@@ -1,0 +1,36 @@
+---
+attribute:
+  name: creature.@sex
+  type: fuzz
+
+---
+attribute:
+  name: creature.sex
+  type: map
+
+---
+map-value:
+  map: creature.sex
+  name: male
+  function:
+    type: near
+    for: creature.@sex
+    # This says: if sex is at 0.01, then this is 100% applicable.
+    # if it is outside 0.01 by +/- 0.01, then this is 0% applicable.
+    # Otherwise, a linear interpolation is done.
+    target: 0.01
+    ramp: 0.01
+
+---
+map-value:
+  map: creature.sex
+  name: female
+  function:
+    type: near
+    for: creature.@sex
+    # Note that female definition here allows for overlap with male.
+    # This is so a match that says it requires "male" could match a
+    # "female" if an object is a perfect match in all but sex.
+    # Map overlaps lead to richer stories!
+    target: 0.02
+    ramp: 0.01

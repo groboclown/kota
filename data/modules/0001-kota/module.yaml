@@ -1,0 +1,18 @@
+---
+module:
+  id: kota
+  name: Knowledge of the Ancients: Core
+  description: Core data for populating a playable world in KotA.
+  version: 0.1
+  authors:
+    - Groboclown
+  license:
+    - ???
+  source:
+    - http://my-kota.website/
+
+  requires:
+    - core 0.0
+
+  hooks:
+    install: install.yaml

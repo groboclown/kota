@@ -1,0 +1,66 @@
+---
+attribute:
+  name: creature.@age_days
+  type: count
+
+---
+attribute:
+  name: creature.years_old
+  type: calculated
+  function:
+    type: number
+    requires:
+      days: creature.@age_days
+    # Note that the expression uses decimals, but as a count, can only be
+    # numerical.
+    expression: days / 365.4
+    bound:
+      round: floor
+      min: 0
+
+---
+attribute:
+  name: creature.age
+  type: map
+
+---
+# This is a default map value.  Other contexts may have their own
+# overloaded values.
+map-value:
+  map: creature.age
+  name: newborn
+  function:
+    type: near
+    for: creature.years_old
+    lessThan: 1
+
+---
+map-value:
+  map: creature.age
+  name: toddler
+  function:
+    type: near
+    for: creature.years_old
+    target: 2
+    ramp: 1
+
+---
+attribute:
+  name: creature.age_adj
+  type: map
+
+# Another shortcut to express the map-value near range expression
+map-value-range:
+  map: creature.age
+  for: creature.years_old
+  ranges:
+    young:
+      lessThan: 20
+    middle:
+      min: 18
+      max: 40
+    old:
+      min: 35
+      max: 70
+    elder:
+      moreThan: 60

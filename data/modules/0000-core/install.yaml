@@ -1,0 +1,21 @@
+---
+
+# The engine will generate "/world" for every new save.  This file contains
+# all the other parts of the path that are expected to exist with a basic world.
+
+install:
+  # Attach values of a specific type to the global context.
+  attach-value:
+    -
+      # The global random number.  This should be the primary source of
+      # randomness in a game.
+      name: '@random'
+      owner: /world
+      type: random-source
+    -
+      # The global count of time "ticks" that have passed since game creation.
+      name: '@ticks'
+      owner: /world/time
+      type: time-count
+      value: 0
+

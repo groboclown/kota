@@ -1,0 +1,220 @@
+---
+# Describes how to localize the translated text.
+
+localization:
+  parent: null
+  locale: en_US
+  name: US English
+
+  # If this locale isn't available, try these next.
+  alternates: [ en_EN, en ]
+
+  number:
+    decimal: .
+    grouping: ","
+
+    # Ordered count of digits to print before a separator.  The last
+    # item indicates that it is repeated.  So "[3, 2]" means to show
+    # 123456789 as "12,34,56,789", and "[3]" means show it as
+    # "123,456,789"
+    grouping-count: [ 3 ]
+
+    # Standard number conversion strings.
+    negative: "-"
+    positive: "+"
+
+    # Digits to use for whatever radix is requested (binary, hexadecimal, etc)
+    # for lower case.  This implicitly embeds the zero digit.  These must be
+    # 1 UTF-8 character per digit.  Note that this is a case where localization
+    # in one region with fewer digits will not render correctly.  For that
+    # reason, all locales MUST support EXACTLY 16 digits.
+    digitsUpper: "0123456789ABCDEF"
+    digitsLower: "0123456789abcdef"
+
+  date-markers:
+    # Date formatting is isolated to the specific markers.  This allows
+    # flexibility in generating date text in many different ways.
+    # The kinds of expressions are very locale specific, and should be used
+    # with the locale-specific translations.
+
+    -
+      # Marker indicates the date shorthand.  It can override existing ones
+      # to change up the translation.  Be careful with this!
+      marker: 'D'
+
+      # Source of the date value.  This is one of:
+      #   day - numeric day of the month (1-31), with no leading zero.
+      #   month - numeric month of the year (1-12), with no leading zero.
+      #   year - numeric 4-digit year.
+      #   yr - last 2 digits of the year.
+      #   week - numeric day of the week (0-6), with 0 = Sunday, 1 = Monday, ...
+      from: day
+
+      # Map the input value to the output value.  Use 'directMapping: true'
+      # instead to directly use the input value instead.
+      mapping:
+        1: "01"
+        2: "02"
+        3: "03"
+        4: "04"
+        5: "05"
+        6: "06"
+        7: "07"
+        8: "08"
+        9: "09"
+        10: "10"
+        11: "11"
+        12: "12"
+        13: "13"
+        14: "14"
+        15: "15"
+        16: "16"
+        17: "17"
+        18: "18"
+        19: "19"
+        20: "20"
+        21: "21"
+        22: "22"
+        23: "23"
+        24: "24"
+        25: "25"
+        26: "26"
+        27: "27"
+        28: "28"
+        29: "29"
+        30: "30"
+        31: "31"
+
+    -
+      marker: d
+      from: day
+      direct-mapping: true
+
+    -
+      # Fancy day of the month.
+      marker: X
+      from: day
+      mapping:
+        1: Kalends
+        2: second day
+        3: third day
+        4: fourth day
+        5: Nones
+        6: sixth day
+        7: seventh day
+        8: eighth day
+        9: nineth day
+        10: tenth day
+        11: eleventh day
+        12: twelth day
+        13: Ides
+        14: fourteenth day
+        15: fifteenth day
+        16: sixteenth day
+        17: seventeenth day
+        18: eighteenth day
+        19: nineteenth day
+        20: twentieth day
+        21: twenty-first day
+        22: twenty-second day
+        23: twenty-third day
+        24: twenty-fourth day
+        25: twenty-fifth day
+        26: twenty-sixth day
+        27: twenty-seventh day
+        28: twenty-eighth day
+        29: twenty-nineth day
+        30: thirtieth day
+        31: Final day
+
+    -
+      marker: m
+      from: month
+      direct-mapping: true
+
+    -
+      marker: M
+      from: month
+      mapping:
+        1: "01"
+        2: "02"
+        3: "03"
+        4: "04"
+        5: "05"
+        6: "06"
+        7: "07"
+        8: "08"
+        9: "09"
+        10: "10"
+        11: "11"
+        12: "12"
+
+    -
+      marker: b
+      from: month
+      mapping:
+        1: Jan
+        2: Feb
+        3: Mar
+        4: Apr
+        5: May
+        6: Jun
+        7: Jul
+        8: Aug
+        9: Sep
+        10: Oct
+        11: Nov
+        12: Dec
+
+    -
+      marker: B
+      from: month
+      mapping:
+        1: January
+        2: February
+        3: March
+        4: April
+        5: May
+        6: June
+        7: July
+        8: August
+        9: September
+        10: October
+        11: November
+        12: December
+
+    -
+      marker: y
+      from: yr
+      direct-mapping: true
+
+    -
+      marker: Y
+      from: year
+      direct-mapping: true
+    # %w => week.short
+    # %W => week.long
+
+    -
+      marker: w
+      from: week
+      mapping:
+        0: Sun
+        1: Mon
+        2: Tue
+        3: Wed
+        4: Thu
+        5: Fri
+        6: Sat
+
+    -
+      marker: W
+      from: week
+      mapping:
+        0: Sunday
+        1: Monday
+        2: Tuesday
+        3: Wednesday
+        4: Thursday
+        5: Friday
+        6: Saturday

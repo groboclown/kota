@@ -1,0 +1,8 @@
+---
+translation:
+  # Translations are instantiated objects, and hence use an "ID".
+  # Instantiated objects have their ID prepended by the module path.
+  # So, in this case, all standard error messages are in
+  # '/modules/core/system-text/errors.*.json'
+  id: errors
+  file: errors

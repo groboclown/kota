@@ -1,0 +1,8 @@
+---
+
+#
+
+group-value:
+  group: @role
+  name: region
+

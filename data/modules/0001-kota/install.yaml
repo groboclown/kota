@@ -1,0 +1,61 @@
+---
+# Describes how to insert this module into an existing world.
+# "world" here is used loosely to mean the entirety of the play area.
+
+install:
+
+  # Create new objects into the world.
+  generate:
+    -
+      # Generate a top-level region.  The world is always present in games,
+      # with the unique ID `/world`.  The `parent` indicates the matching
+      # for the region, which in this case is matching for an object with
+      # a specific ID.
+      parent:
+        id: /world/regions
+
+      # Matcher for how many items to create.  This is a map that matches
+      # based on the parent.  The value of the generate-count is a `count`.
+      generate-count:
+        match:
+          - for:
+              attribute: /world/gen/@world-size
+              matches: small
+            value: 2
+          - for:
+              attribute: /world/gen/@world-size
+              matches: medium
+              default: true
+            value: 5
+          - for:
+              attribute: /world/gen/@world-size
+              matches: large
+            value: 10
+          - for:
+              attribute: /world/gen/@world-size
+              matches: mmo
+            value: 100
+
+      # The role that is used to generate the object.  This is under the covers
+      # a shorthand for matching where the @role map contains `role`
+      role:
+        # To make this interesting, the role is a distribution of types
+        # of roles (roles are outside this document, specified in the
+        # manifest.list file or dependent modules).  The other kind is
+        # 'single'
+        type: distribution
+
+        # Matcher for which role to use in the generation.  In this case, we
+        # want all role which is a `region`.
+        match:
+          # Scan the modules, not the generated world, to match roles.
+          - context: /modules
+
+          # This is matching any role which is a 'region'
+          - for:
+              role: region
+            value: 100
+
+
+  # Updates existing objects with new roles.
+  update:

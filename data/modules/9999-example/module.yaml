@@ -1,0 +1,21 @@
+---
+module:
+  id: example
+  name: Example Module
+  description: >-
+    An example module for testing and exploring the capabilities of modules,
+    used when constructing the engine.  It's included in the core engine
+    data set, but should never be released.
+  version: 1.2.3.4.5.6
+  authors:
+    - Groboclown
+  license:
+    - Public Domain
+  source:
+    - http://my-kota.website/
+
+  requirements:
+    - core 0.0
+
+  hooks:
+    install: install.yaml

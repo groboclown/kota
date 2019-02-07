@@ -1,0 +1,7 @@
+# List of all the processing files in the module.
+# Lines starting with '#' are ignored, as are blank spaces.
+# See `docs/modules/file-formats.md` for details.
+# Media files and translation files should not be included in this list.
+
+# This list can include `manifest.list` and `module.yaml`, but they are
+# always loaded, so they don't need to be here.  They are essentially ignored.

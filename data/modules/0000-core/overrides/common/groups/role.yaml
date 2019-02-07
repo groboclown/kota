@@ -1,0 +1,31 @@
+---
+# All roles are in the "role" group.
+# Each role indicates a generic category of "thing" to create (a city, a person, a paperclip).
+# Generators are assigned to roles to indicate how to create a specific kind of thing for that category.
+
+# "group" is a generic set of strings with a well defined set of possible
+# values.  This can lead to bad modules that
+# abuse this, because matching is sorely limited.  However, there are
+# really good reasons to have a group of unique values.  One way to
+# help extend this concept so it doesn't lead to brittle values is the
+# group value - it must declare what values it contains.  So when
+# a module references 'boat', that value can mean the 'boat' or 'ship'
+# values.
+
+group:
+  name: '@role'
+
+---
+group-value:
+  # Relative reference to the group defined in this directory.
+  group: '@role'
+  name: role
+
+  # Declares the underlying unique values in the group.  Each item is
+  # a fuzz value that indicates how much this group value (`role` here)
+  # is a match for the other group value.  Note that there's an automatic
+  # mapping of itself to itself at 1.
+  # Multiple declarations of a group-value end up joining the matches
+  # collections together, with a "max" on the association value.
+  matches:
+    role: 100

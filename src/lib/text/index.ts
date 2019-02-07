@@ -1,0 +1,3 @@
+/**
+ * Basic text translation services.
+ */

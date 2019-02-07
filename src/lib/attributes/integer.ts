@@ -1,0 +1,2 @@
+
+import { AttributeType } from './core'

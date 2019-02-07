@@ -1,0 +1,21 @@
+
+title: Knowledge of the Ancients
+description: An exploration text game for the web.
+repository: groboclown/kota
+
+# Site Content Details
+theme: jekyll-theme-slate
+paginate: 10
+paginate_path: "/blog/page:num/"
+# Eventually, when there's something to download, this can change.
+show_downloads: false
+
+# Source / destination file information
+source: "site"
+destination: ./_gh_pages
+
+plugins:
+  - jekyll-paginate
+  - jekyll-redirect-from
+  - jekyll-sitemap
+  - jekyll-toc
