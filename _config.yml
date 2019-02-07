@@ -10,9 +10,6 @@ paginate_path: "/site/blog/page:num/"
 # Eventually, when there's something to download, this can change.
 show_downloads: false
 
-# Source / destination file information
-destination: ./_gh_pages
-
 plugins:
   - jekyll-paginate
   - jekyll-redirect-from
