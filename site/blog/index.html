@@ -24,10 +24,10 @@ pagination:
 
         This is having trouble with Github rendering.
         for test:
-          {{ paginator.total_pages }}
-          {{ paginator.per_page }}
-          {{ paginator.total_posts }}
-          {{ paginator.page }}
+          {{ page.pagination_info.total_pages }}
+          {{ page.pagination_info.per_page }}
+          {{ page.pagination_info.total_posts }}
+          {{ page.pagination_info.page }}
     -->
     {% for post in paginator.posts %}
       <div class="post-item">
