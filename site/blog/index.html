@@ -10,7 +10,7 @@ pagination:
 </style>
 
 <div class="home">
-  <div><a href="{% link index.md %}">back to the front page</a></div>
+  <div><a href="../..">back to the front page</a></div>
 
   <h1>Knowledge from the Depths</h1>
   {% if paginator.total_pages > 1 %}
@@ -21,6 +21,13 @@ pagination:
     <!--
         Here is the main paginator logic called.
         All calls to site.posts should be replaced by paginator.posts
+
+        This is having trouble with Github rendering.
+        for test:
+          {{ paginator.total_pages }}
+          {{ paginator.per_page }}
+          {{ paginator.total_posts }}
+          {{ paginator.page }}
     -->
     {% for post in paginator.posts %}
       <div class="post-item">
