@@ -11,7 +11,6 @@ The KotA engine aims to create a landscape of language, object definitions, and 
 
 This project contains the source code for the game engine.  The content is distributed elsewhere.  The engine is licensed under the MIT license.
 
-
 The planned gameplay is initially a hunt for hidden knowledge throughout the known world.
 
 ## The Clockwork World
@@ -27,6 +26,6 @@ KotA itself then creates chains of verbs that create a story
 There's a lot more to what the engine can handle, but that's mostly details under these basic definitions.
 
 
-## Revelaing That Which is Hidden
+## Revealing That Which is Hidden
 
-* [Design Principles](design-principles)
+* [Design Principles](site/design-principles)

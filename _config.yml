@@ -6,7 +6,7 @@ repository: groboclown/kota
 # Site Content Details
 theme: jekyll-theme-slate
 paginate: 10
-paginate_path: "/blog/page:num/"
+paginate_path: "/site/blog/page:num/"
 # Eventually, when there's something to download, this can change.
 show_downloads: false
 
@@ -18,3 +18,14 @@ plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
   - jekyll-toc
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
+  - webpack.config.js
+  - node_modules
+  - src
+  - data
+  - experimental
