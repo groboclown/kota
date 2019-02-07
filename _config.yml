@@ -26,3 +26,4 @@ exclude:
   - src
   - data
   - experimental
+  - docs
