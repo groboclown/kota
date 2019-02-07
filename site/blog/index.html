@@ -21,13 +21,6 @@ pagination:
     <!--
         Here is the main paginator logic called.
         All calls to site.posts should be replaced by paginator.posts
-
-        This is having trouble with Github rendering.
-        for test:
-          {{ page.pagination_info.total_pages }}
-          {{ page.pagination_info.per_page }}
-          {{ page.pagination_info.total_posts }}
-          {{ page.pagination_info.page }}
     -->
     {% for post in paginator.posts %}
       <div class="post-item">

@@ -5,11 +5,11 @@ layout: default
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">{{ page.title | escape }}</h1>
-    <p class="post-meta">
+    <div class="post-meta">
       <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>
-      {% if page.collection %}<p class="post-collection">Filed under "{{ page.collection | capitalize }}"</p>{% endif %}
-      {% if page.tags %}<p class="post-tags">Tags: {{ page.tags | array_to_sentence_string: "" }}</p>{% endif %}
-    </p>
+      {% if page.collection %}<div class="post-collection">Filed under "{{ page.collection | capitalize }}"</div>{% endif %}
+      {% if page.tags %}<div class="post-tags">Tags: {{ page.tags | array_to_sentence_string: "" }}</div>{% endif %}
+    </div>
   </header>
 
   <div class="post-content" itemprop="articleBody">
