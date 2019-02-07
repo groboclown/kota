@@ -1,7 +1,5 @@
 ---
 layout: default
-pagination:
-  enabled: true
 ---
 <!-- Just some nice to have styles for the pager buttons -->
 <style>
@@ -10,34 +8,27 @@ pagination:
 </style>
 
 <div class="home">
-  <div><a href="{% link index.md %}">back to the front page</a></div>
 
-  <h1>Knowledge from the Depths</h1>
-  {% if paginator.total_pages > 1 %}
-  <p class="page-heading">Page {{page.pagination_info.curr_page}} of {{page.pagination_info.total_pages}}</p>
-  {% endif %}
+  <h1 class="page-heading">AutoPage for Tag <b>{% if page.autopages %}{{page.autopages.display_name}}{% endif %}</b> Page {{page.pagination_info.curr_page}} of {{page.pagination_info.total_pages}}</h1>
 
-  <div class="post-list">
+  This page is automagically created and paginated for each tag available in the posts on this site
+
+  {{ content | markdownify }}
+
+  <ul class="post-list">
     <!--
         Here is the main paginator logic called.
         All calls to site.posts should be replaced by paginator.posts
     -->
     {% for post in paginator.posts %}
-      <div class="post-item">
-        <h3>
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}{% if post.book.rank %} | Rank: {{ post.book.rank }}{% endif %}{% if post.collection %} | {{ post.collection }}{% endif %}{% if post.tags %}<br>Tags: {{ post.tags }}{% endif %}</span>
+        <h2>
           <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-        </h3>
-        <div class="post-meta-block">
-        <div class="post-meta">{{ post.date | date: "%b %-d, %Y" }}{% if post.collection %}, filed under "{{ post.collection | capitalize }}"{% endif %}</div>
-        {% if post.tags %}<div class="post-tags">Tags: {{ post.tags | array_to_sentence_string: "" }}</div>{% endif %}
-        </div>
-        <div class="content">
-          {{ post.excerpt | markdownify }}
-          <p><i><a class="post-link" href="{{ post.url | relative_url }}">Read on...</a></i></p>
-        </div>
-      </div>
+        </h2>
+      </li>
     {% endfor %}
-    </div>
+  </ul>
 
   <!--
     Showing buttons to move to the next and to the previous list of posts (pager buttons).

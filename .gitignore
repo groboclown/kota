@@ -1,6 +1,5 @@
 node_modules/
 dist/
-_gh_pages/
-Gemfile
+_site/
 Gemfile.lock
 .vscode/

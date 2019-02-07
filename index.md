@@ -3,7 +3,7 @@ title: Knowledge of the Ancients Game Engine
 layout: default
 ---
 
-\[See The Power of the [Blog](blog/)\]
+\[See The Power of the [Blog](site/blog/)\]
 
 ## About the Project
 
