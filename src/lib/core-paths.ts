@@ -108,6 +108,7 @@ export const ALL_USER_SETTINGS_PATH = joinRelativePaths(WORLD_STATE_PATH, 'users
  * application-wide data. */
 export const CURRENT_USER_PREFERENCES_PATH = joinRelativePaths(CURRENT_REFERENCES_PATH, 'preferences')
 
+export const CURRENT_CONTEXT_PATH = joinRelativePaths(CURRENT_REFERENCES_PATH, 'context')
 
 // ============================================================================
 // Template argument tree

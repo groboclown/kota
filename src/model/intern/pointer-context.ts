@@ -27,7 +27,7 @@ export class PointerContext implements InternContext {
   private readonly pointers: [string, string, string, string][] = []
   constructor(private readonly parent: InternContext) { }
 
-  addPointer(srcPath: string, targetPath: string) {
+  addPointer(srcPath: string, targetPath: string): PointerContext {
     srcPath = normalizeAbsolutePath(srcPath)
     targetPath = normalizeAbsolutePath(targetPath)
     this.pointers.push([
@@ -36,6 +36,7 @@ export class PointerContext implements InternContext {
       srcPath + PATH_SEPARATOR,
       targetPath + PATH_SEPARATOR
     ])
+    return this
   }
 
   get<X, T extends Internal<X>>(path: string, dataType: ATTRIBUTE_DATA_TYPE): T | undefined {
