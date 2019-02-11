@@ -23,6 +23,12 @@ export class NumberAttribute extends AttributeInternal<NumberAttribute> {
   }
 }
 
+export class NameListAttribute extends AttributeInternal<NameListAttribute> {
+  constructor(public readonly domain: string, public readonly msgid: string) {
+    super(m.ATTRIBUTE_NUMBER_TYPE)
+  }
+}
+
 export class DateAttribute extends AttributeInternal<DateAttribute> {
   constructor() {
     super(m.ATTRIBUTE_DATE_TYPE)
@@ -84,11 +90,19 @@ export class CalculatedInternal<T> implements Internal<T> {
   /** indicates that this is a calculated value */
   readonly calculated: boolean = true
 
+
   /** the last internal "tick" when the calculated value was updated. */
   lastCalculatedTick: number = -1
 
   constructor(
-    public readonly type: tn.DATA_TYPE
+    /** data type of the value */
+    public readonly type: tn.DATA_TYPE,
+
+    /**
+     * Context path to the defining attribute.  This is so restrictions on the value,
+     * or other references, can be applied on top of changes.
+     */
+    public readonly source: string
   ) { }
 }
 
@@ -101,9 +115,10 @@ export function isCalculatedInternal(v: any): v is CalculatedInternal<any> {
 export class CalculatedFunctionInternal extends CalculatedInternal<number> {
   previousValue: number | null = null
   constructor(
-    public calculationPath: string
+    /** path to the defining attribute that contains the calculation */
+    calculationPath: string
   ) {
-    super(tn.VALUE_CALCULATED)
+    super(tn.VALUE_CALCULATED, calculationPath)
   }
 }
 
@@ -117,10 +132,10 @@ export class DateInternal extends CalculatedInternal<Date> {
   month: number
   year: number
 
-  constructor(date: Date)
-  constructor(day: number, month: number, year: number)
-  constructor(day: number | Date, month?: number, year?: number) {
-    super(tn.VALUE_DATE)
+  constructor(attributePath: string, date: Date)
+  constructor(attributePath: string, day: number, month: number, year: number)
+  constructor(attributePath: string, day: number | Date, month?: number, year?: number) {
+    super(tn.VALUE_DATE, attributePath)
     if (typeof day === 'number') {
       this.day = day
       this.month = month || 0
@@ -138,17 +153,21 @@ export class DateInternal extends CalculatedInternal<Date> {
 export class NumberInternal extends CalculatedInternal<number> {
   constructor(
     type: tn.ATTRIBUTE_FUZZ_TYPE | tn.VALUE_DATE_DELTA | tn.VALUE_NUMBER | tn.VALUE_NAME_LIST_ITEM,
+    attributePath: string,
+    /** The numeric value of this attribute.  Note that it is NOT read only! */
     public value: number
   ) {
-    super(type)
+    super(type, attributePath)
   }
 }
 
 
 export class GroupSetInternal extends CalculatedInternal<number> {
   constructor(
+    attributePath: string,
+    /** Mutable list of groups */
     public groups: string[]
   ) {
-    super(tn.VALUE_GROUP_SET_FOR)
+    super(tn.VALUE_GROUP_SET_FOR, attributePath)
   }
 }

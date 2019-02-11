@@ -42,6 +42,7 @@ export {
   FunctionAttribute,
   DateAttribute,
   NumberAttribute,
+  NameListAttribute,
   DateInternal,
   GroupSetInternal,
   NumberInternal,

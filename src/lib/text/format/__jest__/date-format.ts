@@ -14,7 +14,7 @@ const DF = new dt.FormatDate()
 describe('date format replacements', () => {
   function mkCtx(arg: Date): Context {
     const d: { [key: string]: Internal<any> } = {
-      [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new DateInternal(arg)
+      [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new DateInternal('/p', arg)
     }
     return new BaseContext(new StorageContext(d))
   }

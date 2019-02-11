@@ -15,7 +15,7 @@ describe('formatNumber', () => {
   const stdL10n = new MockLoc([])
   function mkCtx(arg: number): Context {
     const d: { [key: string]: Internal<any> } = {
-      [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new NumberInternal(VALUE_NUMBER, arg)
+      [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new NumberInternal(VALUE_NUMBER, '/p', arg)
     }
     return new BaseContext(new StorageContext(d))
   }

@@ -46,9 +46,10 @@ export class FormatPlural implements FormatVariable {
       // Internal error - throw an exception.
       throw new Error(`Invalid state: no format registered for ${CONTEXT_FORMAT}`)
     }
+
     console.log(`Running format on ${val} with value ${count}`)
     const countData: { [key: string]: Internal<any> } = {}
-    countData[joinPaths(CURRENT_FUNCTION_ARGUMENTS_PATH, 'count')] = new NumberInternal(VALUE_NUMBER, count)
+    countData[joinPaths(CURRENT_FUNCTION_ARGUMENTS_PATH, 'count')] = new NumberInternal(VALUE_NUMBER, CURRENT_FUNCTION_ARGUMENT_0_PATH, count)
     const countContext = args.push(new StorageContext(countData)).createChild(CURRENT_FUNCTION_ARGUMENTS_PATH)
     return textFormat.format(countContext, val, l10n)
   }
