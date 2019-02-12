@@ -7,11 +7,8 @@ export const PATH_SEPARATOR = '/'
  * Basic definition for an internal representation of a module-loaded object.
  * The objects must be simple JSON data types, so that they can be easily
  * marshalled for persistence.
- *
- * The type parameter (`T`) represents the value type used in the get and
- * set value, not necessarily the inner data type.
  */
-export interface Internal<T> {
+export interface Internal {
   // One of the internal type names defined in `type-names.ts`.
   readonly type: tn.DATA_TYPE
 }
@@ -19,12 +16,18 @@ export interface Internal<T> {
 /**
  * Basic tree-based discovery.
  */
-export interface InternContext {
+export interface Context {
   /**
-   * Fetches the data at the specific path.  Relative paths do not start
-   * with a '/', and absolute paths do.
+   * Fetches the data at the specific path.  This is only fetching absolute
+   * paths.
    */
-  get<X, T extends Internal<X>>(path: string, dataType: tn.DATA_TYPE): T | undefined
+  getInternal(path: string): Internal | undefined
+
+  // Looks up all the keys uner the given path.
+  // This will need to be used for data generation, but that will need to be
+  // defined when we get there.  This is for "what kinds of 'x' exist?", but that
+  // may be better handled through groups.
+  //keysFor(path: string): string[]
 }
 
 export function isAbsolutePath(path: string): boolean {

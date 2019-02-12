@@ -1,24 +1,22 @@
 
 import {
   Internal,
-  InternContext,
+  Context,
   PATH_SEPARATOR,
   normalizeAbsolutePath,
   isRelativePath,
 } from './base'
 
-import {
-  ATTRIBUTE_DATA_TYPE
-} from './type-names'
-
 /**
  * A sub-path aware context.
+ *
+ * TODO Is this needed anymore?
  */
-export class RelativeContext implements InternContext {
+export class RelativeContext implements Context {
   private readonly subPath: string
 
   constructor(
-    private readonly parent: InternContext,
+    private readonly parent: Context,
     subPath: string) {
     subPath = normalizeAbsolutePath(subPath)
     if (isRelativePath(subPath)) {
@@ -33,19 +31,7 @@ export class RelativeContext implements InternContext {
     this.subPath = subPath
   }
 
-  /*
-  createChild(subPath: string): Context {
-    if (subPath.length <= 0) {
-      return this
-    }
-    if (subPath[0] === PATH_SEPARATOR) {
-      return new RelativeContext(this.parent, subPath)
-    }
-    return new RelativeContext(this.parent, this.subPath + subPath)
-  }
-  */
-
-  get<X, T extends Internal<X>>(relativePath: string, dataType: ATTRIBUTE_DATA_TYPE): T | undefined {
+  getInternal(relativePath: string): Internal | undefined {
     if (relativePath.length <= 0) {
       return undefined
     }
@@ -53,6 +39,6 @@ export class RelativeContext implements InternContext {
     if (relativePath[0] !== PATH_SEPARATOR) {
       path = this.subPath + relativePath
     }
-    return this.parent.get(path, dataType)
+    return this.parent.getInternal(path)
   }
 }

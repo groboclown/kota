@@ -7,7 +7,7 @@ import {
   getContextValuesFor,
   VALUE_DATA_CONTEXT_TYPE
 } from './format'
-import { Context, isContext } from '../../context'
+import { Context } from '../../context'
 import * as tx from './text-format-parser'
 import * as registry from './registry'
 

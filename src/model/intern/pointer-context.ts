@@ -1,11 +1,10 @@
 
 import {
   Internal,
-  InternContext,
+  Context,
   PATH_SEPARATOR,
   normalizeAbsolutePath,
 } from './base'
-import { RelativeContext } from './relative-context'
 
 import {
   ATTRIBUTE_DATA_TYPE
@@ -23,9 +22,9 @@ import {
  * Additionally, this will only return pointers, and not propigate
  * requests up to the parent.
  */
-export class PointerContext implements InternContext {
+export class PointerContext implements Context {
   private readonly pointers: [string, string, string, string][] = []
-  constructor(private readonly parent: InternContext) { }
+  constructor(private readonly parent: Context) { }
 
   addPointer(srcPath: string, targetPath: string): PointerContext {
     srcPath = normalizeAbsolutePath(srcPath)
@@ -39,19 +38,16 @@ export class PointerContext implements InternContext {
     return this
   }
 
-  get<X, T extends Internal<X>>(path: string, dataType: ATTRIBUTE_DATA_TYPE): T | undefined {
+  getInternal(path: string): Internal | undefined {
     for (let i = 0; i < this.pointers.length; i++) {
       const p = this.pointers[i]
       if (path === p[0]) {
-        return this.parent.get(p[1], dataType)
+        return this.parent.getInternal(p[1])
       }
       if (path.startsWith(p[2])) {
         // replace the "key" part of the path (which is at the start)
         // with the pointer path.
-        return this.parent.get(
-          p[3] + path.substring(p[2].length),
-          dataType
-        )
+        return this.parent.getInternal(p[3] + path.substring(p[2].length))
       }
     }
     // Do not push up to parent.

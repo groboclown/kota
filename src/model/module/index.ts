@@ -8,13 +8,12 @@ export {
 
 export {
   AttributeType,
-  AttributeTypeConstraint,
   parseSrcAttribute,
   AttributeMapType,
   isAttributeMapType,
   AttributeFuzzType,
   isAttributeFuzzType,
-  AttributeGroupType,
+  AttributeGroupSetType,
   isAttributeGroupType,
   AttributeRandomType,
   isAttributeRandomType,

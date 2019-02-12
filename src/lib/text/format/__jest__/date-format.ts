@@ -1,22 +1,21 @@
 
 import { mkWeekMap, mkMonthMap, mkDateMap, mkDirectMap, MockLoc } from './loc-util'
 import * as dt from '../date-format'
-import { Context, BaseContext } from '../../../context'
+import { Context } from '../../../context'
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH } from '../../../core-paths'
 import {
   Internal, DateInternal,
   StorageContext,
-  ATTRIBUTE_NUMBER_TYPE
 } from '../../../../model/intern'
 
 const DF = new dt.FormatDate()
 
 describe('date format replacements', () => {
   function mkCtx(arg: Date): Context {
-    const d: { [key: string]: Internal<any> } = {
+    const d: { [key: string]: Internal } = {
       [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new DateInternal('/p', arg)
     }
-    return new BaseContext(new StorageContext(d))
+    return new StorageContext(d)
   }
   describe('valid-two-digits', () => {
     const d = mkCtx(new Date(1790, 10, 21))

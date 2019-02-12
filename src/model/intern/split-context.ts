@@ -1,7 +1,7 @@
 
 import {
   Internal,
-  InternContext,
+  Context,
 } from './base'
 
 import {
@@ -14,21 +14,21 @@ import {
  *
  * This allows for different context types to share the same space.
  */
-export class SplitContext implements InternContext {
+export class SplitContext implements Context {
   /** Each path in the list must end with a '/' */
   constructor(
-    private readonly subs: { [path: string]: InternContext },
-    private readonly defaultParent?: InternContext
+    private readonly subs: { [path: string]: Context },
+    private readonly defaultParent?: Context
   ) { }
 
-  get<X, T extends Internal<X>>(path: string, dataType: ATTRIBUTE_DATA_TYPE): T | undefined {
+  getInternal(path: string): Internal | undefined {
     for (const key of Object.keys(this.subs)) {
       if (path.startsWith(key)) {
         // Strip off the 'key' part, but leave the trailing '/'
         const subPath = path.substring(key.length - 1)
-        return this.subs[key].get(subPath, dataType)
+        return this.subs[key].getInternal(subPath)
       }
     }
-    return this.defaultParent ? this.defaultParent.get(path, dataType) : undefined
+    return this.defaultParent ? this.defaultParent.getInternal(path) : undefined
   }
 }

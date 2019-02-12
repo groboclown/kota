@@ -12,7 +12,7 @@ import { Localization } from '.././localization'
 // Ensure all the types are loaded.  The files will load themselves into the registry
 export { DATE_FORMAT_LOADED } from './date-format'
 export { CONTEXT_FORMAT_LOADED } from './context-format'
-export { LOCALIZED_FORMAT_LOADED } from './localized-format'
+export { NAME_LIST_FORMAT_LOADED } from './name-list-format'
 export { NUMBER_FORMAT_LOADED } from './number-format'
 export { PLURAL_FORMAT_LOADED } from './plural-format'
 

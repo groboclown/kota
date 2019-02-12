@@ -1,12 +1,10 @@
 
 import * as nb from '../number-format'
 import { MockLoc } from './loc-util'
-import { Context, BaseContext } from '../../../context'
+import { Context, Internal, NumberInternal } from '../../../context'
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH } from '../../../core-paths'
 import {
-  Internal, NumberInternal,
-  StorageContext,
-  VALUE_NUMBER
+  StorageContext
 } from '../../../../model/intern'
 
 const NB = new nb.FormatNumber()
@@ -14,10 +12,10 @@ const NB = new nb.FormatNumber()
 describe('formatNumber', () => {
   const stdL10n = new MockLoc([])
   function mkCtx(arg: number): Context {
-    const d: { [key: string]: Internal<any> } = {
-      [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new NumberInternal(VALUE_NUMBER, '/p', arg)
+    const d: { [key: string]: Internal } = {
+      [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new NumberInternal('/p', arg)
     }
-    return new BaseContext(new StorageContext(d))
+    return new StorageContext(d)
   }
 
   it('positive - no format', () => {

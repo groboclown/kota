@@ -7,7 +7,7 @@
 
 import {
   PATH_SEPARATOR, joinRelativePaths
-} from './context'
+} from '../model/intern/base'
 
 // A path element that starts with this character indicates it's a leaf
 // name.  This isn't a hard-and-fast rule, but more of a standard.

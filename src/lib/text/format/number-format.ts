@@ -1,10 +1,10 @@
 
 import * as loc from '../localization'
-import { HasErrorValue, coreError } from '../../error'
+import { HasErrorValue, coreError, hasErrorValue } from '../../error'
 import { LocalizedText, FormatVariable } from './format'
 import { getNumberFlags } from './template-flags'
 import * as registry from './registry'
-import { Context, VALUE_NUMBER } from '../../context'
+import { Context, getNumericValueForInternal } from '../../context'
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH } from '../../core-paths'
 
 export const NUMBER_FORMAT = 'c'
@@ -21,7 +21,7 @@ const FORMAT_DEFAULTS: { [key: string]: number } = {
 }
 
 /**
- * "Standard" integer formatting options.
+ * "Standard" integer formatting options.  Only works for number types.
  *
  * The format text is a bit like the Java String.format.
  *
@@ -43,12 +43,16 @@ export class FormatNumber implements FormatVariable {
     const flags = getNumberFlags(template, FORMAT_DEFAULTS)
     var reversed = []
 
-    const countArg = args.get(CURRENT_FUNCTION_ARGUMENT_0_PATH, VALUE_NUMBER);
-    if (typeof countArg !== 'number') {
+    const countArgInternal = args.getInternal(CURRENT_FUNCTION_ARGUMENT_0_PATH);
+    if (!countArgInternal) {
       return { error: coreError('no argument for template', { name: NUMBER_FORMAT }) }
     }
+    const countVal = getNumericValueForInternal(countArgInternal, args)
+    if (hasErrorValue(countVal)) {
+      return { error: coreError('unexpected value type', { value: countArgInternal.type, type: 'numeric' }) }
+    }
     // We only deal with integers.
-    let count = countArg | 0
+    let count = countVal | 0
 
     // Because we're inserting in reverse order, add the trailing ')' if that's
     // our negative expression.

@@ -1,17 +1,17 @@
-import * as fn from '../function'
-import * as irn from '../../../model/intern'
+import * as itr from '../..'
+import * as fn from '../type-function'
 
 
 describe('runCalculation', () => {
-  function mkFn(expr: irn.FunctionExpression): irn.FunctionAttribute {
-    return new irn.FunctionAttribute({}, irn.VALUE_FUZZ, irn.VALUE_FUZZ, -2000, 2000, expr)
+  function mkFn(expr: itr.FunctionExpression): itr.FunctionAttribute {
+    return new itr.FunctionAttribute({}, itr.VALUE_FUZZ, itr.VALUE_FUZZ, -2000, 2000, expr)
   }
 
   describe('valid setup', () => {
     describe('single constant', () => {
       it('spits out correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 5]
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 5]
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(5)
@@ -20,7 +20,7 @@ describe('runCalculation', () => {
     describe('single variable', () => {
       it('generates correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_VAR, 'a']
+          [itr.FUNCTION_EXPRESSION_TYPE_VAR, 'a']
         ])
         const res = fn.runCalculation(f, { a: 5 })
         expect(res).toBe(5)
@@ -29,7 +29,7 @@ describe('runCalculation', () => {
     describe('constant function', () => {
       it('generates correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, 'pi']
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, 'pi']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(Math.PI)
@@ -41,9 +41,9 @@ describe('runCalculation', () => {
     describe('addition', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 3],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '+']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 3],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '+']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(7 + 3)
@@ -52,9 +52,9 @@ describe('runCalculation', () => {
     describe('subtraction', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 3],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '-']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 3],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '-']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(7 - 3)
@@ -63,9 +63,9 @@ describe('runCalculation', () => {
     describe('multiplication', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 3],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '*']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 3],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '*']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(7 * 3)
@@ -74,9 +74,9 @@ describe('runCalculation', () => {
     describe('division', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 3],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '/']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 3],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '/']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(7 / 3)
@@ -88,8 +88,8 @@ describe('runCalculation', () => {
     describe('negate', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, 'neg']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, 'neg']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(-7)
@@ -98,8 +98,8 @@ describe('runCalculation', () => {
     describe('inverse', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, 'inv']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, 'inv']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(1 / 7)
@@ -108,8 +108,8 @@ describe('runCalculation', () => {
     describe('arc tangent', () => {
       it('generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, 'atan']
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, 'atan']
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(Math.atan(7))
@@ -121,29 +121,29 @@ describe('runCalculation', () => {
     describe('embeded calculation', () => {
       it('unary + binary generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 8],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, 'neg'],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 8],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, 'neg'],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(1)
       })
       it('deep binary tree generates the correct value', () => {
         const f = mkFn([
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 8],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 7],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 6],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 5],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 4],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 3],
-          [irn.FUNCTION_EXPRESSION_TYPE_CONST, 2],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '*'],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '*'],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
-          [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '*'],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 8],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 7],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 6],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 5],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 4],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 3],
+          [itr.FUNCTION_EXPRESSION_TYPE_CONST, 2],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '*'],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '*'],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '+'],
+          [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '*'],
         ])
         const res = fn.runCalculation(f, {})
         expect(res).toBe(((((((3 + 2) * 4) + 5) * 6) + 7) * 8))
@@ -154,9 +154,9 @@ describe('runCalculation', () => {
   describe('bounding range', () => {
     it('is limited to top range', () => {
       const f = mkFn([
-        [irn.FUNCTION_EXPRESSION_TYPE_CONST, 1000],
-        [irn.FUNCTION_EXPRESSION_TYPE_CONST, 1000],
-        [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '*']
+        [itr.FUNCTION_EXPRESSION_TYPE_CONST, 1000],
+        [itr.FUNCTION_EXPRESSION_TYPE_CONST, 1000],
+        [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '*']
       ])
       const res = fn.runCalculation(f, {})
       // range bounded to 2000 in the upper side.
@@ -164,9 +164,9 @@ describe('runCalculation', () => {
     })
     it('is limited to bottom range', () => {
       const f = mkFn([
-        [irn.FUNCTION_EXPRESSION_TYPE_CONST, -1000],
-        [irn.FUNCTION_EXPRESSION_TYPE_CONST, 1000],
-        [irn.FUNCTION_EXPRESSION_TYPE_OPERATION, '*']
+        [itr.FUNCTION_EXPRESSION_TYPE_CONST, -1000],
+        [itr.FUNCTION_EXPRESSION_TYPE_CONST, 1000],
+        [itr.FUNCTION_EXPRESSION_TYPE_OPERATION, '*']
       ])
       const res = fn.runCalculation(f, {})
       // range bounded to -2000 in the lower side.

@@ -22,7 +22,11 @@
   "no argument for template": "The `{name}` template must have an argument",
   "not module value": "The value is not a valid module object",
   "changed immutable value": "Attempted to alter value of type {type}",
-  "no function at path": "No function defined at {path}",
   "no value for function at path": "Function {func} requires non-existant value at {path}",
-  "invalid function dependency value": "Function {func} requires a number value at {path} but found {type}"
+  "invalid function dependency value": "Function {func} requires a number value at {path} but found {type}",
+  "undefined attribute definition for value": "{valueType} referenced as defined from non-existant attribute",
+  "invalid attribute definition for value": "{valueType} referenced as defined from attribute {attributeType}",
+  "undefined group value": "{value} not defined in group {group}",
+  "unexpected value type": "{value} should have been {type}",
+  "non-numeric value type": "{value} should have been a numeric type"
 }

@@ -1,11 +1,11 @@
 
 import * as loc from '../localization'
-import { HasErrorValue, coreError } from '../../error'
+import { HasErrorValue, coreError, hasErrorValue } from '../../error'
 import { FormatVariable, LocalizedText } from './format'
 import * as registry from './registry'
 import { CONTEXT_FORMAT } from './context-format'
-import { Context, VALUE_NUMBER } from '../../context'
-import { StorageContext, Internal, joinPaths, NumberInternal } from '../../../model/intern';
+import { Context, getNumericValueForInternal } from '../../context'
+import { StackContext, Internal, joinPaths, NumberInternal, PointerContext } from '../../../model/intern';
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH, CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
 
 
@@ -16,23 +16,30 @@ export const PLURAL_FORMAT = 'p'
  * simple text, like 'a coin' vs. 'two coins' vs. '34 coins'.  The translated
  * text will be run through the simplified parser, where only the number format
  * is used.  The variable name in the number format is `count`.
+ *
+ * If no argument is given, then this uses a '0' as the count.
  */
 export class FormatPlural implements FormatVariable {
   readonly formatName = PLURAL_FORMAT
 
   format(args: Context, template: string, l10n: loc.Localization): LocalizedText | HasErrorValue {
-    const count = args.get(CURRENT_FUNCTION_ARGUMENT_0_PATH, VALUE_NUMBER)
-    if (typeof count !== 'number') {
-      return { error: coreError('no argument for template', { name: PLURAL_FORMAT }) }
+    const countIntern = args.getInternal(CURRENT_FUNCTION_ARGUMENT_0_PATH);
+    const count = countIntern ? getNumericValueForInternal(countIntern, args) : 0
+    if (hasErrorValue(count)) {
+      return { error: coreError('unexpected value type', { value: countIntern ? countIntern.type : '<none>', type: 'numeric' }) }
     }
-    // Parse out the domain, message id, and number format.
-    var tfp = template.indexOf(':')
+    // Parse out the domain, message id, grammar, and number format.
+    const tfp = template.indexOf(':')
     if (tfp <= 0) {
       return { error: coreError('no domain in plural format', { format: template }) }
     }
     const domain = template.substring(0, tfp)
-    const msgid = template.substring(tfp + 1)
-    const val = l10n.getText(domain, msgid, count)
+    const grp = template.indexOf(':', tfp + 1)
+    const msgid = (grp > 0) ? template.substring(tfp + 1, grp) : template.substring(tfp + 1)
+    const grammar = (grp > 0) ? template.substring(grp + 1) : undefined
+
+    // Need the count here for the correct plural string.
+    const val = l10n.getText(domain, msgid, count, grammar)
     if (val === null) {
       // No translation is not an error; it is a limit to the current translated text.
       // However, clearly mark that it isn't translated.
@@ -48,9 +55,13 @@ export class FormatPlural implements FormatVariable {
     }
 
     console.log(`Running format on ${val} with value ${count}`)
-    const countData: { [key: string]: Internal<any> } = {}
-    countData[joinPaths(CURRENT_FUNCTION_ARGUMENTS_PATH, 'count')] = new NumberInternal(VALUE_NUMBER, CURRENT_FUNCTION_ARGUMENT_0_PATH, count)
-    const countContext = args.push(new StorageContext(countData)).createChild(CURRENT_FUNCTION_ARGUMENTS_PATH)
+
+    // Redirect requests to 'count' instead to be the current arg 0.
+    const countContext = new StackContext([
+      new PointerContext(args)
+        .addPointer(joinPaths(CURRENT_FUNCTION_ARGUMENTS_PATH, 'count'), CURRENT_FUNCTION_ARGUMENT_0_PATH),
+      args
+    ])
     return textFormat.format(countContext, val, l10n)
   }
 }

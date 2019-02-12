@@ -1,9 +1,9 @@
 
 import * as loc from '../localization'
-import { HasErrorValue, coreError, hasErrorValue } from '../../error'
+import { HasErrorValue, coreError } from '../../error'
 import { LocalizedText, FormatVariable } from './format'
 import { replacePercentText } from './replace-text'
-import { Context, VALUE_DATE } from '../../context'
+import { Context, isDateInternal, VALUE_DATE, getDateValue } from '../../context'
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH } from '../../core-paths'
 import * as registry from './registry'
 
@@ -17,13 +17,15 @@ export class FormatDate implements FormatVariable {
   readonly formatName = DATE_FORMAT
 
   format(args: Context, template: string, l10n: loc.Localization): LocalizedText | HasErrorValue {
-    const date: Date | HasErrorValue | undefined = args.get(CURRENT_FUNCTION_ARGUMENT_0_PATH, VALUE_DATE);
-    if (hasErrorValue(date)) {
-      return date
-    }
-    if (date === undefined || !(date instanceof Date)) {
+    const dateIntern = args.getInternal(CURRENT_FUNCTION_ARGUMENT_0_PATH);
+    if (dateIntern === undefined) {
       return { error: coreError('no argument for template', { name: DATE_FORMAT }) }
     }
+    if (!isDateInternal(dateIntern)) {
+      return { error: coreError('unexpected value type', { value: dateIntern.type, type: VALUE_DATE }) }
+    }
+    const date = getDateValue(dateIntern)
+
     const fromMap: { [key: string]: number } = {
       day: date.getDate(),
       month: date.getMonth(),

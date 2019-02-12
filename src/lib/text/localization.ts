@@ -1,5 +1,6 @@
 
 import * as ln from '../../model/module/localization'
+import { isArray } from 'util';
 export {
   LocalizationNumberType,
   LocalizationDateMarkerType,
@@ -55,7 +56,7 @@ export interface CountTranslationLookup {
 }
 
 export interface SimpleTranslation {
-  [msgid: string]: string | CountTranslationLookup
+  [msgid: string]: string | string[] | CountTranslationLookup
 }
 
 
@@ -84,9 +85,18 @@ function lookupGrammar(msgid: string, grammar: string | undefined, tlate: Simple
   return tlate[msgid] || null
 }
 
-function lookupCount(xlated: string | CountTranslationLookup | null, count: number | undefined): string | null {
+function lookupCount(xlated: string | CountTranslationLookup | string[] | null, count: number | undefined): string | null {
   if (xlated === null || typeof xlated === 'string') {
     return xlated
+  }
+  if (isArray(xlated)) {
+    if (xlated.length <= 0) {
+      return null
+    }
+    if (count === undefined) {
+      return xlated[0]
+    }
+    return xlated[count % xlated.length]
   }
   if (count === undefined) {
     return xlated.plural || xlated[1] || null

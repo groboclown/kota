@@ -1,6 +1,6 @@
 
 import {
-  Internal, InternContext, normalizeAbsolutePath
+  Internal, Context, normalizeAbsolutePath
 } from './base'
 import { ATTRIBUTE_DATA_TYPE } from './type-names'
 
@@ -17,19 +17,19 @@ import { ATTRIBUTE_DATA_TYPE } from './type-names'
  * The loader is expected to return identical information for the same request path.
  * So, if it returns undefined for a path, it must always return undefined for that path.
  */
-export type ContextPathLoader = (requestPath: string) => [string, InternContext] | undefined
+export type ContextPathLoader = (requestPath: string) => [string, Context] | undefined
 
 /**
  * Supports a limited in-memory cache of data that is either complex to load,
  * or large and can be shifted out of memory without issue.  Items in this
  * path should be considered static.
  */
-export class LazyContext implements InternContext {
-  private readonly cache: [string, InternContext][] = []
+export class LazyContext implements Context {
+  private readonly cache: [string, Context][] = []
   private readonly unsupported: { [key: string]: boolean } = {}
   constructor(private readonly loader: ContextPathLoader) { }
 
-  get<X, T extends Internal<X>>(path: string, dataType: ATTRIBUTE_DATA_TYPE): T | undefined {
+  getInternal(path: string): Internal | undefined {
     // Check if the path is supported.  This is quick, so do it once.
     if (this.unsupported[path]) {
       return undefined
@@ -38,7 +38,7 @@ export class LazyContext implements InternContext {
     for (let i = 0; i < this.cache.length; i++) {
       const p = this.cache[i]
       if (path === p[0] || path.startsWith(p[0])) {
-        return p[1].get(path, dataType)
+        return p[1].getInternal(path)
       }
     }
 
@@ -51,6 +51,6 @@ export class LazyContext implements InternContext {
     // We know that this path isn't in our cache, so it's safe to
     // add it.
     this.cache.push([normalizeAbsolutePath(v[0]), v[1]])
-    return v[1].get(path, dataType)
+    return v[1].getInternal(path)
   }
 }

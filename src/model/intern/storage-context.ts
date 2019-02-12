@@ -1,7 +1,7 @@
 
 import {
   Internal,
-  InternContext,
+  Context,
   PATH_SEPARATOR
 } from './base'
 import {
@@ -22,30 +22,15 @@ const NUMBER_TYPES: { [key: string]: boolean } = {
 }
 
 
-export class StorageContext implements InternContext {
-  constructor(private data: { [path: string]: Internal<any> }) { }
+export class StorageContext implements Context {
+  constructor(private data: { [path: string]: Internal }) { }
 
-  get<X, T extends Internal<X>>(path: string, dataType: ATTRIBUTE_DATA_TYPE): T | undefined {
+  getInternal(path: string): Internal | undefined {
     if (path.length <= 0 || path[0] !== PATH_SEPARATOR) {
-      console.log(`DEBUG --- path is not in list`)
       return undefined
     }
     const value = this.data[path]
-    if (value === undefined) {
-      console.log(`DEBUG --- path value not set ${path}`)
-      return undefined
-    }
-    if (value.type === dataType) {
-      return <T>(<unknown>value)
-    }
-    if (value.type === VALUE_CALCULATED && NUMBER_TYPES[dataType]) {
-      // NOTE: correctly checking the type of the requested value requires
-      // looking up the function definition, which may not even be in this
-      // storage context.  So, this will just skip the prescise number check...
-      return <T>(<unknown>value)
-    }
-    console.log(`DEBUG --- path has data type ${value.type}; expected ${dataType}`)
-    return undefined
+    return value
   }
 
   persist(): string {

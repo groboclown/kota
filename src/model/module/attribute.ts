@@ -40,8 +40,8 @@ export type ATTRIBUTE_RANGE_TYPE = 'range'
 export const ATTRIBUTE_RANGE_TYPE = 'range'
 export type ATTRIBUTE_FUZZ_TYPE = 'fuzz'
 export const ATTRIBUTE_FUZZ_TYPE = 'fuzz'
-export type ATTRIBUTE_GROUP_TYPE = 'group'
-export const ATTRIBUTE_GROUP_TYPE = 'group'
+export type ATTRIBUTE_GROUP_SET_TYPE = 'group'
+export const ATTRIBUTE_GROUP_SET_TYPE = 'group'
 export type ATTRIBUTE_RANDOM_TYPE = 'random'
 export const ATTRIBUTE_RANDOM_TYPE = 'random'
 export type ATTRIBUTE_FUNCTION_TYPE = 'calculated'
@@ -50,6 +50,10 @@ export type ATTRIBUTE_NAME_LIST_TYPE = 'name-list'
 export const ATTRIBUTE_NAME_LIST_TYPE = 'name-list'
 export type ATTRIBUTE_DATE_TYPE = 'date'
 export const ATTRIBUTE_DATE_TYPE = 'date'
+
+// Date Delta is per day, so +5 means 5 days beyond the epoch.
+export type ATTRIBUTE_DATE_DELTA_TYPE = 'datedelta'
+export const ATTRIBUTE_DATE_DELTA_TYPE = 'datedelta'
 
 // The "export const AttributeTypeConstraint"
 // gives a "ConstraintSet is not a constructor" error, which is really, really odd.
@@ -69,7 +73,7 @@ export function getAttributeTypeConstraint(): ConstraintSet {
         [ATTRIBUTE_FUZZ_TYPE]: () => { },
 
         // group types are a collection of group values.
-        [ATTRIBUTE_GROUP_TYPE]: () => { },
+        [ATTRIBUTE_GROUP_SET_TYPE]: () => { },
 
         [ATTRIBUTE_RANDOM_TYPE]: () => { },
 
@@ -200,11 +204,11 @@ export const isAttributeFuzzType: AttributeTypeCheck<AttributeFuzzType> = (t: At
 /**
  * A set of unique strings that form a multi-valence set ("fuzzy set").
  */
-export interface AttributeGroupType extends AttributeType {
+export interface AttributeGroupSetType extends AttributeType {
 }
 
-export const isAttributeGroupType: AttributeTypeCheck<AttributeGroupType> = (t: AttributeType): t is AttributeGroupType => {
-  return t.type === ATTRIBUTE_GROUP_TYPE
+export const isAttributeGroupType: AttributeTypeCheck<AttributeGroupSetType> = (t: AttributeType): t is AttributeGroupSetType => {
+  return t.type === ATTRIBUTE_GROUP_SET_TYPE
 }
 
 
@@ -215,7 +219,7 @@ export const isAttributeGroupType: AttributeTypeCheck<AttributeGroupType> = (t: 
 export interface AttributeRandomType extends AttributeType {
 }
 
-export const isAttributeRandomType: AttributeTypeCheck<AttributeGroupType> = (t: AttributeType): t is AttributeRandomType => {
+export const isAttributeRandomType: AttributeTypeCheck<AttributeRandomType> = (t: AttributeType): t is AttributeRandomType => {
   return t.type === ATTRIBUTE_RANDOM_TYPE
 }
 

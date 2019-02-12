@@ -1,6 +1,6 @@
 
 import { HasErrorValue } from '../../error'
-import { Context, BaseContext, joinPaths, PATH_SEPARATOR } from '../../context'
+import { Context, joinPaths, PATH_SEPARATOR } from '../../context'
 import { CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
 import * as loc from '../localization'
 import {
@@ -54,7 +54,8 @@ export type ArgumentMapping = { [key: string]: string }
 
 
 /**
- * Creates a context which maps all the `args` over to that space.
+ * Creates a context which maps all the `args` over to the argument path.  The keys in the arg
+ * must not contain a path separator.
  *
  * @param baseContext
  * @param fv
@@ -63,15 +64,11 @@ export type ArgumentMapping = { [key: string]: string }
 export function getContextValuesFor(baseContext: Context, fv: FormatVariable, args: ArgumentMapping): Context {
   let pointers = new PointerContext(baseContext)
   Object.keys(args).forEach(key => {
-    if (key.length > 0) {
-      let src = key
-      if (PATH_SEPARATOR !== key[0]) {
-        src = joinPaths(CURRENT_FUNCTION_ARGUMENTS_PATH, src)
-      }
-      pointers.addPointer(src, args[key])
+    if (key.length > 0 && key.indexOf(PATH_SEPARATOR) < 0) {
+      pointers.addPointer(key, args[key])
     }
   })
-  return baseContext.push(new SplitContext({
+  return new SplitContext({
     CURRENT_FUNCTION_ARGUMENTS_PATH: pointers
-  }))
+  }, baseContext)
 }

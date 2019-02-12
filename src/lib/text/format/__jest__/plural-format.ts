@@ -3,12 +3,10 @@
 import * as ft from '../index'
 import * as pl from '../plural-format'
 import * as lut from './loc-util'
-import { Context, BaseContext } from '../../../context'
+import { Context, Internal, VALUE_NUMBER, NumberInternal } from '../../../context'
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH } from '../../../core-paths'
 import {
-    Internal, NumberInternal,
     StorageContext,
-    VALUE_NUMBER
 } from '../../../../model/intern'
 
 
@@ -17,10 +15,10 @@ const LOC = new lut.MockLoc([])
 
 describe('format plural', () => {
     function mkCtx(arg: number): Context {
-        const d: { [key: string]: Internal<any> } = {
+        const d: { [key: string]: Internal } = {
             [CURRENT_FUNCTION_ARGUMENT_0_PATH]: new NumberInternal(VALUE_NUMBER, arg)
         }
-        return new BaseContext(new StorageContext(d))
+        return new StorageContext(d)
     }
 
     it('is loaded', () => {
