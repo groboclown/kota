@@ -62,7 +62,7 @@ describe('parseTextFormat', () => {
         const res = tx.parseTextFormat(template)
         expect(hasErrorValue(res)).toBe(true)
         if (hasErrorValue(res)) {
-          expect(res.error.msgid).toBe('incomplete format string')
+          expect(res.error.msgid).toBe('bad format missing }')
           expect(res.error.params['format']).toBe(template)
         }
       })
@@ -121,8 +121,8 @@ describe('parseTextFormat', () => {
           }
           expect(res0.formatTypeMarker).toBe(replacement[0])
           expect(res0.valueKeyNames).toEqual({
-            '0': replacement[1],
-            value: replacement[1]
+            '0': [replacement[1]],
+            value: [replacement[1]]
           })
           expect(res0.template).toHaveLength(0)
         })
@@ -150,11 +150,28 @@ describe('parseTextFormat', () => {
           }
           expect(res0.formatTypeMarker).toBe(replacement[0])
           expect(res0.valueKeyNames).toEqual({
-            '0': replacement[1],
-            value: replacement[1]
+            '0': [replacement[1]],
+            value: [replacement[1]]
           })
           expect(res0.template).toHaveLength(1)
           expect(res0.template).toContainEqual({ text: replacement[2] })
+        })
+      })
+    })
+    describe('called with surrounding text', () => {
+      it('as "abc {a:x;} def"', () => {
+        const res = tx.parseTextFormat('abc {a:x;} def')
+        expect(hasErrorValue(res)).toBe(false)
+        if (hasErrorValue(res)) {
+          return
+        }
+        expect(res).toHaveLength(3)
+        expect(res[0]).toEqual({ text: 'abc ' })
+        expect(res[2]).toEqual({ text: ' def' })
+        expect(res[1]).toEqual({
+          formatTypeMarker: 'a',
+          template: [],
+          valueKeyNames: { '0': ['x'], value: ['x'] }
         })
       })
     })
@@ -162,27 +179,22 @@ describe('parseTextFormat', () => {
       it('as "{:;}x"', () => {
         // Found through fuzz testing.  Hurray for fuzz testing!
         const res = tx.parseTextFormat('{:;}x')
-        expect(hasErrorValue(res)).toBe(false)
-        if (hasErrorValue(res)) {
-          return
-        }
-        expect(res).toHaveLength(2)
-        expect(res[0]).toEqual({
-          formatTypeMarker: '',
-          template: [],
-          valueKeyNames: {}
-        })
-        expect(res[1]).toEqual({
-          text: 'x'
-        })
-      })
-      it('as "{:}{"', () => {
-        const res = tx.parseTextFormat('{:}{')
         expect(hasErrorValue(res)).toBe(true)
         if (hasErrorValue(res)) {
           expect(res.error).toEqual(<ErrorValue>{
-            domain: '/modules/core/system-text/errors', msgid: 'incomplete format string', params: {
-              format: '{:}{'
+            domain: '/modules/core/system-text/errors', msgid: 'bad format no format name', params: {
+              format: '{:;}x'
+            }
+          })
+        }
+      })
+      it('as "{x:y}{"', () => {
+        const res = tx.parseTextFormat('{x:y}{')
+        expect(hasErrorValue(res)).toBe(true)
+        if (hasErrorValue(res)) {
+          expect(res.error).toEqual(<ErrorValue>{
+            domain: '/modules/core/system-text/errors', msgid: 'bad format missing }', params: {
+              format: '{x:y}{'
             }
           })
         }
@@ -199,7 +211,7 @@ describe('parseTextFormat', () => {
     function rng(min: number, max: number): number {
       return Math.floor(Math.random() * (max - min)) + min
     }
-    const loopCount = 10
+    const loopCount = 100
     const maxTextLength = 10000
     var totCharCount = 0
     var totCheckTime = 0
@@ -235,6 +247,9 @@ describe('parseTextFormat', () => {
             case 10:
               s += ';'
               break
+            case 11:
+              s += '>'
+              break
             default:
               s += String.fromCharCode(32, 127)
               break
@@ -267,7 +282,7 @@ describe('isTextFormatPlain', () => {
   })
   it('no', () => {
     expect(tx.isTextFormatPlain(
-      { formatTypeMarker: 'x', valueKeyNames: { '0': 'y' }, template: [] })
+      { formatTypeMarker: 'x', valueKeyNames: { '0': ['y'] }, template: [] })
     ).toBe(false)
   })
 })
@@ -275,7 +290,7 @@ describe('isTextFormatPlain', () => {
 describe('isTextFormatReplace', () => {
   it('yes', () => {
     expect(tx.isTextFormatReplace(
-      { formatTypeMarker: 'x', valueKeyNames: { '0': 'y' }, template: [] })
+      { formatTypeMarker: 'x', valueKeyNames: { '0': ['y'] }, template: [] })
     ).toBe(true)
   })
   it('no', () => {

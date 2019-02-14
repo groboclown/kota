@@ -313,7 +313,10 @@ export interface GroupSetValue {
 export class GroupSetInternal extends CalculatedInternal<GroupSetValue> {
   constructor(
     attributePath: string,
-    /** Mutable list of groups */
+    /**
+     * Mutable list of groups.  Note that the ordering here is important, and each internal
+     * item must be distinct.
+     */
     public groups: string[]
   ) {
     super(tn.VALUE_GROUP_SET_FOR, attributePath)

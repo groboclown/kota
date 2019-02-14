@@ -11,13 +11,13 @@ export const LOCALIZE_FORMAT = 't'
 /**
  * Generic text lookup.  It knows how to work with name-lists, group sub-references,  counts
  */
-export class FormatNameList implements FormatVariable {
-  readonly formatName = NAME_LIST_FORMAT
+export class FormatLocalize implements FormatVariable {
+  readonly formatName = LOCALIZE_FORMAT
 
   format(args: Context, template: string, l10n: loc.Localization): LocalizedText | HasErrorValue {
     const valueInternal = args.getInternal(CURRENT_FUNCTION_ARGUMENT_0_PATH)
     if (!valueInternal) {
-      return { error: coreError('no argument for template', { name: NAME_LIST_FORMAT }) }
+      return { error: coreError('no argument for template', { name: LOCALIZE_FORMAT }) }
     }
     if (!isNameListInternal(valueInternal)) {
       return { error: coreError('unexpected value type', { value: valueInternal.type, type: VALUE_NAME_LIST_ITEM }) }
@@ -37,7 +37,7 @@ export class FormatNameList implements FormatVariable {
   }
 }
 
-registry.registerDataFormat(new FormatNameList())
+registry.registerDataFormat(new FormatLocalize())
 
 // Declared as a common export, just so that it's something that can mark that the registry was loaded.
-export const NAME_LIST_FORMAT_LOADED = true
+export const LOCALIZE_FORMAT_LOADED = true

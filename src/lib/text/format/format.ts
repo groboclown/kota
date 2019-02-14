@@ -1,12 +1,17 @@
 
-import { HasErrorValue } from '../../error'
-import { Context, joinPaths, PATH_SEPARATOR } from '../../context'
+import { HasErrorValue, hasErrorValue } from '../../error'
+import {
+  Context, joinPaths, PATH_SEPARATOR,
+  PointerContext,
+  isGroupSetInternal,
+  isGroupSetAttribute,
+  isGroupDefinitionInternal,
+  ATTRIBUTE_DATA_TYPE
+} from '../../context'
 import { CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
 import * as loc from '../localization'
 import {
-  PointerContext,
-  SplitContext,
-  ATTRIBUTE_DATA_TYPE
+  SplitContext, getGroupSetValue
 } from '../../../model/intern'
 
 export interface LocalizedText {
@@ -43,19 +48,23 @@ export interface FormatVariable {
   readonly formatName: string
 
   format(
-    args: Context,
+    ctx: Context,
     template: string,
     l10n: loc.Localization
   ): LocalizedText | HasErrorValue
 }
 
+/** A list of pointers to the argument value. */
+export type ArgumentReference = string[]
 
-export type ArgumentMapping = { [key: string]: string }
+/** A mapping of argument name to the argument lookup; name can be a user-specified name or the index in the argument list. */
+export type ArgumentMapping = { [key: string]: ArgumentReference }
 
 
 /**
- * Creates a context which maps all the `args` over to the argument path.  The keys in the arg
- * must not contain a path separator.
+ * Creates a context which maps all the `args` over to the argument path.  The keys will
+ * be relative to the CURRENT_FUNCTION_ARGUMENTS_PATH.  The argments may be a list of pointers.
+ * This is resolved before returning.
  *
  * @param baseContext
  * @param fv
@@ -64,10 +73,49 @@ export type ArgumentMapping = { [key: string]: string }
 export function getContextValuesFor(baseContext: Context, fv: FormatVariable, args: ArgumentMapping): Context {
   let pointers = new PointerContext(baseContext)
   Object.keys(args).forEach(key => {
-    if (key.length > 0 && key.indexOf(PATH_SEPARATOR) < 0) {
-      pointers.addPointer(key, args[key])
+    const refList = args[key]
+    if (key.length > 0 && refList && refList.length > 0) {
+      // Now find the corresponding reference location.
+      // This requires inspecting the links of joins
+      let reference: string = refList[0]
+      // Each additional item in the pointer list is relative to
+      // the previous item's value.
+      for (let i = 1; i < refList.length; i++) {
+        const refVal = baseContext.getInternal(reference)
+        if (refVal === undefined) {
+          // Can't go any further.  Leave the reference to this.
+          break
+        }
+        if (isGroupSetInternal(refVal)) {
+          // Follow the group value's reference.  There may be 0 or more
+          // entries in the group value, but we only care about the first.
+          const groupVal = getGroupSetValue(refVal, baseContext)
+          if (hasErrorValue(groupVal)) {
+            // Nothing else to do here.  Don't report the error?
+            // Leave the reference here, so that other parsing can
+            // report the problem properly.
+            break
+          }
+          if (groupVal.values.length <= 0) {
+            // No values, so leave the reference here, so that other
+            // parsing can report the issue properly.
+            break
+          }
+          reference = joinPaths(groupVal.values[0].referencePath, refList[i])
+        } else {
+          // Unknown reference type.
+          break
+        }
+      }
+
+      // The key is relative to the CURRENT_FUNCTION_ARGUMENTS_PATH,
+      // due to the SplitContext below.
+      pointers.addPointer(key, reference)
     }
   })
+
+  // Use a SplitContext, in order to mask the baseContext's previous
+  // function variables.
   return new SplitContext({
     CURRENT_FUNCTION_ARGUMENTS_PATH: pointers
   }, baseContext)
