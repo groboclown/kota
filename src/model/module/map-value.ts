@@ -1,9 +1,9 @@
 
-import { InstanceContext } from '../instance/context'
-
 
 /**
  * Map values are highly complex objects that must support several use cases.
+ *
+ * TODO These need to be re-examined once generation is written.
  */
 
 export interface FuzzMapValueBase {
@@ -98,11 +98,11 @@ export interface AttributeMapValueType {
   readonly name: string
 
   /** list of attribute types required to be in the context for this map value to be usable */
-  readonly requires: {[key: string]: string}
+  readonly requires: { [key: string]: string }
 
   //readonly function:
 }
 
 export type AttributeMapValueTypeCheck<T extends AttributeMapValueType> = (t: AttributeMapValueType) => t is T
 
-export type AttributeMapValueEvaluator<T extends AttributeMapValueType> = (t: T, context: InstanceContext) => number
+// export type AttributeMapValueEvaluator<T extends AttributeMapValueType> = (t: T, context: InstanceContext) => number

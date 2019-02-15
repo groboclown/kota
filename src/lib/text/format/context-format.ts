@@ -35,7 +35,7 @@ export class FormatContext implements FormatVariable {
     function evaluate(values: Context, formatList: tx.TextFormat[]): string | HasErrorValue {
       // console.log(`DEBUG: evaluating <<${JSON.stringify(value)}>> using <<${JSON.stringify(formatList)}>> size ${formatList.length}`)
       var ret = ''
-      formatList.forEach(fmt => {
+      for (let fmt of formatList) {
         // console.log(`DEBUG: -- fmt <<${JSON.stringify(fmt)}>>`)
         if (tx.isTextFormatPlain(fmt)) {
           // we walk the tree backwards, so the text is added backwards.
@@ -48,13 +48,13 @@ export class FormatContext implements FormatVariable {
             // console.log(`DEBUG: -- unknown marker`)
             return { error: coreError('unknown format marker', { marker: fmt.formatTypeMarker }) }
           }
-          // console.log(`DEBUG: -- formatter ${formatter.formatName}`)
+          console.log(`DEBUG: -- formatter ${formatter.formatName}`)
           var stackValues = getContextValuesFor(values, formatter, fmt.valueKeyNames)
 
           // NOTE: we're evaluating the template section relative to this
           // expression's values, not the parent.
           const template = evaluate(stackValues, fmt.template)
-          // console.log(`DEBUG: -- template => <<${template}>>`)
+          console.log(`DEBUG: -- template => <<${template}>>`)
           if (hasErrorValue(template)) {
             return template
           }
@@ -62,10 +62,10 @@ export class FormatContext implements FormatVariable {
           if (hasErrorValue(ev)) {
             return ev
           }
-          // console.log(`DEBUG: -- evaluated => <<${ev.text}>>`)
+          console.log(`DEBUG: -- evaluated => <<${ev.text}>>`)
           ret += ev.text
         }
-      })
+      }
       return ret
     }
 

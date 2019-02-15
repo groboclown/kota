@@ -82,63 +82,71 @@ describe('text generation integration', () => {
   const LOCALE = new SimpleLoc()
 
   // Setup the context tree to be similar to the real one.
-  const CONTEXT =
+  const CORE_CONTEXT = new itn.SplitContext({
+    [cp.APPLICATION_STATE_PATH + '/']: new itn.StorageContext({}),
+    [cp.MODULE_PATH + '/']: new itn.SplitContext({
+      '/0000-core/': new itn.StorageContext({
+        '/noun/count': new itn.NumberAttribute(1, 100000),
+
+        // TODO gender should instead be a group.
+        '/person/gender': new itn.FuzzAttribute(),
+        '/person/gender/pronoun': new itn.NameListAttribute('/core', 'pronoun'),
+        '/person/possessions/transportation': new itn.GroupSetAttribute(
+          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation')
+        ),
+        '/transportation': new GroupDefBuilder()
+          .addGroup({
+            name: 'foot',
+            matches: {},
+            referencePath: itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation', 'foot')
+          })
+          .build(),
+
+        // TODO this needs to just be a localization reference, used with a plural formatter
+        // based on the number of (subject) performing the action.
+        '/transportation/foot/v-travel-attr': new itn.NameListAttribute('/module/0000-core/text', 'transportation/foot/v-travel'),
+        '/transportation/foot/v-travel': new itn.NameListInternal(
+          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation/foot/v-travel-attr'), 1)
+      }),
+      '/0001-addon/': new itn.StorageContext({
+        '/player-name-list': new itn.NameListAttribute('/module/0001-addon/text', 'player-name-list')
+      }),
+    }),
+    [cp.WORLD_STATE_PATH + '/']: new itn.StorageContext({
+      // Rather than define the generation, this is only concerned with the rendering of
+      // text.  It is assumed that the values here were generated from other patterns.
+      '/+player/count': new itn.NumberInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'noun/count'), 1),
+      '/+player/@name': new itn.NameListInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'player-name-list'), 0),
+      '/+player/@gender': new itn.FuzzInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/gender'), 0.0),
+      '/+player/gender/@pronoun': new itn.NameListInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
+      '/+player/possessions/transportation': new itn.GroupSetInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person//possessions/transportation'),
+        ['foot']
+      ),
+    })
+  })
+  const CONTEXT = new itn.StackContext([
     new itn.PointerContext(
-      new itn.SplitContext({
-        [cp.APPLICATION_STATE_PATH]: new itn.StorageContext({}),
-        [cp.MODULE_PATH]: new itn.SplitContext({
-          '/0000-core': new itn.StorageContext({
-            'noun/count': new itn.NumberAttribute(1, 100000),
-
-            // TODO gender should instead be a group.
-            'person/gender': new itn.FuzzAttribute(),
-            'person/gender/pronoun': new itn.NameListAttribute('/core', 'pronoun'),
-            'person/possessions/transportation': new itn.GroupSetAttribute(
-              itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation')
-            ),
-            'transportation': new GroupDefBuilder()
-              .addGroup({
-                name: 'foot',
-                matches: {},
-                referencePath: itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation', 'foot')
-              })
-              .build(),
-
-            'transportation/foot/v-travel': new itn.NameListAttribute('/module/0000-core/text', 'transportation/foot/v-travel')
-          }),
-          '/0001-addon': new itn.StorageContext({
-            'player-name-list': new itn.NameListAttribute('/module/0001-addon/text', 'player-name-list')
-          }),
-        }),
-        [cp.WORLD_STATE_PATH]: new itn.StorageContext({
-          // Rather than define the generation, this is only concerned with the rendering of
-          // text.  It is assumed that the values here were generated from other patterns.
-          '+player/count': new itn.NumberInternal(
-            itn.joinPaths(cp.MODULE_PATH, '0000-core', 'noun/count'), 1),
-          '+player/@name': new itn.NameListInternal(
-            itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'player-name-list'), 0),
-          '+player/@gender': new itn.FuzzInternal(
-            itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/gender'), 0.0),
-          '+player/gender/@pronoun': new itn.NameListInternal(
-            itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
-          '+player/possessions/transportation': new itn.GroupSetInternal(
-            itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person//possessions/transportation'),
-            ['foot']
-          ),
-        })
-      })
+      CORE_CONTEXT
     )
       // Example, not real...
       .addPointer(
         // From
         itn.joinPaths(cp.MODULE_PATH, '0000-core'),
         // To
-        itn.joinPaths(cp.CURRENT_CONTEXT_PATH))
+        itn.joinPaths(cp.CURRENT_CONTEXT_PATH)),
+    CORE_CONTEXT
+  ])
 
   it('basic sentance', () => {
     const formatter = fmt.getTextContextFormatter()
     // The group + count lookup needs to be SEVERELY re-examined.
-    const res = formatter(CONTEXT, '{t:/world/+player/@name} {x:/world/+player/posessions/transportation;{t:/current/0/v-travel}} to the store.', LOCALE)
+    const res = formatter(CONTEXT,
+      '{name:/world/+player/@name} {name:/world/+player/possessions/transportation > v-travel} to the store.', LOCALE)
     console.log(res)
     if (hasErrorValue(res)) {
       throw new Error(`generated error ${JSON.stringify(res)}`)

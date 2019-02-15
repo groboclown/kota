@@ -16,18 +16,24 @@ export class FormatNameList implements FormatVariable {
   readonly formatName = NAME_LIST_FORMAT
 
   format(args: Context, template: string, l10n: loc.Localization): LocalizedText | HasErrorValue {
+    console.log(`DEBUG ** calling into format-name-list`)
     const valueInternal = args.getInternal(CURRENT_FUNCTION_ARGUMENT_0_PATH)
     if (!valueInternal) {
+      console.log(`DEBUG: ** arg 0 not exist`)
       return { error: coreError('no argument for template', { name: NAME_LIST_FORMAT }) }
     }
     if (!isNameListInternal(valueInternal)) {
+      console.log(`DEBUG: ** arg 0 not a name-list`)
       return { error: coreError('unexpected value type', { value: valueInternal.type, type: VALUE_NAME_LIST_ITEM }) }
     }
     const nameEntry = getNameListValue(valueInternal, args)
     if (hasErrorValue(nameEntry)) {
+      console.log(`DEBUG: ** get name list value parse failed: ${nameEntry.error.msgid}`)
       return nameEntry
     }
+    console.log(`DEBUG: ** fetching ${nameEntry.domain}@${nameEntry.msgid}@${nameEntry.listIndex} with [${template}]`)
     const localized = l10n.getText(nameEntry.domain, nameEntry.msgid, nameEntry.listIndex, template)
+    console.log(`DEBUG ${NAME_LIST_FORMAT}:${nameEntry.domain}@${nameEntry.msgid}@${nameEntry.listIndex} => "${localized}"`)
     if (localized === null) {
       // No translation is not an error; it is a limit to the current translated text.
       // However, clearly mark that it isn't translated.

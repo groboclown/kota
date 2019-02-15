@@ -64,7 +64,7 @@ export class NameListAttribute extends AttributeInternal {
     public readonly domain: string,
     public readonly msgid: string
   ) {
-    super(m.ATTRIBUTE_NUMBER_TYPE)
+    super(m.ATTRIBUTE_NAME_LIST_TYPE)
   }
 }
 
@@ -99,6 +99,6 @@ export class GroupSetAttribute extends AttributeInternal {
   }
 }
 
-export function isGroupSetAttribute(v: Internal): v is DateAttribute {
+export function isGroupSetAttribute(v: Internal): v is GroupSetAttribute {
   return v.type === m.ATTRIBUTE_GROUP_SET_TYPE
 }

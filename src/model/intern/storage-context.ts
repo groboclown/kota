@@ -4,22 +4,6 @@ import {
   Context,
   PATH_SEPARATOR
 } from './base'
-import {
-  ATTRIBUTE_DATA_TYPE,
-  VALUE_CALCULATED,
-  VALUE_DATE_DELTA,
-  VALUE_FUZZ,
-  VALUE_NAME_LIST_ITEM,
-  VALUE_NUMBER
-} from './type-names'
-
-const NUMBER_TYPES: { [key: string]: boolean } = {
-  [VALUE_DATE_DELTA]: true,
-  [VALUE_FUZZ]: true,
-  [VALUE_CALCULATED]: true,
-  [VALUE_NAME_LIST_ITEM]: true,
-  [VALUE_NUMBER]: true
-}
 
 
 export class StorageContext implements Context {

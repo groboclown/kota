@@ -1,11 +1,14 @@
 
+// TODO should this be in the module definitions?
 // A "group" which contains membership functions.
 export type ATTRIBUTE_GROUP_DEFINITION = 'group-def'
 export const ATTRIBUTE_GROUP_DEFINITION = 'group-def'
 
+// TODO Do we need this?
 export type ATTRIBUTE_REFERENCE_DEFINITION = 'reference'
 export const ATTRIBUTE_REFERENCE_DEFINITION = 'reference'
 
+// TODO Do we need this?
 export type ATTRIBUTE_INTERNAL_POINTER = 'pointer'
 export const ATTRIBUTE_INTERNAL_POINTER = 'pointer'
 
@@ -19,7 +22,13 @@ export {
   ATTRIBUTE_DATE_TYPE
 } from '../module/attribute'
 
+export {
+  CONSTANT_LOCALIZED,
+  CONSTANT_NUMBER
+} from '../module/constants'
+
 import * as attr from '../module/attribute'
+import * as cst from '../module/constants'
 
 export type ATTRIBUTE_DATA_TYPE =
   // Note the missing values - that's intentional.
@@ -63,6 +72,7 @@ export type RANDOM_SOURCE_TYPE = 'random-source'
 export const RANDOM_SOURCE_TYPE = 'random-source'
 
 export type DATA_TYPE = ATTRIBUTE_DATA_TYPE |
+  cst.CONSTANT_LOCALIZED | cst.CONSTANT_NUMBER |
   RANDOM_SOURCE_TYPE | GROUP_DEFINITION |
   VALUE_NAME_LIST_ITEM |
   VALUE_NUMBER |

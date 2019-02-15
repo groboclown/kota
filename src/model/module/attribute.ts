@@ -30,24 +30,49 @@ export function isValidNumber(v: any): boolean {
 }
 export const INTEGER_RANGE_TYPE = 'number between ' + INTEGER_RANGE_MIN + ' and ' + INTEGER_RANGE_MAX
 
+// Attributes are used in object declarations to indicate the range of
+// possible generated values.  Values are the (possibly) mutable
+// per-object instance with the actual value, and they reference the
+// declaring attribute.
+
+// TODO map types aren't really attributes, but are used for refining
+// possible values during generation.  This may instead be just an
+// aspect of Group Set attribute.
 export type ATTRIBUTE_MAP_TYPE = 'map'
 export const ATTRIBUTE_MAP_TYPE = 'map'
+
+// The definition of a number type with a range
 export type ATTRIBUTE_NUMBER_TYPE = 'number'
 export const ATTRIBUTE_NUMBER_TYPE = 'number'
+
+// A module-specific type that is turned into a number internally
 export type ATTRIBUTE_COUNT_TYPE = 'count'
 export const ATTRIBUTE_COUNT_TYPE = 'count'
+
+// A module-specific type that is turned into a number internally
 export type ATTRIBUTE_RANGE_TYPE = 'range'
 export const ATTRIBUTE_RANGE_TYPE = 'range'
+
+// A floating point number in the range [0, 1]
 export type ATTRIBUTE_FUZZ_TYPE = 'fuzz'
 export const ATTRIBUTE_FUZZ_TYPE = 'fuzz'
+
+// A definition of a collection of group values that
+// come from a single group declaration.
 export type ATTRIBUTE_GROUP_SET_TYPE = 'group'
 export const ATTRIBUTE_GROUP_SET_TYPE = 'group'
-export type ATTRIBUTE_RANDOM_TYPE = 'random'
-export const ATTRIBUTE_RANDOM_TYPE = 'random'
+
+// A declaration of a calculation represented as an
+// object attribute value.
 export type ATTRIBUTE_FUNCTION_TYPE = 'calculated'
 export const ATTRIBUTE_FUNCTION_TYPE = 'calculated'
+
+// A declaration of the localization text containing the
+// name.  The value will be an index into the name list.
 export type ATTRIBUTE_NAME_LIST_TYPE = 'name-list'
 export const ATTRIBUTE_NAME_LIST_TYPE = 'name-list'
+
+// A specific date.
 export type ATTRIBUTE_DATE_TYPE = 'date'
 export const ATTRIBUTE_DATE_TYPE = 'date'
 
@@ -74,8 +99,6 @@ export function getAttributeTypeConstraint(): ConstraintSet {
 
         // group types are a collection of group values.
         [ATTRIBUTE_GROUP_SET_TYPE]: () => { },
-
-        [ATTRIBUTE_RANDOM_TYPE]: () => { },
 
         [ATTRIBUTE_DATE_TYPE]: () => { },
 
@@ -209,18 +232,6 @@ export interface AttributeGroupSetType extends AttributeType {
 
 export const isAttributeGroupType: AttributeTypeCheck<AttributeGroupSetType> = (t: AttributeType): t is AttributeGroupSetType => {
   return t.type === ATTRIBUTE_GROUP_SET_TYPE
-}
-
-
-/**
- * Stored as a seed value that is updated with each query.  Returns a
- * random `number` value.
- */
-export interface AttributeRandomType extends AttributeType {
-}
-
-export const isAttributeRandomType: AttributeTypeCheck<AttributeRandomType> = (t: AttributeType): t is AttributeRandomType => {
-  return t.type === ATTRIBUTE_RANDOM_TYPE
 }
 
 

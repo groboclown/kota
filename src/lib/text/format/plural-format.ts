@@ -5,7 +5,7 @@ import { FormatVariable, LocalizedText } from './format'
 import * as registry from './registry'
 import { CONTEXT_FORMAT } from './context-format'
 import { Context, getNumericValueForInternal } from '../../context'
-import { StackContext, Internal, joinPaths, NumberInternal, PointerContext } from '../../../model/intern';
+import { StackContext, Internal, joinPaths, NumberInternal, PointerContext, PATH_SEPARATOR } from '../../../model/intern';
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH, CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
 
 
@@ -18,6 +18,8 @@ export const PLURAL_FORMAT = 'p'
  * is used.  The variable name in the number format is `count`.
  *
  * If no argument is given, then this uses a '0' as the count.
+ *
+ * TODO This needs to be merged with the "localize" formatter.
  */
 export class FormatPlural implements FormatVariable {
   readonly formatName = PLURAL_FORMAT

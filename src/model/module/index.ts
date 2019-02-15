@@ -15,8 +15,6 @@ export {
   isAttributeFuzzType,
   AttributeGroupSetType,
   isAttributeGroupType,
-  AttributeRandomType,
-  isAttributeRandomType,
   AttributeIntegerType,
   isAttributeIntegerType,
   AttributeFunctionBaseType,
@@ -35,6 +33,11 @@ export {
   FunctionAttributeNearUpperBound,
   isFunctionAttributeNearUpperBound,
 } from './function'
+
+export {
+  ConstantLocalized,
+  ConstantNumber
+} from './constants'
 
 export {
   Manifest

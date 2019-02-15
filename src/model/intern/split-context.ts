@@ -4,10 +4,6 @@ import {
   Context,
 } from './base'
 
-import {
-  ATTRIBUTE_DATA_TYPE
-} from './type-names'
-
 /**
  * Stores sub-contexts in specific paths.  Allows for a fall-back parent
  * context as a grab-bag for everything else.
@@ -22,13 +18,17 @@ export class SplitContext implements Context {
   ) { }
 
   getInternal(path: string): Internal | undefined {
+    // console.log(`DEBUG )) Checking split for [${path}]`)
     for (const key of Object.keys(this.subs)) {
+      //console.log(`DEBUG )) trying prefix [${key}]`)
       if (path.startsWith(key)) {
         // Strip off the 'key' part, but leave the trailing '/'
         const subPath = path.substring(key.length - 1)
+        // console.log(`DEBUG )) using [${key}] => [${subPath}]`)
         return this.subs[key].getInternal(subPath)
       }
     }
+    // console.log(`DEBUG )) no split on ${path}; trying parent`)
     return this.defaultParent ? this.defaultParent.getInternal(path) : undefined
   }
 }

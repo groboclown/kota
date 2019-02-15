@@ -6,9 +6,6 @@ import {
   normalizeAbsolutePath,
 } from './base'
 
-import {
-  ATTRIBUTE_DATA_TYPE
-} from './type-names'
 
 /**
  * Allows for storing data pointers from one path into another path of the
@@ -39,19 +36,22 @@ export class PointerContext implements Context {
   }
 
   getInternal(path: string): Internal | undefined {
+    console.log(`DEBUG: ++ checking [${path}]`)
     for (let i = 0; i < this.pointers.length; i++) {
       const p = this.pointers[i]
       if (path === p[0]) {
+        console.log(`DEBUG: ++ mapped ${path} => ${p[1]}`)
         return this.parent.getInternal(p[1])
       }
       if (path.startsWith(p[2])) {
         // replace the "key" part of the path (which is at the start)
         // with the pointer path.
-        return this.parent.getInternal(p[3] + path.substring(p[2].length))
+        const dest: string = p[3] + path.substring(p[2].length)
+        console.log(`DEBUG: ++ mapped2 ${path} => ${dest}`)
+        return this.parent.getInternal(dest)
       }
     }
     // Do not push up to parent.
-    // return this.parent.get(path, dataType)
     return undefined
   }
 }

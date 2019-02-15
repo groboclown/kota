@@ -112,7 +112,7 @@ abstract class AbstractNumberValueInternal extends CalculatedInternal<number> {
     /** The numeric value of this attribute.  Note that it is NOT read only! */
     public value: number
   ) {
-    super(tn.VALUE_NUMBER, attributePath)
+    super(type, attributePath)
   }
 }
 
@@ -328,14 +328,25 @@ export function isGroupSetInternal(v: Internal): v is GroupSetInternal {
 }
 
 export function getGroupSetValue(v: GroupSetInternal, ctx: Context): GroupSetValue | HasErrorValue {
-  const definition = ctx.getInternal(v.source)
-  if (!definition) {
+  const attributeDef = ctx.getInternal(v.source)
+  if (!attributeDef) {
     return { error: coreError('undefined attribute definition for value', { valueType: v.type, path: v.source }) }
+  }
+  if (!ta.isGroupSetAttribute(attributeDef)) {
+    return {
+      error: coreError(
+        'invalid attribute definition for value', { valueType: v.type, attributeType: attributeDef.type }
+      )
+    }
+  }
+  const definition = ctx.getInternal(attributeDef.groupDefinitionPath)
+  if (!definition) {
+    return { error: coreError('undefined attribute definition for value', { valueType: v.type, path: attributeDef.groupDefinitionPath }) }
   }
   if (!isGroupDefinitionInternal(definition)) {
     return {
       error: coreError(
-        'invalid attribute definition for value', { valueType: v.type, attributeType: definition.type }
+        'invalid attribute definition for value', { valueType: attributeDef.type, attributeType: definition.type }
       )
     }
   }
