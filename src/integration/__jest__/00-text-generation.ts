@@ -102,11 +102,8 @@ describe('text generation integration', () => {
           })
           .build(),
 
-        // TODO this needs to just be a localization reference, used with a plural formatter
-        // based on the number of (subject) performing the action.
-        '/transportation/foot/v-travel-attr': new itn.NameListAttribute('/module/0000-core/text', 'transportation/foot/v-travel'),
-        '/transportation/foot/v-travel': new itn.NameListInternal(
-          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation/foot/v-travel-attr'), 1)
+        '/transportation/foot/v-travel': new itn.LocalizedMessageInternal(
+          '/module/0000-core/text', 'transportation/foot/v-travel')
       }),
       '/0001-addon/': new itn.StorageContext({
         '/player-name-list': new itn.NameListAttribute('/module/0001-addon/text', 'player-name-list')

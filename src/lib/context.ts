@@ -11,6 +11,8 @@ export {
   ATTRIBUTE_FUNCTION_TYPE,
   ATTRIBUTE_FUZZ_TYPE,
   ATTRIBUTE_GROUP_SET_TYPE,
+  CONSTANT_LOCALIZED,
+  CONSTANT_NUMBER,
   RANDOM_SOURCE_TYPE,
   VALUE_GROUP_SET_FOR,
   VALUE_CALCULATED,
@@ -108,5 +110,8 @@ export {
   setNameListValue,
   setNumberValue,
   getNumericValueForInternal,
+  LocalizedMessageInternal,
+  ConstantNumberInternal,
+  isConstantNumberInternal,
+  isLocalizedMessageInternal,
 } from '../model/intern'
-

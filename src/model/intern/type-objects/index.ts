@@ -87,3 +87,11 @@ export {
   isFunctionAttribute,
   getNumericValueForInternal,
 } from './type-function'
+
+export {
+  LocalizedMessageInternal,
+  isLocalizedMessageInternal,
+  ConstantNumberInternal,
+  isConstantNumberInternal,
+} from './type-constant'
+

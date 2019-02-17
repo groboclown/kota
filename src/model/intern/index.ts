@@ -33,7 +33,10 @@ export {
   VALUE_NAME_LIST_ITEM,
   VALUE_NUMBER,
 
-  DATA_TYPE
+  DATA_TYPE,
+
+  CONSTANT_LOCALIZED,
+  CONSTANT_NUMBER,
 } from './type-names'
 
 export {
@@ -111,6 +114,10 @@ export {
   setNameListValue,
   setNumberValue,
   getNumericValueForInternal,
+  isLocalizedMessageInternal,
+  LocalizedMessageInternal,
+  isConstantNumberInternal,
+  ConstantNumberInternal,
 } from './type-objects'
 
 export {

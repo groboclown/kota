@@ -5,6 +5,7 @@ import {
 import * as tn from '../type-names'
 import { AttributeInternal } from './type-attribute'
 import * as tv from './type-value'
+import * as tc from './type-constant'
 import * as m from '../../module/attribute'
 import { HasErrorValue, hasErrorValue, coreError } from '../../../lib/error';
 
@@ -216,6 +217,12 @@ export function getNumericValueForInternal(v: Internal, ctx: Context): number | 
         return { error: coreError('unexpected value type', { value: v.type, type: tn.VALUE_NUMBER }) }
       }
       return tv.getNumberValue(v)
+    }
+    case tn.CONSTANT_NUMBER: {
+      if (!tc.isConstantNumberInternal(v)) {
+        return { error: coreError('unexpected value type', { value: v.type, type: tn.CONSTANT_NUMBER }) }
+      }
+      return v.value
     }
   }
   return { error: coreError('non-numeric value type', { value: v.type }) }
