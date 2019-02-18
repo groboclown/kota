@@ -8,8 +8,11 @@ import * as loc from '../localization'
 
 const DATA_FORMATS: { [key: string]: FormatVariable } = {}
 
-export function registerDataFormat(format: FormatVariable): void {
+export function registerDataFormat(format: FormatVariable, ...additionalNames: string[]): void {
   DATA_FORMATS[format.formatName] = format
+  if (additionalNames) {
+    additionalNames.forEach(n => { DATA_FORMATS[n] = format })
+  }
 }
 
 export function getDataFormatFor(formatTypeMarker: string): FormatVariable | undefined {

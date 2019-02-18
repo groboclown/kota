@@ -12,9 +12,9 @@ import { Localization } from '.././localization'
 // Ensure all the types are loaded.  The files will load themselves into the registry
 export { DATE_FORMAT_LOADED } from './date-format'
 export { CONTEXT_FORMAT_LOADED } from './context-format'
-export { NAME_LIST_FORMAT_LOADED } from './name-list-format'
+export { LOCALIZE_FORMAT_LOADED } from './localize-format'
 export { NUMBER_FORMAT_LOADED } from './number-format'
-export { PLURAL_FORMAT_LOADED } from './plural-format'
+export { TEXT_FORMAT_LOADED } from './text-format'
 
 export type TextContextFormatter =
     (context: Context, formatText: string, l10n: Localization) => (LocalizedText | HasErrorValue)

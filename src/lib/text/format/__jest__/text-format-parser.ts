@@ -175,6 +175,63 @@ describe('parseTextFormat', () => {
         })
       })
     })
+    describe('called with multiple arguments', () => {
+      it('as "{a:x,y}"', () => {
+        const res = tx.parseTextFormat('{a:x,y}')
+        expect(hasErrorValue(res)).toBe(false)
+        if (hasErrorValue(res)) {
+          return
+        }
+        expect(res).toHaveLength(1)
+        expect(res[0]).toEqual({
+          formatTypeMarker: 'a',
+          template: [],
+          valueKeyNames: {
+            '0': ['x'],
+            '1': ['y']
+          }
+        })
+      })
+    })
+    describe('called with multiple named arguments', () => {
+      it('as "{a:wbc=x,@def=y}"', () => {
+        const res = tx.parseTextFormat('{a:wbc=x,@def=y}')
+        expect(hasErrorValue(res)).toBe(false)
+        if (hasErrorValue(res)) {
+          return
+        }
+        expect(res).toHaveLength(1)
+        expect(res[0]).toEqual({
+          formatTypeMarker: 'a',
+          template: [],
+          valueKeyNames: {
+            '0': ['x'],
+            '1': ['y'],
+            'wbc': ['x'],
+            '@def': ['y']
+          }
+        })
+      })
+    })
+    describe('called with mixed named arguments', () => {
+      it('as "{a:x,@def=y}"', () => {
+        const res = tx.parseTextFormat('{a:x,@def=y}')
+        expect(hasErrorValue(res)).toBe(false)
+        if (hasErrorValue(res)) {
+          return
+        }
+        expect(res).toHaveLength(1)
+        expect(res[0]).toEqual({
+          formatTypeMarker: 'a',
+          template: [],
+          valueKeyNames: {
+            '0': ['x'],
+            '1': ['y'],
+            '@def': ['y']
+          }
+        })
+      })
+    })
     describe('called with weird blocks', () => {
       it('as "{:;}x"', () => {
         // Found through fuzz testing.  Hurray for fuzz testing!

@@ -2,6 +2,7 @@
 import {
   Internal,
   Context,
+  normalizeAbsolutePath,
   PATH_SEPARATOR
 } from './base'
 
@@ -15,6 +16,24 @@ export class StorageContext implements Context {
     }
     const value = this.data[path]
     return value
+  }
+
+  keysFor(path: string): string[] {
+    // Ensure the path ends with a trailing slash
+    const p = normalizeAbsolutePath(path, true)
+    console.log(`DEBUG StorageContext: getting keys for ${p}`)
+    const keys: string[] = []
+    Object.keys(this.data).forEach(k => {
+      if (k.startsWith(p)) {
+        const pk = k.indexOf(PATH_SEPARATOR, p.length + 1)
+        if (pk > 0) {
+          keys.push(k.substring(0, pk + 1))
+        } else {
+          keys.push(k)
+        }
+      }
+    })
+    return keys
   }
 
   persist(): string {

@@ -18,4 +18,13 @@ export class StackContext implements Context {
     }
     return undefined
   }
+
+  keysFor(path: string): string[] {
+    console.log(`DEBUG StackContext.keysFor: ${path}`)
+    const keys: { [key: string]: boolean } = {}
+    this.parents.forEach(p =>
+      p.keysFor(path).forEach(pk => { keys[pk] = true })
+    )
+    return Object.keys(keys)
+  }
 }

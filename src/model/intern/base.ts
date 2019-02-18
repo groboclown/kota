@@ -23,11 +23,13 @@ export interface Context {
    */
   getInternal(path: string): Internal | undefined
 
-  // Looks up all the keys uner the given path.
+  // Looks up all the keys under the given path, but only that path (not sub-paths).
+  // If there is a value '/a/b/c' and requests for keys under '/a', then '/a/b/' is
+  // returned.  Keys which are paths are returned with the trailing '/'.
   // This will need to be used for data generation, but that will need to be
   // defined when we get there.  This is for "what kinds of 'x' exist?", but that
   // may be better handled through groups.
-  //keysFor(path: string): string[]
+  keysFor(path: string): string[]
 }
 
 export function isAbsolutePath(path: string): boolean {
@@ -45,13 +47,17 @@ export function isRelativePath(path: string): boolean {
  * The path can be either a relative or absolute path, and does not
  * end with a slash.
  */
-export function normalizePath(path: string): string {
+export function normalizePath(path: string, includeTrailingSlash?: boolean): string {
   // Strip out all double slashes
   while (path.indexOf(PATH_SEPARATOR + PATH_SEPARATOR) >= 0) {
     path = path.replace(PATH_SEPARATOR + PATH_SEPARATOR, PATH_SEPARATOR)
   }
-  if (path.length > 1 && path[path.length - 1] === PATH_SEPARATOR) {
-    path = path.substring(0, path.length - 1)
+  if (!includeTrailingSlash) {
+    if (path.length > 1 && path[path.length - 1] === PATH_SEPARATOR) {
+      path = path.substring(0, path.length - 1)
+    }
+  } else if (path.length <= 0 || path[path.length - 1] !== PATH_SEPARATOR) {
+    path += PATH_SEPARATOR
   }
   return path
 }
@@ -61,8 +67,8 @@ export function normalizePath(path: string): string {
  * Ensures that the returned path is normalized and absolute.  The path
  * will be forced to have a leading slash.
  */
-export function normalizeAbsolutePath(path: string): string {
-  path = normalizePath(path)
+export function normalizeAbsolutePath(path: string, includeTrailingSlash?: boolean): string {
+  path = normalizePath(path, includeTrailingSlash)
   if (path.length <= 0 || path[0] !== PATH_SEPARATOR) {
     path = PATH_SEPARATOR + path
   }

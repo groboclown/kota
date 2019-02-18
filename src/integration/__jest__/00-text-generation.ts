@@ -56,7 +56,18 @@ describe('text generation integration', () => {
         'Alex',
         'Ashley',
         'Tay',
-      ]
+      ],
+      'store-name-list': [
+        "Bob's Groceries",
+        'Korner Krap',
+        'The Generic Store',
+      ],
+      'marble-name': {
+        1: 'a marble',
+        2: 'a pair of marbles',
+        3: 'some marbles',
+        plural: '{c:/current/function/arguments/@count;,} glass marbles',
+      }
     }
   }
   class SimpleLoc implements loc.Localization {
@@ -106,7 +117,28 @@ describe('text generation integration', () => {
           '/module/0000-core/text', 'transportation/foot/v-travel')
       }),
       '/0001-addon/': new itn.StorageContext({
-        '/player-name-list': new itn.NameListAttribute('/module/0001-addon/text', 'player-name-list')
+        '/player-name-list': new itn.NameListAttribute('/module/0001-addon/text', 'player-name-list'),
+        '/player/store-goal': new itn.GroupSetAttribute(
+          itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location', 'store', 'player-goals')),
+
+        '/location/store/name-list': new itn.NameListAttribute('/module/0001-addon/text', 'store-name-list'),
+        // TODO location should probably allow for a topology to encode distances and other concepts like things-on-the-way.
+        // Either that, or it is part of the generation and encoded as distance-to-place.  That will need
+        // name pointer in context arguments to allow for the pointer to be a variable name.
+        '/location/store/distance': new itn.NumberAttribute(0, 100000),
+
+        '/location/store/player-goal': new itn.GroupSetAttribute(
+          itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goals-def')),
+        '/location/store/player-goal-count': new itn.NumberAttribute(1, 1000),
+        '/location/store/player-goals-def': new GroupDefBuilder()
+          .addGroup({
+            name: 'marbles',
+            matches: { toy: 0.8 },
+            referencePath: itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'toys', 'marble')
+          })
+          .build(),
+
+        '/toys/marble/@name': new itn.LocalizedMessageInternal('/module/0001-addon/text', 'marble-name'),
       }),
     }),
     [cp.WORLD_STATE_PATH + '/']: new itn.StorageContext({
@@ -121,9 +153,18 @@ describe('text generation integration', () => {
       '/+player/gender/@pronoun': new itn.NameListInternal(
         itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
       '/+player/possessions/transportation': new itn.GroupSetInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person//possessions/transportation'),
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/possessions/transportation'),
         ['foot']
       ),
+      '/+player/location/store/player-goal': new itn.GroupSetInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal'), ['marbles']),
+      '/+player/location/store/@player-goal-count': new itn.NumberInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal-count'), 1040),
+
+      '/+location/@name': new itn.NameListInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/name-list'), 5),
+      '/+location/@distance': new itn.NumberInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/distance'), 15),
     })
   })
   const CONTEXT = new itn.StackContext([
@@ -143,11 +184,13 @@ describe('text generation integration', () => {
     const formatter = fmt.getTextContextFormatter()
     // The group + count lookup needs to be SEVERELY re-examined.
     const res = formatter(CONTEXT,
-      '{name:/world/+player/@name} {name:/world/+player/possessions/transportation > v-travel} to the store.', LOCALE)
+      '{l:/world/+player/@name} {l:/world/+player/possessions/transportation > v-travel} ' +
+      '{c:/world/+location/@distance} kilometers to {l:/world/+location/@name} ' +
+      'to buy {l:/world/+player/location/store/player-goal > @name,@count=/world/+player/location/store/@player-goal-count}.', LOCALE)
     console.log(res)
     if (hasErrorValue(res)) {
       throw new Error(`generated error ${JSON.stringify(res)}`)
     }
-    expect(res.text).toBe('Chris walked to the store.')
+    expect(res.text).toBe('Chris walked 15 kilometers to The Generic Store to buy 1,040 glass marbles.')
   })
 })

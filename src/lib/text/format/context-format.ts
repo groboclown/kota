@@ -36,7 +36,7 @@ export class FormatContext implements FormatVariable {
       // console.log(`DEBUG: evaluating <<${JSON.stringify(value)}>> using <<${JSON.stringify(formatList)}>> size ${formatList.length}`)
       var ret = ''
       for (let fmt of formatList) {
-        // console.log(`DEBUG: -- fmt <<${JSON.stringify(fmt)}>>`)
+        console.log(`DEBUG: -- fmt <<${JSON.stringify(fmt)}>>`)
         if (tx.isTextFormatPlain(fmt)) {
           // we walk the tree backwards, so the text is added backwards.
           // console.log(`DEBUG -- plain text`)
@@ -56,10 +56,13 @@ export class FormatContext implements FormatVariable {
           const template = evaluate(stackValues, fmt.template)
           console.log(`DEBUG: -- template => <<${template}>>`)
           if (hasErrorValue(template)) {
+            console.log(`DEBUG: -- sub-evaluate failed`)
             return template
           }
+          console.log(`DEBUG: -- starting formatter`)
           const ev = formatter.format(stackValues, template, l10n)
           if (hasErrorValue(ev)) {
+            console.log(`DEBUG: -- format failed`)
             return ev
           }
           console.log(`DEBUG: -- evaluated => <<${ev.text}>>`)
@@ -82,11 +85,3 @@ registry.registerDataFormat(new FormatContext())
 
 // Declared as a common export, just so that it's something that can mark that the registry was loaded.
 export const CONTEXT_FORMAT_LOADED = true
-
-function fmtValue(valueName: string, value: any): any {
-  if (value === undefined) {
-    return `??<${valueName}>??`
-  } else {
-    return value
-  }
-}

@@ -75,7 +75,7 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
   Object.keys(args).forEach(key => {
     const refList = args[key]
     if (key.length > 0 && refList && refList.length > 0) {
-      // console.log(`DEBUG: -+- discovering [${key}] -> ${JSON.stringify(refList)}`)
+      console.log(`DEBUG: -+- discovering [${key}] -> ${JSON.stringify(refList)}`)
       // Now find the corresponding reference location.
       // This requires inspecting the links of joins
       let reference: string = refList[0]
@@ -85,7 +85,7 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
         const refVal = baseContext.getInternal(reference)
         if (refVal === undefined) {
           // Can't go any further.  Leave the reference to this.
-          // console.log(`DEBUG: -+- :: no context value at ${reference}`)
+          console.log(`DEBUG: -+- :: no context value at ${reference}`)
           break
         }
         if (isGroupSetInternal(refVal)) {
@@ -96,27 +96,27 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
             // Nothing else to do here.  Don't report the error?
             // Leave the reference here, so that other parsing can
             // report the problem properly.
-            // console.log(`DEBUG: -+- :: get group value ${JSON.stringify(refVal)} returned error ${JSON.stringify(groupVal.error)}`)
+            console.log(`DEBUG: -+- :: get group value ${JSON.stringify(refVal)} returned error ${JSON.stringify(groupVal.error)}`)
             break
           }
           if (groupVal.values.length <= 0) {
             // No values, so leave the reference here, so that other
             // parsing can report the issue properly.
-            // console.log(`DEBUG: -+- :: no group values`)
+            console.log(`DEBUG: -+- :: no group values`)
             break
           }
           reference = joinPaths(groupVal.values[0].referencePath, refList[i])
-          // console.log(`DEBUG: -+- :: mapped "${groupVal.values[0].referencePath}" + "${refList[i]}" -> "${reference}"`)
+          console.log(`DEBUG: -+- :: mapped "${groupVal.values[0].referencePath}" + "${refList[i]}" -> "${reference}"`)
         } else {
           // Unknown reference type.
-          // console.log(`DEBUG: -+- :: cannot lookup pointer from ${refVal.type}`)
+          console.log(`DEBUG: -+- :: cannot lookup pointer from ${refVal.type}`)
           break
         }
       }
 
       // The key is relative to the CURRENT_FUNCTION_ARGUMENTS_PATH,
       // due to the SplitContext below.
-      // console.log(`DEBUG: -+- :: final mapping [${key}] -> [${reference}]`)
+      console.log(`DEBUG: -+- :: final mapping [${key}] -> [${reference}]`)
       pointers.addPointer(PATH_SEPARATOR + key, reference)
     }
   })

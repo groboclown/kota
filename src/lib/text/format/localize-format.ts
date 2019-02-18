@@ -17,14 +17,18 @@ import {
   CONSTANT_LOCALIZED,
 } from '../../context'
 import { CURRENT_FUNCTION_ARGUMENT_0_PATH, CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
-import { isNameListAttribute, joinPaths, isConstantNumberInternal, isNumberInternal, isCalculatedInternal, getNumericValueForInternal } from 'model/intern';
+import {
+  isNameListAttribute,
+  joinPaths,
+  getNumericValueForInternal
+} from '../../../model/intern';
 
-// "t" for "text"
-export const LOCALIZE_FORMAT = 't'
+// "l" for "lookup" or "localize"
+export const LOCALIZE_FORMAT = 'l'
 
 
 /**
- * Generic text lookup.  It knows how to work with name-lists and localizations.
+ * Generic localized text lookup.  It knows how to work with name-lists and localizations.
  *
  * Unlike other formatters, this one is concerned with the formatting of the message described
  * in the first argument.  All the arguments are used as-is for input to formatting the
@@ -58,7 +62,8 @@ export class FormatLocalize implements FormatVariable {
       domain = i18nLookup.domain
       msgid = i18nLookup.msgid
     } else {
-      return { error: coreError('unexpected value type', { type: CONSTANT_LOCALIZED + ',' + VALUE_NAME_LIST_ITEM }) }
+      console.log(`DEBUG: [[ value type ${i18nLookup.type}, argument keys ${args.keysFor(CURRENT_FUNCTION_ARGUMENTS_PATH)}`)
+      return { error: coreError('unexpected value type', { type: CONSTANT_LOCALIZED + ',' + VALUE_NAME_LIST_ITEM, found: i18nLookup.type }) }
     }
 
     // Note: this overrides name-list value's count.
@@ -90,7 +95,8 @@ export class FormatLocalize implements FormatVariable {
   }
 }
 
-registry.registerDataFormat(new FormatLocalize())
+// "l" looks like "1", so allow it as well.
+registry.registerDataFormat(new FormatLocalize(), '1')
 
 // Declared as a common export, just so that it's something that can mark that the registry was loaded.
 export const LOCALIZE_FORMAT_LOADED = true

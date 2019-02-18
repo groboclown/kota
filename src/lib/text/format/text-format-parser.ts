@@ -291,9 +291,12 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
           // Variable has no name, but there will now be more arguments, so it doesn't use "value" default.
           current.value.pointers.push(current.value.valueTrimmedBuff)
           current.values[String(current.value.index)] = current.value.pointers
-          current.value.index++
           // Don't need to clear the value buffers, because they will be cleared
           // in the start search.
+
+          // Reset all but the buffers.
+          current.value.pointers = []
+          current.value.index++
           current.state = CTX_VALUE_OR_NAME_START
         } else if (c === '=') {
           // found the name for the value
@@ -395,9 +398,12 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
         } else if (c === ',') {
           // no-named value with no pointer.
           current.values[String(current.value.index)] = [current.value.valueTrimmedBuff]
-          current.value.index++
           // Don't need to clear the value buffers, because they will be cleared
           // in the start search.
+
+          // Reset all but the buffers.
+          current.value.pointers = []
+          current.value.index++
           current.state = CTX_VALUE_OR_NAME_START
         } else if (c === '=') {
           // found the name for the value
