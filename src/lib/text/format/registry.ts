@@ -1,10 +1,5 @@
 
-import { LocalizedText, FormatVariable } from './format'
-import { FormatDate } from './date-format'
-import { FormatPlural } from './plural-format'
-import { FormatNumber } from './number-format'
-import { HasErrorValue, coreError, hasErrorValue } from '../../error'
-import * as loc from '../localization'
+import { FormatVariable } from './format'
 
 const DATA_FORMATS: { [key: string]: FormatVariable } = {}
 

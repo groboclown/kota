@@ -66,7 +66,6 @@ export {
   NameListInternal,
   NameListValue,
   PointerContext,
-  RelativeContext,
   SetDateDeltaValueFunc,
   SetDateValueFunc,
   SetFuzzValueFunc,

@@ -305,19 +305,29 @@ export const SetNameListValueFunc: setCalculatedInternal<NameListInternal, NameL
 
 // ---------------
 
+// Note: these names are terrible, but here they are.
+// GroupDefinition: the universe of possible group values.
+// GroupValue: an individual item in the group definition.  Includes match to other group values.
+// GroupSetInternal: specific value with 0 or more distinct group values for a specific group definition.
+// GroupSetAttribute: defines an attribute for a group set internal.
+
 export interface GroupSetValue {
+  // Note: does not include the GroupValue -> inclusion number.
+
   values: GroupValue[]
   readonly definition: GroupDefinitionInternal
 }
+
+export type GroupMultivalenceSet = { [groupName: string]: number }
 
 export class GroupSetInternal extends CalculatedInternal<GroupSetValue> {
   constructor(
     attributePath: string,
     /**
-     * Mutable list of groups.  Note that the ordering here is important, and each internal
-     * item must be distinct.
+     * Mutable collection of group value names to their inclusion in the set.
+     * Inclusion values are in the range [0, 1].
      */
-    public groups: string[]
+    public groups: GroupMultivalenceSet
   ) {
     super(tn.VALUE_GROUP_SET_FOR, attributePath)
   }
@@ -351,7 +361,7 @@ export function getGroupSetValue(v: GroupSetInternal, ctx: Context): GroupSetVal
     }
   }
   const ret: GroupSetValue = { values: [], definition }
-  for (let name of v.groups) {
+  for (let name of Object.keys(v.groups)) {
     const val = definition.values[name]
     if (!val) {
       return { error: coreError('undefined group value', { value: name, group: v.source }) }
@@ -361,20 +371,124 @@ export function getGroupSetValue(v: GroupSetInternal, ctx: Context): GroupSetVal
   return ret
 }
 
-export function setGroupSetValue(v: GroupSetInternal, value: GroupSetValue, tick: number): undefined | HasErrorValue {
-  const nameSet: { [name: string]: boolean } = {}
-  for (let gv of value.values) {
-    const n = gv.name
-    if (!value.definition.values[n]) {
-      return { error: coreError('undefined group value', { value: n, group: v.source }) }
+export type GroupValueMultivalenceEntry = {
+  /** name of the group */
+  n: string,
+  /** inclusion amount [0, 1] */
+  v: number,
+  /** link to the group value */
+  g: GroupValue,
+  /** the original group value that caused the link. */
+  src: GroupValue
+}
+export type GroupValueMultivalenceSet = { [groupName: string]: GroupValueMultivalenceEntry }
+
+export function getCompleteGroupValues(inclusion: GroupMultivalenceSet, value: GroupSetValue, cutoff?: number): GroupValueMultivalenceSet {
+  const ret: GroupValueMultivalenceSet = {}
+  const cutoffVal = Math.max(0, cutoff === undefined ? 0 : cutoff)
+
+  const pendingStack: GroupValueMultivalenceEntry[] = []
+  Object.keys(inclusion).forEach(k => pendingStack.push({
+    n: k,
+    v: inclusion[k],
+    g: value.definition.values[k],
+    src: value.definition.values[k]
+  }))
+  while (true) {
+    const entry = pendingStack.pop()
+    if (!entry) {
+      break
     }
-    nameSet[n] = true
+    if (entry.v > cutoffVal) {
+      if (ret[entry.n]) {
+        if (ret[entry.n].src.name !== entry.src.name) {
+          // The two entries have different sources, so they reinforce each other.
+          if (ret[entry.n].v >= entry.v) {
+            // ret's value is more prominent, so use it.
+            ret[entry.n].v = Math.min(1, ret[entry.n].v + entry.v)
+          } else {
+            // replace ret's value with the entry, since entry is more prominent.
+            entry.v = Math.min(1, ret[entry.n].v + entry.v)
+            ret[entry.n] = entry
+          }
+        }
+      } else {
+        // Create the entry.
+        ret[entry.n] = entry
+        Object.keys(entry.g.matches).forEach(gk => {
+          pendingStack.push({
+            n: gk,
+            v: entry.v * entry.g.matches[gk],
+            g: value.definition.values[gk],
+            src: entry.src
+          })
+        })
+      }
+    }
   }
-  const names: string[] = Object.keys(nameSet)
-  names.sort()
-  if (names !== v.groups) {
+
+  return ret
+}
+
+
+export function unionGroupValueMultivalenceSet(...values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
+  return joinGroupValueMultivalenceSet((a, b) => a + b, 0, 0, values)
+}
+
+
+export function intersectGroupValueMultivalenceSet(...values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
+  return joinGroupValueMultivalenceSet((a, b) => a * b, 0, 0, values)
+}
+
+
+function joinGroupValueMultivalenceSet(
+  joinFunc: (n1: number, n2: number) => number,
+  cutoff: number,
+  notExistValue: number,
+  values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
+  const ret: GroupValueMultivalenceSet = {}
+
+  values.forEach(val => {
+    Object.keys(val).forEach(key => {
+      const entry = val[key]
+      if (ret[key]) {
+        if (ret[key].src.name !== entry.src.name) {
+          // The two entries have different sources, so they reinforce each other.
+          if (ret[key].v >= entry.v) {
+            // ret's value is more prominent, so use it.
+            ret[key].v = Math.max(0, Math.min(1, joinFunc(ret[key].v, entry.v)))
+            if (ret[key].v <= cutoff) {
+              delete ret[key]
+            }
+          } else {
+            // replace ret's value with the entry, since entry is more prominent.
+            // Do NOT change the original value
+            const rv = { ...entry }
+            rv.v = Math.max(0, Math.min(1, joinFunc(ret[key].v, entry.v)))
+            if (rv.v > cutoff) {
+              ret[entry.n] = rv
+            }
+          }
+        }
+      } else {
+        const v = Math.max(0, Math.min(1, joinFunc(entry.v, notExistValue)))
+        if (v > cutoff) {
+          ret[key] = { ...entry }
+        }
+      }
+    })
+  })
+
+  return ret
+}
+
+
+
+export function setGroupSetValue(v: GroupSetInternal, value: GroupMultivalenceSet, tick: number): undefined | HasErrorValue {
+  const nameSet: { [name: string]: number } = {}
+  if (value !== v.groups) {
     v.lastCalculatedTick = tick
-    v.groups = names
+    v.groups = value
   }
   return
 }

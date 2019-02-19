@@ -154,10 +154,10 @@ describe('text generation integration', () => {
         itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
       '/+player/possessions/transportation': new itn.GroupSetInternal(
         itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/possessions/transportation'),
-        ['foot']
+        { 'foot': 1 }
       ),
       '/+player/location/store/player-goal': new itn.GroupSetInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal'), ['marbles']),
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal'), { 'marbles': 1 }),
       '/+player/location/store/@player-goal-count': new itn.NumberInternal(
         itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal-count'), 1040),
 

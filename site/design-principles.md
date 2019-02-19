@@ -6,7 +6,7 @@ layout: default
 The KotA engine is being built with these principles in mind.
 
 
-### Generative Not Declaritive
+### Generative Not Declarative
 
 The game stories define the shape of what's necessary to fulfil the story, while the game world data defines acceptable parameters for creating different kinds of things.
 
@@ -22,3 +22,8 @@ The system must allow for as much add-ons and changes to the story generation as
 In order to make older add-ons work with newer add-ons, we don't want hard-and-fast rules, like "only sailors can have this job," when the earlier add-ons had no concept of sailors.  Additionally, if an add-on requires a new concept to be integrated into the world, like finances, then the add-on needs to describe how that is brought into the world.
 
 A non-goal is describing how to remove add-ons from existing worlds.
+
+
+### Choice over Random
+
+Choices are generally represented as a single value from a collection of values.  In many places, the player has no control over which value is chosen.  However, in order to maximize player choice, look where these are determined by the player, rather than by the roll of a die.

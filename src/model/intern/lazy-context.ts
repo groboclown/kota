@@ -53,4 +53,9 @@ export class LazyContext implements Context {
     this.cache.push([normalizeAbsolutePath(v[0]), v[1]])
     return v[1].getInternal(path)
   }
+
+  // No idea how to properly implement this...
+  keysFor(path: string): string[] {
+    throw new Error("Method not implemented.");
+  }
 }

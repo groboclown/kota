@@ -129,10 +129,6 @@ export {
 } from './pointer-context'
 
 export {
-  RelativeContext
-} from './relative-context'
-
-export {
   SplitContext
 } from './split-context'
 
