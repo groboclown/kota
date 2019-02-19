@@ -431,17 +431,29 @@ export function getCompleteGroupValues(inclusion: GroupMultivalenceSet, value: G
 }
 
 
-export function unionGroupValueMultivalenceSet(...values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
-  return joinGroupValueMultivalenceSet((a, b) => a + b, 0, 0, values)
+export function unionGroupValueMultivalueSet(...values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
+  // This union operator should be a standard s-norm function.
+  return joinGroupValueMultivalueSet((a, b) => a + b, 0, 0, values)
 }
 
 
-export function intersectGroupValueMultivalenceSet(...values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
-  return joinGroupValueMultivalenceSet((a, b) => a * b, 0, 0, values)
+export function intersectGroupValueMultivalueSet(...values: GroupValueMultivalenceSet[]): GroupValueMultivalenceSet {
+  // The intersection operator should be a standard t-norm function.
+  return joinGroupValueMultivalueSet((a, b) => a * b, 0, 0, values)
 }
 
 
-function joinGroupValueMultivalenceSet(
+/**
+ *
+ *
+ * @param joinFunc function used to join two membership numbers together.  The function should ensure that
+ *    the output is in the range [0, 1]; note that the inputs are guaranteed to be in that range.
+ * @param cutoff If the resulting membership number for an element is below this, then it is omitted from the
+ *    collection
+ * @param notExistValue value to use if one set has an element and the other set does not.
+ * @param values list of sets.
+ */
+function joinGroupValueMultivalueSet(
   joinFunc: (n1: number, n2: number) => number,
   cutoff: number,
   notExistValue: number,

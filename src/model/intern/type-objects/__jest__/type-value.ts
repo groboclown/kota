@@ -26,3 +26,9 @@ describe('date-delta-type', () => {
     })
   })
 })
+
+describe('group-value-type', () => {
+  describe('unionGroupValueMultivalenceSet', () => {
+
+  })
+})
