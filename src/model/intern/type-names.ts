@@ -71,9 +71,13 @@ export type VALUE_DATE = 't'
 export type RANDOM_SOURCE_TYPE = 'random-source'
 export const RANDOM_SOURCE_TYPE = 'random-source'
 
+// Internal references for story fragments
+export type CONTEXT_REFERENCE_TYPE = 'ref'
+export const CONTEXT_REFERENCE_TYPE = 'ref'
+
 export type DATA_TYPE = ATTRIBUTE_DATA_TYPE |
   cst.CONSTANT_LOCALIZED | cst.CONSTANT_NUMBER |
-  RANDOM_SOURCE_TYPE | GROUP_DEFINITION |
+  RANDOM_SOURCE_TYPE | GROUP_DEFINITION | CONTEXT_REFERENCE_TYPE |
   VALUE_NAME_LIST_ITEM |
   VALUE_NUMBER |
   VALUE_FUZZ |

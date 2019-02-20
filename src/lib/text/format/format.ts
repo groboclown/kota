@@ -4,8 +4,7 @@ import {
   Context, joinPaths, PATH_SEPARATOR,
   PointerContext,
   isGroupSetInternal,
-  isGroupSetAttribute,
-  isGroupDefinitionInternal,
+  isContextReference,
   ATTRIBUTE_DATA_TYPE
 } from '../../context'
 import { CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
@@ -107,6 +106,10 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
           }
           reference = joinPaths(groupVal.values[0].referencePath, refList[i])
           console.log(`DEBUG: -+- :: mapped "${groupVal.values[0].referencePath}" + "${refList[i]}" -> "${reference}"`)
+        } else if (isContextReference(refVal)) {
+          console.log(`DEBUG: -+- :: mapped "${reference}"`)
+          reference = joinPaths(refVal.referencePath, refList[i])
+          console.log(`DEBUG: -+- ::   -> "${reference}"`)
         } else {
           // Unknown reference type.
           console.log(`DEBUG: -+- :: cannot lookup pointer from ${refVal.type}`)

@@ -113,4 +113,7 @@ export {
   ConstantNumberInternal,
   isConstantNumberInternal,
   isLocalizedMessageInternal,
+  ContextReference,
+  isContextReference,
+  createContextReferences,
 } from '../model/intern'

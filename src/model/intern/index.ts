@@ -37,6 +37,8 @@ export {
 
   CONSTANT_LOCALIZED,
   CONSTANT_NUMBER,
+
+  CONTEXT_REFERENCE_TYPE,
 } from './type-names'
 
 export {
@@ -118,6 +120,9 @@ export {
   LocalizedMessageInternal,
   isConstantNumberInternal,
   ConstantNumberInternal,
+  ContextReference,
+  createContextReferences,
+  isContextReference,
 } from './type-objects'
 
 export {

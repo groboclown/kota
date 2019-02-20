@@ -4,7 +4,6 @@ import {
 } from '../base'
 import { RandomSeed, seededRandom } from '../../../lib/math/seedrandom'
 import * as tn from '../type-names'
-import * as m from '../../module/attribute'
 
 // -------------------------------------------------------------------------
 // The random source is a seed that generates random numbers.

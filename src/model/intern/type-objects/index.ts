@@ -12,20 +12,26 @@ export {
   FuzzAttribute,
   isFuzzAttribute,
   GroupSetAttribute,
-  isGroupSetAttribute
+  isGroupSetAttribute,
 } from './type-attribute'
 
 export {
   GroupDefinitionInternal,
   GroupValue,
-  isGroupDefinitionInternal
+  isGroupDefinitionInternal,
 } from './type-group'
 
 export {
   RandomSource,
   getRandomSourceValue,
-  isRandomSource
+  isRandomSource,
 } from './type-random'
+
+export {
+  ContextReference,
+  isContextReference,
+  createContextReferences,
+} from './type-ref'
 
 export {
   CalculatedInternal,
@@ -94,4 +100,3 @@ export {
   ConstantNumberInternal,
   isConstantNumberInternal,
 } from './type-constant'
-

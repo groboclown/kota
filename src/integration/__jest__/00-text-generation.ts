@@ -57,6 +57,12 @@ describe('text generation integration', () => {
         'Ashley',
         'Tay',
       ],
+      'home-name-list:S': [
+        '"Home"',
+      ],
+      'home-name-list': [
+        '"home"',
+      ],
       'store-name-list': [
         "Bob's Groceries",
         'Korner Krap',
@@ -97,14 +103,24 @@ describe('text generation integration', () => {
     [cp.APPLICATION_STATE_PATH + '/']: new itn.StorageContext({}),
     [cp.MODULE_PATH + '/']: new itn.SplitContext({
       '/0000-core/': new itn.StorageContext({
+        // A generic count for nouns for use in grammar syntax.
         '/noun/count': new itn.NumberAttribute(1, 100000),
+
+        '/preferences/language-set': new GroupDefBuilder()
+          .addGroup({
+            name: 'en_US',
+            matches: { 'en': 1.0, 'en_UK': 0.8 },
+            referencePath: '???'
+          })
+          .build(),
+        '/preferences/language': new itn.GroupSetAttribute(
+          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'preferences/language-set')),
 
         // TODO gender should instead be a group.
         '/person/gender': new itn.FuzzAttribute(),
         '/person/gender/pronoun': new itn.NameListAttribute('/core', 'pronoun'),
         '/person/possessions/transportation': new itn.GroupSetAttribute(
-          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation')
-        ),
+          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation')),
         '/transportation': new GroupDefBuilder()
           .addGroup({
             name: 'foot',
@@ -121,6 +137,8 @@ describe('text generation integration', () => {
         '/player/store-goal': new itn.GroupSetAttribute(
           itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location', 'store', 'player-goals')),
 
+
+        '/location/home/name-list': new itn.NameListAttribute('/module/0001-addon/text', 'home-name-list'),
         '/location/store/name-list': new itn.NameListAttribute('/module/0001-addon/text', 'store-name-list'),
         // TODO location should probably allow for a topology to encode distances and other concepts like things-on-the-way.
         // Either that, or it is part of the generation and encoded as distance-to-place.  That will need
@@ -141,42 +159,78 @@ describe('text generation integration', () => {
         '/toys/marble/@name': new itn.LocalizedMessageInternal('/module/0001-addon/text', 'marble-name'),
       }),
     }),
+    [cp.APPLICATION_STATE_PATH + '/']: new itn.StorageContext({
+      '/users/bobbyj/preferences/language': new itn.GroupSetInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'preferences/language'),
+        { 'en': 1.0 }),
+    }),
     [cp.WORLD_STATE_PATH + '/']: new itn.StorageContext({
       // Rather than define the generation, this is only concerned with the rendering of
       // text.  It is assumed that the values here were generated from other patterns.
-      '/+player/count': new itn.NumberInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'noun/count'), 1),
-      '/+player/@name': new itn.NameListInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'player-name-list'), 0),
-      '/+player/@gender': new itn.FuzzInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/gender'), 0.0),
-      '/+player/gender/@pronoun': new itn.NameListInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
-      '/+player/possessions/transportation': new itn.GroupSetInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/possessions/transportation'),
-        { 'foot': 1 }
-      ),
-      '/+player/location/store/player-goal': new itn.GroupSetInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal'), { 'marbles': 1 }),
-      '/+player/location/store/@player-goal-count': new itn.NumberInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal-count'), 1040),
 
-      '/+location/@name': new itn.NameListInternal(
+      // "/users/bobbyj": this is the current player's login name.  It allows for multiple people to
+      // play the same game together with different characters.
+      '/users/bobbyj/+adventurer1/@count': new itn.NumberInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'noun/count'), 1),
+      '/users/bobbyj/+adventurer1/@name': new itn.NameListInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'player-name-list'), 0),
+
+      // TODO change gender to a group
+      '/users/bobbyj/+adventurer1/@gender': new itn.FuzzInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/gender'), 0.0),
+      '/users/bobbyj/+adventurer1/gender/@pronoun': new itn.NameListInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
+
+      '/users/bobbyj/+adventurer1/possessions/transportation': new itn.GroupSetInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/possessions/transportation'),
+        { 'foot': 1 }),
+      // TODO should this ContextReference be here?  We need to reference the real location,
+      // but the lookup won't happen this deep (story -> this goal, but not deeper).
+      '/users/bobbyj/+adventurer1/location-store-goal/@location': new itn.ContextReference(
+        itn.joinPaths(cp.WORLD_STATE_PATH, 'locations/+store')),
+      '/users/bobbyj/+adventurer1/location-store-goal/@item': new itn.GroupSetInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal'), { 'marbles': 1 }),
+      '/users/bobbyj/+adventurer1/location-store-goal/@count': new itn.NumberInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal-count'), 1040),
+      '/users/bobbyj/+adventurer1/location-store-goal/@distance': new itn.NumberInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/distance'), 16),
+
+      '/locations/+home/@name': new itn.NameListInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/home/name-list'), 91),
+
+      '/locations/+store/@name': new itn.NameListInternal(
         itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/name-list'), 5),
-      '/+location/@distance': new itn.NumberInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/distance'), 15),
+
+      '/stories/+s001/+adventurer': new itn.ContextReference(
+        // TODO will this be the real path, or a pointer path?  Real path makes more sense.
+        itn.joinPaths(cp.WORLD_STATE_PATH, 'users/bobbyj/+adventurer1')),
+      '/stories/+s001/+location': new itn.ContextReference(
+        itn.joinPaths(cp.WORLD_STATE_PATH, 'locations/+home')),
+      '/stories/+s001/+goal': new itn.ContextReference(
+        itn.joinPaths(cp.WORLD_STATE_PATH, 'users/bobbyj/+adventurer1/location-store-goal')),
+
     })
   })
   const CONTEXT = new itn.StackContext([
+    // Pointers are created based on the currently executing story fragment.
+    itn.createContextReferences(CORE_CONTEXT, '/world/stories/+s001/', cp.CURRENT_CONTEXT_PATH),
+
+    // There are some "static" pointers
     new itn.PointerContext(
       CORE_CONTEXT
     )
-      // Example, not real...
       .addPointer(
         // From
-        itn.joinPaths(cp.MODULE_PATH, '0000-core'),
+        itn.joinPaths(cp.WORLD_STATE_PATH, 'users/bobbyj'),
         // To
-        itn.joinPaths(cp.CURRENT_CONTEXT_PATH)),
+        itn.joinPaths(cp.CURRENT_CONTEXT_PATH, '+player'))
+      .addPointer(
+        // From
+        itn.joinPaths(cp.APPLICATION_STATE_PATH, 'users/bobbyj/preferences'),
+        // To
+        cp.CURRENT_USER_PREFERENCES_PATH),
+
+    // And finally the core values it's all based on.
     CORE_CONTEXT
   ])
 
@@ -184,13 +238,13 @@ describe('text generation integration', () => {
     const formatter = fmt.getTextContextFormatter()
     // The group + count lookup needs to be SEVERELY re-examined.
     const res = formatter(CONTEXT,
-      '{l:/world/+player/@name} {l:/world/+player/possessions/transportation > v-travel} ' +
-      '{c:/world/+location/@distance} kilometers to {l:/world/+location/@name} ' +
-      'to buy {l:/world/+player/location/store/player-goal > @name,@count=/world/+player/location/store/@player-goal-count}.', LOCALE)
+      '{l:/current/context/+adventurer/@name} {l:/current/context/+adventurer/possessions/transportation > v-travel} ' +
+      '{c:/current/context/+goal/@distance} kilometers to {l:/current/context/+goal/@location > @name} ' +
+      'to buy {l:/current/context/+goal/@item > @name,@count=/current/context/+goal/@count}.', LOCALE)
     console.log(res)
     if (hasErrorValue(res)) {
       throw new Error(`generated error ${JSON.stringify(res)}`)
     }
-    expect(res.text).toBe('Chris walked 15 kilometers to The Generic Store to buy 1,040 glass marbles.')
+    expect(res.text).toBe('Chris walked 16 kilometers to The Generic Store to buy 1,040 glass marbles.')
   })
 })

@@ -25,11 +25,14 @@ Different spaces in the name are reserved for different purposes:
   configuration data.  This is considered "session" data, where its contents
   depend upon the current player settings, story, etc.
 * **/current/preferences** - information about the current user's settings.
-  This can be volume, language settings, etc.
+  This can be volume, language settings, etc.  This is mapped from "/application/"
 * **/modules/(module id)/overrides** - Tree that allows a module to override
   values in other modules.  This is particularly handy for creating new
   translations as add-on modules, or providing a high-def graphics pack.
 * **/common** - Values that are common to everything, such as roles.
+* **/application/(user)** - a separate storage for this computer; it is not
+  persisted as part of the game save.  Each user can have their own
+  preferences, but some are generic.
 
 Pointers should be used only in the **/current** path.
 
