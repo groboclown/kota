@@ -3,7 +3,7 @@ import {
   Internal,
   Context,
   normalizeAbsolutePath,
-  PATH_SEPARATOR
+  PATH_SEPARATOR,
 } from './base'
 
 

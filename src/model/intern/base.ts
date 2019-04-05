@@ -95,3 +95,33 @@ export function joinPaths(...paths: string[]): string {
       ? currPath
       : (fullPath + PATH_SEPARATOR + currPath)))
 }
+
+
+/**
+ * Split the last part of the path (after the /) from everything before it.
+ * For the root tree case, it returns `['/', '']`.  The first path value
+ * will always end in a trailing slash.
+ * 
+ * @param path 
+ */
+export function splitLast(path: string): [string, string] {
+  path = normalizeAbsolutePath(path, false)
+  const i = path.lastIndexOf(PATH_SEPARATOR) + 1
+  if (i > 0) {
+    return [path.substring(0, i), path.substring(i)]
+  }
+  return ['/', '']
+}
+
+/**
+ * Strips the trailing slash off of a path.
+ * 
+ * @param path 
+ */
+export function stripTrailingSlash(path: string): string {
+  let last = path.length - 1
+  while (last > 1 && path[last] === PATH_SEPARATOR) {
+    last--
+  }
+  return path.substring(0, last + 1)
+}

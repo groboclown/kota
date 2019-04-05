@@ -4,6 +4,7 @@ import {
   Context,
   PATH_SEPARATOR,
   normalizeAbsolutePath,
+  splitLast
 } from './base'
 
 

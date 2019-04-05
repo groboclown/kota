@@ -186,7 +186,7 @@ describe('text generation integration', () => {
         { 'foot': 1 }),
       // TODO should this ContextReference be here?  We need to reference the real location,
       // but the lookup won't happen this deep (story -> this goal, but not deeper).
-      '/users/bobbyj/+adventurer1/location-store-goal/@location': new itn.ContextReference(
+      '/users/bobbyj/+adventurer1/location-store-goal/+location': new itn.ContextReference(
         itn.joinPaths(cp.WORLD_STATE_PATH, 'locations/+store')),
       '/users/bobbyj/+adventurer1/location-store-goal/@item': new itn.GroupSetInternal(
         itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location/store/player-goal'), { 'marbles': 1 }),
@@ -239,7 +239,9 @@ describe('text generation integration', () => {
     // The group + count lookup needs to be SEVERELY re-examined.
     const res = formatter(CONTEXT,
       '{l:/current/context/+adventurer/@name} {l:/current/context/+adventurer/possessions/transportation > v-travel} ' +
-      '{c:/current/context/+goal/@distance} kilometers to {l:/current/context/+goal/@location > @name} ' +
+      // Pointer here is wrong.  The writer of the text MUST NOT need to be aware of parts that
+      // are or are not pointers.
+      '{c:/current/context/+goal/@distance} kilometers to {l:/current/context/+goal/+location/@name} ' +
       'to buy {l:/current/context/+goal/@item > @name,@count=/current/context/+goal/@count}.', LOCALE)
     console.log(res)
     if (hasErrorValue(res)) {

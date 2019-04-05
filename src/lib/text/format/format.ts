@@ -10,8 +10,9 @@ import {
 import { CURRENT_FUNCTION_ARGUMENTS_PATH } from '../../core-paths'
 import * as loc from '../localization'
 import {
-  SplitContext, getGroupSetValue
+  SplitContext, getGroupSetValue, Internal
 } from '../../../model/intern'
+import { splitLast, stripTrailingSlash } from '../../../model/intern/base'
 
 export interface LocalizedText {
   text: string
@@ -77,25 +78,26 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
       console.log(`DEBUG: -+- discovering [${key}] -> ${JSON.stringify(refList)}`)
       // Now find the corresponding reference location.
       // This requires inspecting the links of joins
-      let reference: string = refList[0]
+      let v = lookup(baseContext, refList[0], [])
+      let value: Internal | undefined = v[0]
+      let reference: string = v[1]
       // Each additional item in the pointer list is relative to
       // the previous item's value.
       for (let i = 1; i < refList.length; i++) {
-        const refVal = baseContext.getInternal(reference)
-        if (refVal === undefined) {
+        if (value === undefined) {
           // Can't go any further.  Leave the reference to this.
           console.log(`DEBUG: -+- :: no context value at ${reference}`)
           break
         }
-        if (isGroupSetInternal(refVal)) {
+        if (isGroupSetInternal(value)) {
           // Follow the group value's reference.  There may be 0 or more
           // entries in the group value, but we only care about the first.
-          const groupVal = getGroupSetValue(refVal, baseContext)
+          const groupVal = getGroupSetValue(value, baseContext)
           if (hasErrorValue(groupVal)) {
             // Nothing else to do here.  Don't report the error?
             // Leave the reference here, so that other parsing can
             // report the problem properly.
-            console.log(`DEBUG: -+- :: get group value ${JSON.stringify(refVal)} returned error ${JSON.stringify(groupVal.error)}`)
+            console.log(`DEBUG: -+- :: get group value ${JSON.stringify(value)} returned error ${JSON.stringify(groupVal.error)}`)
             break
           }
           if (groupVal.values.length <= 0) {
@@ -104,15 +106,19 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
             console.log(`DEBUG: -+- :: no group values`)
             break
           }
-          reference = joinPaths(groupVal.values[0].referencePath, refList[i])
+          v = lookup(baseContext, joinPaths(groupVal.values[0].referencePath, refList[i]), [])
+          value = v[0]
+          reference = v[1]
           console.log(`DEBUG: -+- :: mapped "${groupVal.values[0].referencePath}" + "${refList[i]}" -> "${reference}"`)
-        } else if (isContextReference(refVal)) {
+        } else if (isContextReference(value)) {
           console.log(`DEBUG: -+- :: mapped "${reference}"`)
-          reference = joinPaths(refVal.referencePath, refList[i])
+          v = lookup(baseContext, joinPaths(value.referencePath, refList[i]), [])
+          value = v[0]
+          reference = v[1]
           console.log(`DEBUG: -+- ::   -> "${reference}"`)
         } else {
           // Unknown reference type.
-          console.log(`DEBUG: -+- :: cannot lookup pointer from ${refVal.type}`)
+          console.log(`DEBUG: -+- :: cannot lookup pointer from ${value.type}`)
           break
         }
       }
@@ -129,4 +135,47 @@ export function getContextValuesFor(baseContext: Context, fv: FormatVariable, ar
   return new SplitContext({
     [CURRENT_FUNCTION_ARGUMENTS_PATH + PATH_SEPARATOR]: pointers
   }, baseContext)
+}
+
+
+// Exported for Unit Tests only.
+export function lookup(ctx: Context, origPath: string, history: string[]): [Internal | undefined, string] {
+  // TODO 
+  const path = stripTrailingSlash(origPath)
+  console.log(`DEBUG: -+- ::= Looking up ${path} (was ${origPath})`)
+  if (history.indexOf(path) >= 0 || history.length > 1000) {
+    // Prevent infinite recursion
+    console.log(`DEBUG: -+- ::=   recursion from ${JSON.stringify(history)}`)
+    return [undefined, path]
+  }
+  let value = ctx.getInternal(path)
+  let base = path
+  let rest = ''
+  let debugCount = 0
+  while (value === undefined && base.length > 1) {
+    const parts = splitLast(base)
+    base = stripTrailingSlash(parts[0])
+    rest = parts[1] + PATH_SEPARATOR + rest
+    console.log(`DEBUG: -+- ::=   looking to ${base}`)
+    value = ctx.getInternal(base)
+    if (++debugCount > 10) {
+      throw new Error(`bad path: "${base}" + "${rest}"`)
+    }
+  }
+  if (value !== undefined) {
+    if (isContextReference(value)) {
+      console.log(`DEBUG: -+- ::=   mapped to reference ${value.referencePath} + "${rest}"`)
+      history.push(path)
+      const v = lookup(ctx, joinPaths(value.referencePath, rest), history)
+      value = v[0]
+      base = v[1]
+      rest = ''
+    } else if (rest.length > 0) {
+      console.log(`DEBUG: -+- ::=   Lookup found value with extra path ${rest}`)
+      // Invalid path - a parent node has a value, not the child.
+      value = undefined
+    }
+  }
+
+  return [value, base]
 }
