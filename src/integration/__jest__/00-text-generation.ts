@@ -31,12 +31,51 @@ describe('text generation integration', () => {
       // 'n': subject (default)
       // 'o': object
       // 'g': possessive
-      'pronoun:S': { 0: 'He', 1: 'She', 2: 'They', 3: 'We' },
-      'pronoun': { 0: 'he', 1: 'she', 2: 'they', 3: 'we' },
-      'pronoun:So': { 0: 'Him', 1: 'Her', 2: 'Them', 3: 'Us' },
-      'pronoun:o': { 0: 'him', 1: 'her', 2: 'them', 3: 'us' },
-      'pronoun:Sg': { 0: 'His', 1: 'Her', 2: 'Their', 3: 'Our' },
-      'pronoun:g': { 0: 'his', 1: 'her', 2: 'their', 3: 'our' },
+      // 'r': reflexive
+      'pronoun-male:S': { 1: 'He', plural: 'They' },
+      'pronoun-male': { 1: 'he', plural: 'they' },
+      'pronoun-male:So': { 1: 'Him', plural: 'Them' },
+      'pronoun-male:o': { 1: 'him', plural: 'them' },
+      'pronoun-male:Sr': { 1: 'Himself', plural: 'Themselves' },
+      'pronoun-male:r': { 1: 'himself', plural: 'themselves' },
+      'pronoun-male:Sg': { 1: 'His', plural: 'Their' },
+      'pronoun-male:g': { 1: 'his', plural: 'their' },
+
+      'pronoun-female:S': { 1: 'She', plural: 'They' },
+      'pronoun-female': { 1: 'she', plural: 'they' },
+      'pronoun-female:So': { 1: 'Her', plural: 'Them' },
+      'pronoun-female:o': { 1: 'her', plural: 'them' },
+      'pronoun-female:Sr': { 1: 'Herself', plural: 'Themselves' },
+      'pronoun-female:r': { 1: 'herself', plural: 'themselves' },
+      'pronoun-female:Sg': { 1: 'Her', plural: 'Their' },
+      'pronoun-female:g': { 1: 'her', plural: 'their' },
+
+      'pronoun-fluid:S': 'They',
+      'pronoun-fluid': 'they',
+      'pronoun-fluid:So': 'Them',
+      'pronoun-fluid:o': 'them',
+      'pronoun-fluid:Sr': 'Themselves',
+      'pronoun-fluid:r': 'themselves',
+      'pronoun-fluid:Sg': 'Their',
+      'pronoun-fluid:g': 'their',
+
+      'pronoun-neuter:S': { 1: 'It', plural: 'They' },
+      'pronoun-neuter': { 1: 'it', plural: 'they' },
+      'pronoun-neuter:So': { 1: 'It', plural: 'Them' },
+      'pronoun-neuter:o': { 1: 'it', plural: 'them' },
+      'pronoun-neuter:Sr': { 1: 'Itself', plural: 'Themselves' },
+      'pronoun-neuter:r': { 1: 'itself', plural: 'themselves' },
+      'pronoun-neuter:Sg': { 1: 'Its', plural: 'Their' },
+      'pronoun-neuter:g': { 1: 'its', plural: 'their' },
+
+      'pronoun-self:S': { 1: 'I', plural: 'We' },
+      'pronoun-self': { 1: 'I', plural: 'we' },
+      'pronoun-self:So': { 1: 'Me', plural: 'Us' },
+      'pronoun-self:o': { 1: 'me', plural: 'us' },
+      'pronoun-self:Sr': { 1: 'Myself', plural: 'Ourselves' },
+      'pronoun-self:r': { 1: 'myself', plural: 'ourselves' },
+      'pronoun-self:Sg': { 1: 'My', plural: 'Our' },
+      'pronoun-self:g': { 1: 'my', plural: 'our' },
     },
     '/module/0000-core/text': {
       // Verb grammar flags:
@@ -117,8 +156,34 @@ describe('text generation integration', () => {
           itn.joinPaths(cp.MODULE_PATH, '0000-core', 'preferences/language-set')),
 
         // TODO gender should instead be a group.
-        '/person/gender': new itn.FuzzAttribute(),
-        '/person/gender/pronoun': new itn.NameListAttribute('/core', 'pronoun'),
+        //'/person/gender': new itn.FuzzAttribute(),
+        //'/person/gender/pronoun': new itn.NameListAttribute('/core', 'pronoun'),
+        '/person/gender': new itn.GroupSetAttribute(
+          itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person', 'gender-def')
+        ),
+        '/person/gender-def': new GroupDefBuilder()
+          .addGroup({
+            name: 'male',
+            matches: {},
+            referencePath: itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person', 'gender', 'male')
+          })
+          .addGroup({
+            name: 'female',
+            matches: {},
+            referencePath: itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person', 'gender', 'female')
+          })
+          .addGroup({
+            name: 'fluid',
+            matches: {},
+            referencePath: itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person', 'gender', 'fluid')
+          })
+          .build(),
+        '/person/gender/male/@pronoun': new itn.LocalizedMessageInternal('/core', 'pronoun-male'),
+        '/person/gender/female/@pronoun': new itn.LocalizedMessageInternal('/core', 'pronoun-female'),
+        '/person/gender/fluid/@pronoun': new itn.LocalizedMessageInternal('/core', 'pronoun-fluid'),
+        '/person/gender/neuter/@pronoun': new itn.LocalizedMessageInternal('/core', 'pronoun-neuter'),
+
+
         '/person/possessions/transportation': new itn.GroupSetAttribute(
           itn.joinPaths(cp.MODULE_PATH, '0000-core', 'transportation')),
         '/transportation': new GroupDefBuilder()
@@ -129,14 +194,11 @@ describe('text generation integration', () => {
           })
           .build(),
 
-        '/transportation/foot/v-travel': new itn.LocalizedMessageInternal(
+        '/transportation/foot/@v-travel': new itn.LocalizedMessageInternal(
           '/module/0000-core/text', 'transportation/foot/v-travel')
       }),
       '/0001-addon/': new itn.StorageContext({
         '/player-name-list': new itn.NameListAttribute('/module/0001-addon/text', 'player-name-list'),
-        '/player/store-goal': new itn.GroupSetAttribute(
-          itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'location', 'store', 'player-goals')),
-
 
         '/location/home/name-list': new itn.NameListAttribute('/module/0001-addon/text', 'home-name-list'),
         '/location/store/name-list': new itn.NameListAttribute('/module/0001-addon/text', 'store-name-list'),
@@ -175,13 +237,13 @@ describe('text generation integration', () => {
       '/users/bobbyj/+adventurer1/@name': new itn.NameListInternal(
         itn.joinPaths(cp.MODULE_PATH, '0001-addon', 'player-name-list'), 0),
 
-      // TODO change gender to a group
-      '/users/bobbyj/+adventurer1/@gender': new itn.FuzzInternal(
-        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/gender'), 0.0),
+      '/users/bobbyj/+adventurer1/@gender': new itn.GroupSetInternal(
+        itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/gender'),
+        { 'male': 1 }),
       '/users/bobbyj/+adventurer1/gender/@pronoun': new itn.NameListInternal(
         itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/pronoun'), 0),
 
-      '/users/bobbyj/+adventurer1/possessions/transportation': new itn.GroupSetInternal(
+      '/users/bobbyj/+adventurer1/possessions/@transportation': new itn.GroupSetInternal(
         itn.joinPaths(cp.MODULE_PATH, '0000-core', 'person/possessions/transportation'),
         { 'foot': 1 }),
       // TODO should this ContextReference be here?  We need to reference the real location,
@@ -238,15 +300,18 @@ describe('text generation integration', () => {
     const formatter = fmt.getTextContextFormatter()
     // The group + count lookup needs to be SEVERELY re-examined.
     const res = formatter(CONTEXT,
-      '{l:/current/context/+adventurer/@name} {l:/current/context/+adventurer/possessions/transportation > v-travel} ' +
-      // Pointer here is wrong.  The writer of the text MUST NOT need to be aware of parts that
-      // are or are not pointers.
+      '{l:/current/context/+adventurer/@name} {l:/current/context/+adventurer/possessions/@transportation > @v-travel} ' +
+      // Look into getting rid of the pointer.  The first "@" helps to identify the need for it.
       '{c:/current/context/+goal/@distance} kilometers to {l:/current/context/+goal/+location/@name} ' +
-      'to buy {l:/current/context/+goal/@item > @name,@count=/current/context/+goal/@count}.', LOCALE)
+      'to buy {l:/current/context/+goal/@item > @name,@count=/current/context/+goal/@count} ' +
+      'for {l:/current/context/+adventurer/@gender > @pronoun,@count=/current/context/+adventurer/@count;r}.', LOCALE)
     console.log(res)
     if (hasErrorValue(res)) {
       throw new Error(`generated error ${JSON.stringify(res)}`)
     }
-    expect(res.text).toBe('Chris walked 16 kilometers to The Generic Store to buy 1,040 glass marbles.')
+    expect(res.text).toBe('Chris walked 16 kilometers to The Generic Store to buy 1,040 glass marbles for himself.')
   })
+
+  // TODO add a test regarding mis-matched types or not-found values.
+  // Unwinding errors is extremely important to helping people make these files.
 })
