@@ -53,7 +53,7 @@ export const ModuleConstraint: ConstraintSet = new ConstraintSet('module')
     )))
   .canHave('hooks', 'dictionary', ac =>
     ac.has('string mapped to string', src =>
-      (src instanceof Object) && Object.keys(src).reduce(
+      (src instanceof Object) && Object.keys(src).reduce<boolean>(
         (prevValue, currentKey) =>
           prevValue
           && (typeof (<any>src)[currentKey] === 'string')

@@ -128,7 +128,7 @@ export class AttributeConstraint implements Verifiable {
   isInStringSet(values: string[]): AttributeConstraint {
     this.constraintFuncs.push({
       f: (v: any): boolean =>
-        typeof v === 'string' && values.reduce(
+        typeof v === 'string' && values.reduce<boolean>(
           // Need only one to match...
           (prevValue, currentValue) => prevValue || currentValue === v,
           false),

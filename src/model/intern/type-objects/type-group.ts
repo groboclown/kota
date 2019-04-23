@@ -34,3 +34,11 @@ export class GroupDefinitionInternal implements Internal {
 export function isGroupDefinitionInternal(v: Internal): v is GroupDefinitionInternal {
   return v.type === tn.GROUP_DEFINITION
 }
+
+export function createGroupDefinitionInternal(values: GroupValue[]): GroupDefinitionInternal {
+  const ret = new GroupDefinitionInternal()
+  for (const v of values) {
+    ret.values[v.name] = v
+  }
+  return ret
+}

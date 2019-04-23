@@ -337,6 +337,15 @@ export function isGroupSetInternal(v: Internal): v is GroupSetInternal {
   return v.type === tn.VALUE_GROUP_SET_FOR
 }
 
+export function pickGroupValueFromSet(v: GroupSetValue, ctx: Context): GroupValue | undefined {
+  // TODO this is a simplistic function that just picks the top value, or
+  // returns undefined if the list is empty.
+  if (v.values.length <= 0) {
+    return undefined
+  }
+  return v.values[0]
+}
+
 export function getGroupSetValue(v: GroupSetInternal, ctx: Context): GroupSetValue | HasErrorValue {
   const attributeDef = ctx.getInternal(v.source)
   if (!attributeDef) {

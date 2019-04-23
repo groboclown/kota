@@ -49,7 +49,7 @@ export class FormatContext implements FormatVariable {
             return { error: coreError('unknown format marker', { marker: fmt.formatTypeMarker }) }
           }
           console.log(`DEBUG: -- formatter ${formatter.formatName}`)
-          var stackValues = getContextValuesFor(values, formatter, fmt.valueKeyNames)
+          var stackValues = getContextValuesFor(values, fmt.valueKeyNames)
 
           // NOTE: we're evaluating the template section relative to this
           // expression's values, not the parent.

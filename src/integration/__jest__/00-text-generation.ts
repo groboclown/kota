@@ -300,11 +300,11 @@ describe('text generation integration', () => {
     const formatter = fmt.getTextContextFormatter()
     // The group + count lookup needs to be SEVERELY re-examined.
     const res = formatter(CONTEXT,
-      '{l:/current/context/+adventurer/@name} {l:/current/context/+adventurer/possessions/@transportation > @v-travel} ' +
+      '{l:/current/context/+adventurer/@name} {l:/current/context/+adventurer/possessions/@transportation/@v-travel} ' +
       // Look into getting rid of the pointer.  The first "@" helps to identify the need for it.
       '{c:/current/context/+goal/@distance} kilometers to {l:/current/context/+goal/+location/@name} ' +
-      'to buy {l:/current/context/+goal/@item > @name,@count=/current/context/+goal/@count} ' +
-      'for {l:/current/context/+adventurer/@gender > @pronoun,@count=/current/context/+adventurer/@count;r}.', LOCALE)
+      'to buy {l:/current/context/+goal/@item/@name,@count=/current/context/+goal/@count} ' +
+      'for {l:/current/context/+adventurer/@gender/@pronoun,@count=/current/context/+adventurer/@count;r}.', LOCALE)
     console.log(res)
     if (hasErrorValue(res)) {
       throw new Error(`generated error ${JSON.stringify(res)}`)

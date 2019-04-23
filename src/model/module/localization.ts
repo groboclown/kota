@@ -18,7 +18,7 @@ export const LocalizationTypeConstraint: ConstraintSet = new ConstraintSet('loca
     .mustHave('digitsLower', 'string', ac => ac
       .isAString()
       .has('string with 16 characters', src => (<any>src).digitsLower.length === 16))
-    ))
+  ))
   .canHave('date-markers', 'LocalizationDateMarkerType[]', ac => ac
     .isAnArrayWith('LocalizationDateMarkerType', csf => csf
       .mustHave('marker', 'string', ac => ac
@@ -29,7 +29,7 @@ export const LocalizationTypeConstraint: ConstraintSet = new ConstraintSet('loca
       .matchesOneOf({
         'map': csf => csf
           .has('one character keys', v => {
-            return Object.keys(v).reduce((prevValue, key) =>
+            return Object.keys(v).reduce<boolean>((prevValue, key) =>
               prevValue && key.length === 1,
               true)
           }),

@@ -29,6 +29,9 @@
   "undefined attribute definition for value": "{valueType} referenced as defined from non-existant attribute",
   "invalid attribute definition for value": "{valueType} referenced as defined from attribute {attributeType}",
   "undefined group value": "{value} not defined in group {group}",
+  "empty group value set": "{path} is a group value set with no matching entries",
   "unexpected value type": "{value} should have been {type}",
-  "non-numeric value type": "{value} should have been a numeric type"
+  "non-numeric value type": "{value} should have been a numeric type",
+  "cyclic path pointer": "`{path}` contains internal self-references, including `{cycle}`",
+  "too many path indirections": "`{path}` contains too many indirections (more than {depth})"
 }

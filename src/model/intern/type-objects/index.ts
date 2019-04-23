@@ -19,6 +19,7 @@ export {
   GroupDefinitionInternal,
   GroupValue,
   isGroupDefinitionInternal,
+  createGroupDefinitionInternal,
 } from './type-group'
 
 export {
@@ -60,6 +61,7 @@ export {
   getDateValue,
   getFuzzValue,
   getGroupSetValue,
+  pickGroupValueFromSet,
   getNameListValue,
   getNumberValue,
   isDateDeltaInternal,

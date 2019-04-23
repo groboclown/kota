@@ -10,9 +10,9 @@ import { HasErrorValue, coreError } from '../../lib/error';
 /**
  * Converts Module (user-land view) objects into internal objects.
  */
-export type convertModuleToInternValue<T, S> = (moduleValue: T) => Internal<S>
+export type convertModuleToInternValue<T> = (moduleValue: T) => Internal
 
-export const MODULE_TO_INTERN: { [key: string]: convertModuleToInternValue<any, any> } = {
+export const MODULE_TO_INTERN: { [key: string]: convertModuleToInternValue<any> } = {
   [m.ATTRIBUTE_COUNT_TYPE]: convertCountAttribute,
   [m.ATTRIBUTE_RANGE_TYPE]: convertRangeAttribute,
   [m.ATTRIBUTE_NUMBER_TYPE]: convertNumberAttribute,
@@ -28,7 +28,7 @@ export const MODULE_TO_INTERN: { [key: string]: convertModuleToInternValue<any, 
   // There are other types, but they should not be defined in the module.
 }
 
-export function convertModuleToIntern(moduleValue: any): Internal<any> | HasErrorValue {
+export function convertModuleToIntern(moduleValue: any): Internal | HasErrorValue {
   if (moduleValue.type === undefined || MODULE_TO_INTERN[moduleValue.type] === undefined) {
     return { error: coreError('not module value') }
   }

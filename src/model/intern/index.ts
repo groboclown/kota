@@ -144,3 +144,7 @@ export {
 export {
   StorageContext
 } from './storage-context'
+
+export {
+  lookupInternal
+} from './lookup'
