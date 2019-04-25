@@ -1,0 +1,8 @@
+---
+localization:
+  id: en_US
+  locale: en_US
+  alternates:
+  - en
+  - LANG_C
+  

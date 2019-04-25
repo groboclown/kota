@@ -1,18 +1,15 @@
 
 import * as modl from '../module'
 import { ParsedError } from '../parse-info'
-//import { ErrorValue, CORE_ERROR_DOMAIN } from '../../../lib/error/error'
+import { createLogger } from '../../../lib/log'
 
-// FIXME
-import { FIXME_DEBUG } from '../parse-contraints'
+const LOG = createLogger('model.module.__jest__.module')
 
 describe('module', () => {
   describe('check validity', () => {
     function runMdc(value: any): { hasError: boolean, errors: ParsedError[] } {
       const err: ParsedError[] = []
-      if (FIXME_DEBUG.debug) {
-        console.log(`verifying keys ${Object.keys(value)}`)
-      }
+      LOG.debug('verifying keys', Object.keys(value))
       const ret = modl.ModuleConstraint.runVerify(value, err)
       return { hasError: ret, errors: err }
     }

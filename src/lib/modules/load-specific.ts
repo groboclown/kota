@@ -41,7 +41,7 @@ export function loadManifest(basedir: string, fileLoader: FileLoader): Promise<M
 }
 
 export interface ModuleResults {
-  readonly module: Module | null
+  readonly moduleValue: Module | null
   readonly errors: ParsedError[] | null
   readonly valid: boolean
 }
@@ -63,13 +63,13 @@ export function loadModuleFile(basedir: string, fileLoader: FileLoader): Promise
       const parsed = parseSrcModule(items.data[0][MODULE_TYPE_NAME])
       if (!parsed.valid) {
         return {
-          module: null,
+          moduleValue: null,
           errors: parsed.errors,
           valid: false
         }
       }
       return {
-        module: parsed.parsed,
+        moduleValue: parsed.parsed,
         errors: null,
         valid: true
       }

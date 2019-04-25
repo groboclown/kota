@@ -1,14 +1,17 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { FileLoader, FileData } from '../lib/files'
-import { HasErrorValue, coreError } from '../lib/error'
-import { ModuleData, loadModule } from '../lib/modules/load-module'
+import { FileLoader, FileData } from '../../lib/files'
+import { HasErrorValue, coreError } from '../../lib/error'
+import { loadModule } from '../../lib/modules/load-module'
+import { createLogger } from '../../lib/log'
 
 describe('Load module data', () => {
+  const LOG = createLogger('integration.01-module')
   const loadFileData: FileLoader = (...filePath: string[]): Promise<FileData | HasErrorValue> => {
     filePath = [__dirname].concat(filePath)
     const fp = path.join.apply(path, filePath)
+    LOG.notice('Loading file', fp)
     return new Promise(resolve => {
       // Production version will check if the file size is too big before loading.
       fs.readFile(fp, 'utf8', (err, data) => {
@@ -20,13 +23,22 @@ describe('Load module data', () => {
     })
   }
   it('01-module-data directory', () =>
-    loadModule(path.join(__dirname, '01-module-data'), loadFileData)
+    loadModule('01-module-data', loadFileData)
       .then(md => {
-        expect(md.module).not.toBeUndefined
+        expect(md.moduleResults).not.toBeUndefined
         expect(md.context).not.toBeUndefined
         expect(md.errors).toHaveLength(0)
         expect(md.parseErrors).toHaveLength(0)
-        // console.log(md.)
+        if (!md.context || !md.moduleResults) {
+          return
+        }
+        expect(md.context.keysFor('/')).toEqual([
+          '/l10n/'
+        ])
+        expect(md.context.keysFor('/l10n')).toEqual([
+          '/l10n/en_US'
+        ])
+        console.log(JSON.stringify(md.context))
       })
   )
 })

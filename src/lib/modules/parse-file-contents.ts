@@ -4,7 +4,7 @@ import {
 } from '../../model/module/parse-info'
 import { coreError } from '../error'
 import * as intern from '../../model/intern'
-import * as module from '../../model/module'
+import * as moduleModel from '../../model/module'
 
 export interface ParsedIntern<T> {
   readonly valid: boolean
@@ -19,7 +19,7 @@ export interface ParsedIntern<T> {
  * @returns the internal representation of that data object.
  */
 export function parseFileObject(typeName: string, obj: any): ParsedIntern<any> {
-  const f = module.OBJECT_PARSE_MAP[typeName]
+  const f = moduleModel.OBJECT_PARSE_MAP[typeName]
   const id = obj.id
   const errors: ParsedError[] = []
   if (!id || id.length <= 0) {

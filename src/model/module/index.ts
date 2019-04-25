@@ -50,10 +50,12 @@ export {
 
 import { ParseSrcKey } from './parse-info'
 import * as mattribute from './attribute'
+import * as mlocalization from './localization'
 
 // Turn module raw data into validated module objects.
 export const OBJECT_PARSE_MAP: { [name: string]: ParseSrcKey<any> } = {
   [mattribute.ATTRIBUTE_TYPE_NAME]: mattribute.parseSrcAttribute,
+  [mlocalization.LOCALIZATION_TYPE_NAME]: mlocalization.parseSrcAttribute,
 
-  // `module` isn't a valid object outside the module.yaml file.
+  // `module` isn't a valid object outside the module.yaml file, so it doesn't appear here.
 }

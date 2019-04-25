@@ -1,14 +1,9 @@
 
 import { ParsedError } from './parse-info'
 import { coreError } from '../../lib/error'
+import { createLogger } from '../../lib/log'
 
-// FIXME DEBUG
-export const FIXME_DEBUG = { debug: false }
-export function FIXME_debug(msg: string) {
-  if (FIXME_DEBUG.debug) {
-    console.log(msg)
-  }
-}
+const LOG = createLogger('model.module.parse-constraints')
 
 // If an object is marked to have a subtype (using 'matchesOneOf' or 'asTypeBy'),
 // then this key in the object is assigned a dictionary with the key of the
@@ -114,11 +109,11 @@ export class AttributeConstraint implements Verifiable {
   }
   isNumberBetween(min: number, max: number): AttributeConstraint {
     // Note: not calling isANumber, because we want to keep this expected type.
-    FIXME_debug(`adding isNumberBetween ${min} and ${max}`)
+    LOG.debug('adding isNumberBetween', min, 'and', max)
     return this.isA(`number in [${min}, ${max}]`,
       <ConstraintTypeCheckFunction<number>>(v => typeof v === 'number' && v >= min && v <= max))
     //<ConstraintTypeCheckFunction<number>>(v => {
-    //  FIXME_debug(`checking if <<${v}>> is between ${min} and ${max}`)
+    //  LOG.debug(`checking if <<${v}>> is between ${min} and ${max}`)
     //  return typeof v === 'number' && v >= min && v <= max
     //}))
   }
@@ -152,19 +147,21 @@ export class AttributeConstraint implements Verifiable {
     const errors: ParsedError[] = accumulatedErrors || []
     if (attribValue === undefined) {
       if (this.required) {
-        FIXME_debug(`attribute ${this.name} is undefined and required`)
+        LOG.debug('attribute', this.name, 'is undefined and required')
         errors.push({
           attributeName: this.name, attributeType: this.typeName,
-          missing: true, invalid: false, srcValue: attribValue, violation: coreError(MSGID_REQUIRED_ATTRIBUTE)
+          missing: true, invalid: false, srcValue: attribValue,
+          // FIXME get the type name...
+          violation: coreError(MSGID_REQUIRED_ATTRIBUTE, { type: this.name, attribute: this.name })
         })
         return true
       }
       // Not required, so this is not an error.
-      FIXME_debug(`attribute ${this.name} is undefined but not required`)
+      LOG.debug('attribute', this.name, 'is undefined but not required')
       return false
     }
 
-    FIXME_debug(`attribute "${this.name}" is <<${attribValue}>>, running ${this.additional.length} group checks`)
+    LOG.debug('attribute', this.name, 'is <<', attribValue, '>>, running', this.additional.length, 'group checks')
 
     for (var verifiable of this.additional) {
       if (verifiable.runVerify(attribValue, errors)) {
@@ -251,7 +248,9 @@ export class ConstraintSet implements Verifiable {
     if (typeof objectValue !== 'object') {
       errors.push({
         attributeName: this.name, attributeType: this.name,
-        missing: true, invalid: false, srcValue: objectValue, violation: coreError(MSGID_REQUIRED_ATTRIBUTE)
+        missing: true, invalid: false, srcValue: objectValue,
+        // TODO use the right type name.
+        violation: coreError(MSGID_REQUIRED_ATTRIBUTE, { type: this.name, attribute: this.name })
       })
       return true
     }
@@ -259,7 +258,7 @@ export class ConstraintSet implements Verifiable {
     for (const key in this.attributes) {
       // Easy way for owned value check.
       if (this.attributes[key].runVerify) {
-        FIXME_debug(`Running verify for attribute ${key} against ${this.attributes[key].name}`)
+        LOG.debug('Running verify for attribute', key, 'against', this.attributes[key].name)
         // Note hasHrror is after ||, so that it doesn't short circuit
         hasError = this.attributes[key].runVerify(objectValue[key], errors) || hasError
       }
@@ -311,16 +310,16 @@ class OrConstraintSet implements Verifiable {
 
     const ourErrors: ParsedError[] = []
     for (const verifiable of this.oneOf) {
-      FIXME_debug(`running OR verify on "${this.name} > ${verifiable.name}" for <<${objectValue}>>`)
+      LOG.debug('running OR verify on', this.name, '>', verifiable.name, 'for', objectValue)
       const thisErrors: ParsedError[] = []
       const res = verifiable.runVerify(objectValue, thisErrors)
       if (!res) {
         // No error!  Don't add errors to the accumulated list.
-        FIXME_debug(` --> generated no error`)
+        LOG.debug(' --> generated no error')
         if (typeof objectValue === 'object') {
           objectValue[SUBTYPE_SET_KEY] = objectValue[SUBTYPE_SET_KEY] || {}
           objectValue[SUBTYPE_SET_KEY][verifiable.name] = true
-          FIXME_debug(` new subtype list: ${Object.keys(objectValue[SUBTYPE_SET_KEY])}`)
+          LOG.debug(' new subtype list:', Object.keys(objectValue[SUBTYPE_SET_KEY]))
         }
         return false
       }
@@ -330,7 +329,7 @@ class OrConstraintSet implements Verifiable {
         ourErrors.push(e)
       })
     }
-    FIXME_debug(`all ${this.oneOf.length} OR checks failed`)
+    LOG.debug('all', this.oneOf.length, 'OR checks failed')
     ourErrors.forEach(e => errors.push(e))
     return true
   }

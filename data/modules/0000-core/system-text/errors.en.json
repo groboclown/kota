@@ -5,6 +5,7 @@
   "bad yaml format first line": "Expected yaml file to have `---` by itself on the first line.",
   "bad yaml format": "Invalid yaml format: {msg}",
   "missing id field": "Module data value must have 'id' field.",
+  "required attribute": "Module data value of type {type} requires attribute named {attribute}",
   "list file hex code": "Error in input file: Invalid hex code in line data: {value}",
   "not valid value": "Expected value to be a `{expected}`, but found `{value}`",
   "not valid date mapping": "Not a valid localization date `from` value: `{from}`",

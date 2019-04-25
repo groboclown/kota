@@ -10,8 +10,11 @@ import * as tn from '../type-names'
 export interface GroupValue {
   readonly name: string
 
-  /** A mapping of other group values to the % matching to this group value.
+  /**
+   * A mapping of other group values to the % matching to this group value.
    * Matching must be fuzzy (between 0 and 1 inclusive).
+   * 
+   * TODO should we allow number to be a function?  What's a use case for it?
    */
   matches: { [name: string]: number }
 

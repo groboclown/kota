@@ -60,7 +60,8 @@ describe('AttributeConstraint', () => {
           name: 'keyName',
           type: 'theType',
           missing: true,
-          error: 'required attribute'
+          error: 'required attribute',
+          params: { attribute: 'keyName', type: 'keyName' }
         })
     })
 
@@ -136,7 +137,8 @@ describe('AttributeConstraint', () => {
         {
           name: 'x',
           type: 'string',
-          missing: true
+          missing: true,
+          params: { attribute: 'x', type: 'x' }
         })
     })
   })
@@ -179,7 +181,8 @@ describe('AttributeConstraint', () => {
         {
           name: 'keyName',
           type: 'theType',
-          missing: true
+          missing: true,
+          params: { attribute: 'keyName', type: 'keyName' }
         })
     })
   })
@@ -286,7 +289,8 @@ describe('AttributeConstraint', () => {
         {
           name: 'keyName',
           type: 'theType',
-          missing: true
+          missing: true,
+          params: { attribute: 'keyName', type: 'keyName' }
         })
     })
   })

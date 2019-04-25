@@ -5,8 +5,9 @@ import { loadManifest, loadModuleFile, ModuleResults } from './load-specific'
 import { parseFileObject } from './parse-file-contents'
 import { loadStructuredFileContents } from './load-raw'
 import { Context, StorageContext, Internal, joinRelativePaths } from '../../model/intern'
-import { ParsedError } from '../../model/module';
-import { splitLast } from 'model/intern/base';
+import { ParsedError } from '../../model/module'
+import { splitLast } from '../../model/intern/base'
+import { createLogger } from '../log'
 
 export interface ModuleDataFileError extends ParsedError {
   readonly modulePath: string
@@ -14,7 +15,7 @@ export interface ModuleDataFileError extends ParsedError {
 }
 
 export interface ModuleData {
-  module?: ModuleResults
+  moduleResults?: ModuleResults
   /** The context for the module.  Its paths are relative to the module. */
   context?: Context
   contextFilePaths: string[]
@@ -22,8 +23,12 @@ export interface ModuleData {
   parseErrors: ModuleDataFileError[]
 }
 
+const LOG = createLogger('lib.modules.load-module')
+
 export function loadModule(modulePath: string, fileLoader: FileLoader): Promise<ModuleData> {
   const ret: ModuleData = { contextFilePaths: [], errors: [], parseErrors: [] }
+
+  LOG.info('Loading module from ', modulePath)
 
   return Promise.all([
     loadManifest(modulePath, fileLoader)
@@ -41,11 +46,11 @@ export function loadModule(modulePath: string, fileLoader: FileLoader): Promise<
         }
       }),
     loadModuleFile(modulePath, fileLoader)
-      .then(module => {
-        if (hasErrorValue(module)) {
-          ret.errors.push(module.error)
+      .then(m => {
+        if (hasErrorValue(m)) {
+          ret.errors.push(m.error)
         } else {
-          ret.module = module
+          ret.moduleResults = m
         }
       })
   ])

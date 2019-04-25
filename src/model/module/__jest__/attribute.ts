@@ -79,8 +79,8 @@ describe('AttributeTypeConstraint', () => {
 
     it('empty', () => {
       expectInvalid({},
-        { name: 'name', type: 'string', missing: true },
-        { name: 'type', type: 'type', missing: true }
+        { name: 'name', type: 'string', missing: true, params: { attribute: 'name', type: 'name' } },
+        { name: 'type', type: 'type', missing: true, params: { attribute: 'type', type: 'type' } }
       )
     })
 

@@ -3,9 +3,10 @@
  */
 
 import { ParsedError, ParsedInfo, ParseSrcKey, createParsedInfo } from './parse-info'
-import { ConstraintSet, FIXME_debug } from './parse-contraints'
+import { ConstraintSet } from './parse-contraints'
 import { FunctionAttributeConstraint } from './function'
 import { INTEGER_RANGE_MAX, INTEGER_RANGE_MIN } from '../../lib/attributes/primitives'
+import { createLogger } from '../../lib/log'
 
 export const ATTRIBUTE_TYPE_NAME = 'attribute'
 
@@ -86,6 +87,8 @@ export const ATTRIBUTE_DATE_DELTA_TYPE = 'datedelta'
 // export const AttributeTypeConstraint: ConstraintSet = new ConstraintSet('attribute')
 const AttributeTypeConstraint: [ConstraintSet | null] = [null]
 
+const LOG = createLogger('model.module.attribute')
+
 export function getAttributeTypeConstraint(): ConstraintSet {
   if (AttributeTypeConstraint[0] === null) {
     AttributeTypeConstraint[0] = new ConstraintSet('attribute')
@@ -124,7 +127,7 @@ export function getAttributeTypeConstraint(): ConstraintSet {
           .canHave('min', 'number', ac => ac.isNumberBetween(INTEGER_RANGE_MIN, INTEGER_RANGE_MAX))
           .canHave('max', 'number', ac => ac.isNumberBetween(INTEGER_RANGE_MIN, INTEGER_RANGE_MAX))
           .has('min < max', src => {
-            FIXME_debug(`DEBUG comparing <<${(<any>src).min}>> and <<${(<any>src).max}>>`)
+            LOG.debug('comparing', (<any>src).min, 'and', (<any>src).max)
             return ((<any>src).min === undefined) || ((<any>src).max === undefined) || (<any>src).min < (<any>src).max
           }),
         // implies:

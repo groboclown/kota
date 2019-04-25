@@ -2,6 +2,8 @@
 import { ParsedError, ParsedInfo, ParseSrcKey, createParsedInfo } from './parse-info'
 import { ConstraintSet, ConstraintTypeCheckFunction } from './parse-contraints'
 
+export const LOCALIZATION_TYPE_NAME = 'localization'
+
 export const LocalizationTypeConstraint: ConstraintSet = new ConstraintSet('localization')
   .canHave('parent', 'string', ac => ac.isAString())
   .mustHave('locale', 'string', ac => ac.isAString())
@@ -42,7 +44,7 @@ export const LocalizationTypeConstraint: ConstraintSet = new ConstraintSet('loca
 export const parseSrcAttribute: ParseSrcKey<LocalizationType> = (src: any): ParsedInfo<LocalizationType> => {
   const errors: ParsedError[] = []
   LocalizationTypeConstraint.runVerify(src, errors)
-  return createParsedInfo(src, errors, 'localization')
+  return createParsedInfo(src, errors, LOCALIZATION_TYPE_NAME)
 }
 
 export interface LocalizationType {
