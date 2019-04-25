@@ -2,6 +2,7 @@
 import { HasErrorValue } from '../error'
 
 export interface FileData {
+  source: string
   data: string
 }
 

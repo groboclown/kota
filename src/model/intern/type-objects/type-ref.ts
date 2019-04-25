@@ -7,6 +7,10 @@ import {
 } from '../pointer-context'
 import * as tn from '../type-names'
 
+import { createLogger } from '../../../lib/log'
+
+const LOG = createLogger('model.intern.type-objects.type-ref')
+
 // -------------------------------------------------------------------------
 // The ContextReference forms a pointer to another location.  These should
 // be used as a pointer in some rare cases (but it's currently being decided
@@ -47,7 +51,7 @@ export function createContextReferences(ctx: Context, sourcePath: string, destPa
       const p = path.lastIndexOf('/')
       if (p >= 0) {
         const pointerPath = joinPaths(destPath, path.substring(p + 1))
-        console.log(`DEBUG: -$- adding pointer from ${pointerPath} -> ${obj.referencePath}`)
+        LOG.debug('-$- adding pointer from', pointerPath, '->', obj.referencePath)
         ret.addPointer(pointerPath, obj.referencePath)
       }
     }

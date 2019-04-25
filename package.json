@@ -53,6 +53,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.14",
     "@types/js-yaml": "^3.12.1",
+    "@types/node": "^11.13.7",
     "@types/react-test-renderer": "^16.8.1",
     "@types/redux-mock-store": "^1.0.0",
     "awesome-typescript-loader": "^5.2.1",

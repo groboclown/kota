@@ -5,12 +5,13 @@ import {
   LocalizedText,
   FormatVariable,
   getContextValuesFor,
-  VALUE_DATA_CONTEXT_TYPE
 } from './format'
 import { Context } from '../../context'
 import * as tx from './text-format-parser'
 import * as registry from './registry'
+import { createLogger } from '../../log'
 
+const LOG = createLogger('lib.text.format.context-format')
 
 // This is the default text parser, but it can be embedded inside itself.
 export const CONTEXT_FORMAT = 'x'
@@ -33,39 +34,39 @@ export class FormatContext implements FormatVariable {
     // around means complex array structure that might be needed,
     // but is skipped for now for the sake of simplicity.
     function evaluate(values: Context, formatList: tx.TextFormat[]): string | HasErrorValue {
-      // console.log(`DEBUG: evaluating <<${JSON.stringify(value)}>> using <<${JSON.stringify(formatList)}>> size ${formatList.length}`)
+      LOG.trace('evaluating', values, 'using', formatList, 'size', formatList.length)
       var ret = ''
       for (let fmt of formatList) {
-        console.log(`DEBUG: -- fmt <<${JSON.stringify(fmt)}>>`)
+        LOG.debug('fmt', fmt)
         if (tx.isTextFormatPlain(fmt)) {
           // we walk the tree backwards, so the text is added backwards.
-          // console.log(`DEBUG -- plain text`)
+          LOG.trace('-- plain text')
           ret += fmt.text
         } else {
-          // console.log(`DEBUG: -- format type ${fmt.formatTypeMarker}`)
+          LOG.trace('-- format type', fmt.formatTypeMarker)
           const formatter = registry.getDataFormatFor(fmt.formatTypeMarker)
           if (!formatter) {
-            // console.log(`DEBUG: -- unknown marker`)
+            LOG.trace('-- unknown marker')
             return { error: coreError('unknown format marker', { marker: fmt.formatTypeMarker }) }
           }
-          console.log(`DEBUG: -- formatter ${formatter.formatName}`)
+          LOG.debug('-- formatter', formatter.formatName)
           var stackValues = getContextValuesFor(values, fmt.valueKeyNames)
 
           // NOTE: we're evaluating the template section relative to this
           // expression's values, not the parent.
           const template = evaluate(stackValues, fmt.template)
-          console.log(`DEBUG: -- template => <<${template}>>`)
+          LOG.debug('-- template => <<', template, '>>')
           if (hasErrorValue(template)) {
-            console.log(`DEBUG: -- sub-evaluate failed`)
+            LOG.debug('-- sub-evaluate failed')
             return template
           }
-          console.log(`DEBUG: -- starting formatter`)
+          LOG.debug('-- starting formatter')
           const ev = formatter.format(stackValues, template, l10n)
           if (hasErrorValue(ev)) {
-            console.log(`DEBUG: -- format failed`)
+            LOG.debug('-- format failed')
             return ev
           }
-          console.log(`DEBUG: -- evaluated => <<${ev.text}>>`)
+          LOG.debug('-- evaluated => <<${ev.text}>>')
           ret += ev.text
         }
       }

@@ -1,0 +1,18 @@
+---
+module:
+  id: my-module
+  name: My Special Module
+  description: The Super Special Module
+  version: 1.9.22
+  authors:
+    - Myself
+    - Someone Else
+  license:
+    - Commercial
+  source:
+    - http://my-special-module.website/
+  requirements:
+    - core 0
+    - kota 1
+  hooks:
+    install: install.yaml

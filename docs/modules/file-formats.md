@@ -32,7 +32,7 @@ Files are read with UTF-8 encoding, so if you encode your file in UTF-8, you don
 
 See [the official YAML file specification documentation](https://yaml.org/spec/1.2/spec.html) for detailed information on how to format your files.
 
-The game adds an additional constraint on yaml files so that they must start with a single line containing only three dashes (`---`) and no additional whitespace.
+The game adds an additional constraint on `yaml` files so that they must start with a single line containing only three dashes (`---`) and no additional whitespace.
 
 Each file contains highly specific structured information which depends upon what the data represents.
 
@@ -83,7 +83,7 @@ information about the module, and how it connects to the high level events of th
 
 The file must contain only one element - the "module" definition:
 
-```(yaml)
+```yaml
 ---
 module:
   id: my-module

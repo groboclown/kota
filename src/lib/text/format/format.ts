@@ -10,6 +10,7 @@ import * as loc from '../localization'
 import {
   SplitContext, Internal, lookupInternal
 } from '../../../model/intern'
+import { createLogger } from '../../log'
 
 export interface LocalizedText {
   text: string
@@ -65,6 +66,8 @@ export type ArgumentMapping = { [key: string]: ArgumentReference }
 // TODO make this an argument?
 const MAXIMUM_POINTER_DEPTH = 10
 
+const LOG = createLogger('lib.text.format.format')
+
 /**
  * Creates a context which maps all the `args` over to the argument path.  The keys will
  * be relative to the CURRENT_FUNCTION_ARGUMENTS_PATH.
@@ -85,23 +88,27 @@ export function getContextValuesFor(baseContext: Context, args: ArgumentMapping)
   Object.keys(args).forEach(key => {
     const refList = args[key]
     if (key.length > 0 && refList) {
-      console.log(`DEBUG: -+- discovering [${key}] -> ${refList}`)
+      LOG.debug('-+- discovering [', key, '] ->', refList)
       // Now find the corresponding reference location.
       // This requires inspecting the links of joins
       let v = lookupInternal(baseContext, refList, MAXIMUM_POINTER_DEPTH)
       if (hasErrorValue(v[0])) {
-        console.log(`DEBUG: -+- :: get path trace [${JSON.stringify(v[2])}] generated an error: ${JSON.stringify(v[0])}`)
+        // FIXME!!!!  Make this actually return an error object???  Or insert an error object
+        // into the context tree???
+        LOG.error('Path trace ', v[2], 'generated an error:', v[0])
         return
       }
       if (v[0] === undefined) {
-        console.log(`DEBUG: -+- :: get path trace [${JSON.stringify(v[2])}] references undefined path.`)
+        // FIXME!!!!! This one might be okay, because it keeps the reference undefined.
+        LOG.error('Path trace ', v[2], 'references undefined path.')
+        return
       }
       // let value: Internal | undefined = v[0]
       let reference: string = v[1]
 
       // The key is relative to the CURRENT_FUNCTION_ARGUMENTS_PATH,
       // due to the SplitContext below.
-      console.log(`DEBUG: -+- :: final mapping [${key}] -> [${reference}]`)
+      LOG.debug('-+- :: final mapping [', key, '] -> [', reference, ']')
       pointers.addPointer(PATH_SEPARATOR + key, reference)
     }
   })

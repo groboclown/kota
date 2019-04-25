@@ -3,8 +3,11 @@ import {
   Internal,
   Context,
   normalizeAbsolutePath,
-  PATH_SEPARATOR
 } from './base'
+
+import { createLogger } from '../../lib/log'
+
+const LOG = createLogger('model.intern.split-context')
 
 /**
  * Stores sub-contexts in specific paths.  Allows for a fall-back parent
@@ -20,24 +23,24 @@ export class SplitContext implements Context {
   ) { }
 
   getInternal(path: string): Internal | undefined {
-    // console.log(`DEBUG )) Checking split for [${path}]`)
+    LOG.trace(')) Checking split for [', path, ']')
     for (const key of Object.keys(this.subs)) {
-      //console.log(`DEBUG )) trying prefix [${key}]`)
+      LOG.trace(')) trying prefix [', key, ']')
       if (path.startsWith(key)) {
         // Strip off the 'key' part, but leave the trailing '/'
         const subPath = path.substring(key.length - 1)
-        // console.log(`DEBUG )) using [${key}] => [${subPath}]`)
+        LOG.trace(')) using [', key, '] => [', subPath, ']')
         return this.subs[key].getInternal(subPath)
       }
     }
-    console.log(`DEBUG )) no split on ${path}; trying parent`)
+    LOG.trace(')) no split on', path, '; trying parent')
     return this.defaultParent ? this.defaultParent.getInternal(path) : undefined
   }
 
   keysFor(path: string): string[] {
     const keys: string[] = []
     const p = normalizeAbsolutePath(path, true)
-    console.log(`DEBUG SplitContext finding keys for ${p}`)
+    LOG.debug('SplitContext finding keys for', p)
     for (const key of Object.keys(this.subs)) {
       if (p.startsWith(key)) {
         const subKey = key.substring(0, key.length - 1)

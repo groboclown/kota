@@ -6,6 +6,9 @@ import {
   PATH_SEPARATOR,
 } from './base'
 
+import { createLogger } from '../../lib/log'
+
+const LOG = createLogger('model.intern.storage-context')
 
 export class StorageContext implements Context {
   constructor(private data: { [path: string]: Internal }) { }
@@ -21,7 +24,7 @@ export class StorageContext implements Context {
   keysFor(path: string): string[] {
     // Ensure the path ends with a trailing slash
     const p = normalizeAbsolutePath(path, true)
-    console.log(`DEBUG StorageContext: getting keys for ${p}`)
+    LOG.debug('StorageContext: getting keys for', p)
     const keys: string[] = []
     Object.keys(this.data).forEach(k => {
       if (k.startsWith(p)) {

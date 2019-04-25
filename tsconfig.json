@@ -4,7 +4,6 @@
     "module": "commonjs",
     "jsx": "react",
     "sourceMap": true,
-    "inlineSourceMap": true,
     "outDir": "./dist",
     "noImplicitAny": true,
     "strict": true,

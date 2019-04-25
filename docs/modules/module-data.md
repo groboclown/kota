@@ -40,10 +40,10 @@ Translations define a collection of locale-specific translation files which use 
 
 Example:
 
-```(yaml)
+```yaml
 translation:
     id: names
-    file; name-list
+    file: name-list
 ```
 
 Because translations are created just once, they are created with an `id` and inserted into the context tree under `(module path)/(id)`, which creates the domain for the messages.
@@ -54,7 +54,7 @@ The translation json files have a very simple format.  They are a simple JSON ob
 the message ID is assigned to another object, with each count value
 as the key; the default plural number, for any count, is 'plural'.  For things such as name lists, the value is an array of translated text.
 
-```(json)
+```json
 {
     "simple greeting", "Hello, {name}",
     "formal greeting", "Good {time}, {name}.",
@@ -166,7 +166,7 @@ Group definitions only define one attribute.
 
 * **name**: name of the group.  This will be inserted into the global context tree according to the standard module name conventions.
 
-```(yaml)
+```yaml
 group:
   name: '@container'
 ```
@@ -184,7 +184,7 @@ If there are multiple definitions of a group-value name inside the same group, t
 * **name**: name of this group value.
 * **matches**: a dictionary of alternate group values (which do not have to exist in the group) mapped to a fuzz value of how well it matches that alternate group value.
 
-```(yaml)
+```yaml
 group-value:
   group: /common/roles/@occupation
   name: blacksmith
@@ -214,7 +214,7 @@ The standard method for constraints is to create a heirarchy of values.  The fir
 * **name**: the name of the constraint.  Does not need to be unique for the role.
 * **includes**: list of other constraints to base this one off of.  Keep in mind the priority for overriding values.
 
-```(yaml)
+```yaml
 object-constraints:
     name: blacksmith
     includes:
@@ -319,8 +319,8 @@ Some ideas:
 
 * *Categorical threats*
     * A location can have threats specific to it, that dictate how objects are created.
-        * A location can be renoun for how the general population acts.  This would mean that natives to the location tend to side with these categories of threats.  Xenophobic, agressive, shy, etc.  They represent general cultural and societal norms that most people conform to.
-        * Threats could also be in the form of cultural taboos and other expectations of behavior that an unprepared person could easily break, which could lead to inferred insults or shunning or religious concequences.  Things like entering a house without shoes, eating the wrong way, using a sacred rock as a lunch table.  These would be things that would require a careful traveler to prepare for and/or hire a friendly local to aid them in the cultural navigation.
+        * A location can be renown for how the general population acts.  This would mean that natives to the location tend to side with these categories of threats.  Xenophobic, agressive, shy, etc.  They represent general cultural and societal norms that most people conform to.
+        * Threats could also be in the form of cultural taboos and other expectations of behavior that an unprepared person could easily break, which could lead to inferred insults or shunning or religious consequences.  Things like entering a house without shoes, eating the wrong way, using a sacred rock as a lunch table.  These would be things that would require a careful traveler to prepare for and/or hire a friendly local to aid them in the cultural navigation.
         * Locations can also have natural threats - things in the natural world specific to them.  Harsh cold, bears, landslides, poisonous plants, mosquitos, disease, brackish water, black mold.
     * Organizations can have rules that the members are expected to follow, which can themselves be threats.  In this case, the organization itself is not a threat (it's an organization, which is made up of people), but which makes the people in it follow certain behaviors and thus be inclined to general categories of threats.
     * Categorical threats to not mean "may or may not have threat X", but should mean instead "how much of threats similar to X", because people can have different degrees of association with that idea, and it can manifest behaviors in different ways.
