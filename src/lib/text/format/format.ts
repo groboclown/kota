@@ -52,15 +52,18 @@ export interface FormatVariable {
 }
 
 /**
- * A list of pointers to the argument value.
- * 
- * FIXME make this a single path string, not a list of pointers.
+ * A path to the argument value.
  */
-export type ArgumentReference = string[]
+export type ArgumentReference = string
 
-/** A mapping of argument name to the argument lookup; name can be a user-specified name or the index in the argument list. */
+/**
+ * A mapping of argument name to the argument lookup; name can be a
+ * user-specified name or the index in the argument list.
+ */
 export type ArgumentMapping = { [key: string]: ArgumentReference }
 
+// TODO make this an argument?
+const MAXIMUM_POINTER_DEPTH = 10
 
 /**
  * Creates a context which maps all the `args` over to the argument path.  The keys will
@@ -81,15 +84,11 @@ export function getContextValuesFor(baseContext: Context, args: ArgumentMapping)
   let pointers = new PointerContext(baseContext)
   Object.keys(args).forEach(key => {
     const refList = args[key]
-    if (key.length > 0 && refList && refList.length > 0) {
-      console.log(`DEBUG: -+- discovering [${key}] -> ${JSON.stringify(refList)}`)
-      if (refList.length !== 1) {
-        console.log(`DEBUG: -+- :: explicit pointers in paths are no longer supported`)
-        return
-      }
+    if (key.length > 0 && refList) {
+      console.log(`DEBUG: -+- discovering [${key}] -> ${refList}`)
       // Now find the corresponding reference location.
       // This requires inspecting the links of joins
-      let v = lookupInternal(baseContext, refList[0], 10)
+      let v = lookupInternal(baseContext, refList, MAXIMUM_POINTER_DEPTH)
       if (hasErrorValue(v[0])) {
         console.log(`DEBUG: -+- :: get path trace [${JSON.stringify(v[2])}] generated an error: ${JSON.stringify(v[0])}`)
         return
@@ -97,7 +96,7 @@ export function getContextValuesFor(baseContext: Context, args: ArgumentMapping)
       if (v[0] === undefined) {
         console.log(`DEBUG: -+- :: get path trace [${JSON.stringify(v[2])}] references undefined path.`)
       }
-      let value: Internal | undefined = v[0]
+      // let value: Internal | undefined = v[0]
       let reference: string = v[1]
 
       // The key is relative to the CURRENT_FUNCTION_ARGUMENTS_PATH,

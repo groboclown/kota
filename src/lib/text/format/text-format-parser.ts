@@ -210,7 +210,7 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
         // pointer references to a value or just a value.  For now, we're checking
         // for a non-space character.
         current.contents += c
-        if (c === '}' || c === ';' || c === '>' || c === ',' || c === '=' || c === '{') {
+        if (c === '}' || c === ';' || c === ',' || c === '=' || c === '{') {
           // We're at the start, so that means there was a dangling ',' or no values
           // given.
           // The ">" and "," and "=" and '{' is a bit of a cop-out, to keep from writing
@@ -259,9 +259,8 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
             throw new Error(`No parent inside CTX_VALUE; format "${format}"`)
           }
           // Variable has no name, and no more arguments, so set to default key "value"
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          current.values[String(current.value.index)] = current.value.pointers
-          current.values.value = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
+          current.values.value = current.value.valueTrimmedBuff
 
           const textFormat: TextFormatReplace = {
             formatTypeMarker: current.marker.markerTrimBuff,
@@ -275,27 +274,18 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
         } else if (c === ';') {
           // End of the variables, start of the template.
           // Variable has no name, and no more arguments, so set to default key "value"
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          current.values[String(current.value.index)] = current.value.pointers
-          current.values.value = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
+          current.values.value = current.value.valueTrimmedBuff
 
           current.state = CTX_TEMPLATE_START
-        } else if (c === '>') {
-          // Variable has no name, but it is now a pointer reference.
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          // Reset the current search
-          // Don't need to clear the value buffers, because they will be cleared
-          // in the value start search.
-          current.state = CTX_FIRST_VALUE_START
         } else if (c === ',') {
           // Variable has no name, but there will now be more arguments, so it doesn't use "value" default.
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          current.values[String(current.value.index)] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
           // Don't need to clear the value buffers, because they will be cleared
           // in the start search.
 
           // Reset all but the buffers.
-          current.value.pointers = []
+          // current.value.pointers = []
           current.value.index++
           current.state = CTX_VALUE_OR_NAME_START
         } else if (c === '=') {
@@ -328,7 +318,7 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
         // pointer references to a value or just a value.  For now, we're checking
         // for a non-space character.
         current.contents += c
-        if (c === '}' || c === ';' || c === '>' || c === ',' || c === '=' || c === '{') {
+        if (c === '}' || c === ';' || c === ',' || c === '=' || c === '{') {
           // We're at the start, so that means there was a dangling ',' or no values
           // given.
           // The ">" and "," and "=" and '{' is a bit of a cop-out, to keep from writing
@@ -371,8 +361,8 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
           if (current.parent === null) {
             throw new Error(`No parent inside CTX_VALUE; format "${format}"`)
           }
-          // Variable has no name and no pointer, so it will only be the index.
-          current.values[String(current.value.index)] = [current.value.valueTrimmedBuff]
+          // Variable has no name, so it will only be the index.
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
 
           const textFormat: TextFormatReplace = {
             formatTypeMarker: current.marker.markerTrimBuff,
@@ -385,24 +375,16 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
           // Parent should be in the right state.
         } else if (c === ';') {
           // End of the variables, start of the template.
-          // Variable has no name and no pointers, so it will only be the index.
-          current.values[String(current.value.index)] = [current.value.valueTrimmedBuff]
+          // Variable has no name, so it will only be the index.
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
           current.state = CTX_TEMPLATE_START
-        } else if (c === '>') {
-          // Variable has no name, but it is now a pointer reference.
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          // Reset the current search
-          // Don't need to clear the value buffers, because they will be cleared
-          // in the value start search.
-          current.state = CTX_ONLY_VALUE_START
         } else if (c === ',') {
-          // no-named value with no pointer.
-          current.values[String(current.value.index)] = [current.value.valueTrimmedBuff]
+          // no-named value.
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
           // Don't need to clear the value buffers, because they will be cleared
           // in the start search.
 
           // Reset all but the buffers.
-          current.value.pointers = []
           current.value.index++
           current.state = CTX_VALUE_OR_NAME_START
         } else if (c === '=') {
@@ -432,11 +414,10 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
         break
       case CTX_NAMED_VALUE_START:
         // We are in the value parsing, we have found a key name,
-        // and have either just found a pointer ('>') or are starting
-        // the value location.
+        // and are starting the value location.
         current.contents += c
 
-        if (c === '}' || c === ';' || c === '>' || c === ',' || c === '=' || c === '{') {
+        if (c === '}' || c === ';' || c === ',' || c === '=' || c === '{') {
           // The format requires some valid value here.
           return { error: coreError('embedded format no value', { format }) }
         }
@@ -474,10 +455,9 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
             throw new Error(`CTX_NAMED_VALUE has no key value: "${format}"`)
           }
 
-          current.value.pointers.push(current.value.valueTrimmedBuff)
           // Both a named and numbered value
-          current.values[String(current.value.index)] = current.value.pointers
-          current.values[current.value.key] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
+          current.values[current.value.key] = current.value.valueTrimmedBuff
 
           const textFormat: TextFormatReplace = {
             formatTypeMarker: current.marker.markerTrimBuff,
@@ -488,34 +468,26 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
           current = current.parent
           current.parsed.push(textFormat)
           // Parent should be in the right state.
-        } else if (c === '>') {
-          // Start a pointer.
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          // No need to set the value buffers, because they will be reset
-          current.state = CTX_NAMED_VALUE_START
         } else if (c === ',') {
           // Start a new value
-          current.value.pointers.push(current.value.valueTrimmedBuff)
           // Both a named and numbered value
-          current.values[String(current.value.index)] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
           if (!current.value.key) {
             throw new Error(`CTX_NAMED_VALUE has no key value: "${format}"`)
           }
-          current.values[current.value.key] = current.value.pointers
+          current.values[current.value.key] = current.value.valueTrimmedBuff
 
           // Reset all but the buffers.
-          current.value.pointers = []
           current.value.index++
           current.state = CTX_VALUE_OR_NAME_START
         } else if (c === ';') {
           // Start the template
-          current.value.pointers.push(current.value.valueTrimmedBuff)
           // Both a named and numbered value
-          current.values[String(current.value.index)] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
           if (!current.value.key) {
             throw new Error(`CTX_NAMED_VALUE has no key value: "${format}"`)
           }
-          current.values[current.value.key] = current.value.pointers
+          current.values[current.value.key] = current.value.valueTrimmedBuff
           // No need to clear out the value data, because it won't be used again for
           // this current stack position.
           current.state = CTX_TEMPLATE_START
@@ -536,23 +508,6 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
           current.value.valueTrimmedBuff = current.value.valueBuff
         }
         current.state = CTX_NAMED_VALUE
-        break
-      case CTX_ONLY_VALUE_START:
-        // Start of a only-value, no key.  We have a pointer already, and we just found a '>' character
-        current.contents += c
-
-        if (c === '}' || c === ';' || c === '>' || c === ',' || c === '=' || c === '{') {
-          // The format requires some valid value here.
-          return { error: coreError('embedded format no value', { format }) }
-        }
-
-        if (c !== ' ' && c !== '\t') {
-          // start the new value.
-          current.value.valueBuff = c
-          current.value.valueTrimmedBuff = c
-          current.state = CTX_ONLY_VALUE
-        }
-        // else we keep looking for that start.
         break
       case CTX_ONLY_VALUE:
         // Inside a only-value with some text, no key.  We have a pointer already.
@@ -576,9 +531,8 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
             throw new Error(`No parent inside CTX_ESC_ONLY_VALUE; format "${format}"`)
           }
 
-          current.value.pointers.push(current.value.valueTrimmedBuff)
           // Both only a numbered value
-          current.values[String(current.value.index)] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
 
           const textFormat: TextFormatReplace = {
             formatTypeMarker: current.marker.markerTrimBuff,
@@ -589,26 +543,18 @@ export function parseTextFormat(format: string): TextFormat[] | HasErrorValue {
           current = current.parent
           current.parsed.push(textFormat)
           // Parent should be in the right state.
-        } else if (c === '>') {
-          // Start a pointer.
-          current.value.pointers.push(current.value.valueTrimmedBuff)
-          // No need to set the value buffers, because they will be reset
-          current.state = CTX_ONLY_VALUE_START
         } else if (c === ',') {
           // Start a new value
-          current.value.pointers.push(current.value.valueTrimmedBuff)
           // Only a numbered value
-          current.values[String(current.value.index)] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
 
           // Reset all but the buffers.
-          current.value.pointers = []
           current.value.index++
           current.state = CTX_VALUE_OR_NAME_START
         } else if (c === ';') {
           // Start the template
-          current.value.pointers.push(current.value.valueTrimmedBuff)
           // Only a numbered value
-          current.values[String(current.value.index)] = current.value.pointers
+          current.values[String(current.value.index)] = current.value.valueTrimmedBuff
           // No need to clear out the value data, because it won't be used again for
           // this current stack position.
           current.state = CTX_TEMPLATE_START
@@ -670,7 +616,6 @@ const CTX_ESC_FIRST_VALUE = 232
 const CTX_VALUE_OR_NAME_START = 200
 const CTX_VALUE_OR_NAME = 201
 const CTX_ESC_VALUE_OR_NAME = 202
-const CTX_ONLY_VALUE_START = 210
 const CTX_ONLY_VALUE = 211
 const CTX_ESC_ONLY_VALUE = 212
 const CTX_NAMED_VALUE_START = 220
@@ -703,9 +648,10 @@ interface ParserVariableState {
   // If a key is found, this is set.  It is never a buffer.
   key: string | null
 
+  // TODO This is left-over from when pointers were supported.
   // If a pointer key is found, it is added into this
   // list.  This is the already parsed out pointers.
-  pointers: ArgumentReference
+  // pointers: ArgumentReference[]
 }
 
 interface ParseState {
@@ -743,7 +689,7 @@ function mkParseState(parent: ParseState | null): ParseState {
       valueBuff: '',
       valueTrimmedBuff: '',
       key: null,
-      pointers: []
+      // pointers: []
     },
     values: {},
     textBuff: '',

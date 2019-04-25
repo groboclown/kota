@@ -121,8 +121,8 @@ describe('parseTextFormat', () => {
           }
           expect(res0.formatTypeMarker).toBe(replacement[0])
           expect(res0.valueKeyNames).toEqual({
-            '0': [replacement[1]],
-            value: [replacement[1]]
+            '0': replacement[1],
+            value: replacement[1]
           })
           expect(res0.template).toHaveLength(0)
         })
@@ -150,8 +150,8 @@ describe('parseTextFormat', () => {
           }
           expect(res0.formatTypeMarker).toBe(replacement[0])
           expect(res0.valueKeyNames).toEqual({
-            '0': [replacement[1]],
-            value: [replacement[1]]
+            '0': replacement[1],
+            value: replacement[1]
           })
           expect(res0.template).toHaveLength(1)
           expect(res0.template).toContainEqual({ text: replacement[2] })
@@ -171,7 +171,7 @@ describe('parseTextFormat', () => {
         expect(res[1]).toEqual({
           formatTypeMarker: 'a',
           template: [],
-          valueKeyNames: { '0': ['x'], value: ['x'] }
+          valueKeyNames: { '0': 'x', value: 'x' }
         })
       })
     })
@@ -187,8 +187,8 @@ describe('parseTextFormat', () => {
           formatTypeMarker: 'a',
           template: [],
           valueKeyNames: {
-            '0': ['x'],
-            '1': ['y']
+            '0': 'x',
+            '1': 'y'
           }
         })
       })
@@ -205,10 +205,10 @@ describe('parseTextFormat', () => {
           formatTypeMarker: 'a',
           template: [],
           valueKeyNames: {
-            '0': ['x'],
-            '1': ['y'],
-            'wbc': ['x'],
-            '@def': ['y']
+            '0': 'x',
+            '1': 'y',
+            'wbc': 'x',
+            '@def': 'y'
           }
         })
       })
@@ -225,9 +225,9 @@ describe('parseTextFormat', () => {
           formatTypeMarker: 'a',
           template: [],
           valueKeyNames: {
-            '0': ['x'],
-            '1': ['y'],
-            '@def': ['y']
+            '0': 'x',
+            '1': 'y',
+            '@def': 'y'
           }
         })
       })
@@ -339,7 +339,7 @@ describe('isTextFormatPlain', () => {
   })
   it('no', () => {
     expect(tx.isTextFormatPlain(
-      { formatTypeMarker: 'x', valueKeyNames: { '0': ['y'] }, template: [] })
+      { formatTypeMarker: 'x', valueKeyNames: { '0': 'y' }, template: [] })
     ).toBe(false)
   })
 })
@@ -347,7 +347,7 @@ describe('isTextFormatPlain', () => {
 describe('isTextFormatReplace', () => {
   it('yes', () => {
     expect(tx.isTextFormatReplace(
-      { formatTypeMarker: 'x', valueKeyNames: { '0': ['y'] }, template: [] })
+      { formatTypeMarker: 'x', valueKeyNames: { '0': 'y' }, template: [] })
     ).toBe(true)
   })
   it('no', () => {

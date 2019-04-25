@@ -7,6 +7,14 @@ import {
 
 describe('format', () => {
   describe('getContextValuesFor', () => {
-    // Need an implementation.
+    describe('When arguments are empty', () => {
+      it('returns the original context', () => {
+        const src = new StorageContext({ '/a': new NumberInternal('/x', 1) })
+        const res = format.getContextValuesFor(src, {})
+        expect(src.keysFor('/')).toEqual(['/a'])
+      })
+    })
+
+    // TODO add more
   })
 })
