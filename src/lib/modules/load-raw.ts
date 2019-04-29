@@ -13,16 +13,16 @@ export function isLoadedStructure(v: LoadedStructure | HasErrorValue): v is Load
 /**
  * Load a structured (yaml) module file.  Should be read in UTF-8 format.
  */
-export function loadStructuredFileContents(data: string): LoadedStructure | HasErrorValue {
+export function loadStructuredFileContents(filename: string, data: string): LoadedStructure | HasErrorValue {
   // Required format check.
-  if (!data.startsWith('---\n') && ! data.startsWith('---\r')) {
-    return { error: coreError('bad yaml format first line') }
+  if (!data.startsWith('---\n') && !data.startsWith('---\r')) {
+    return { error: coreError('bad yaml format first line', { path: filename }) }
   }
   try {
     const raw: any[] = yaml.safeLoadAll(data)
     return { data: raw }
   } catch (e) {
-    return { error: coreError('bad yaml format', { msg: e.toString() }) }
+    return { error: coreError('bad yaml format', { msg: e.toString(), path: filename }) }
   }
 }
 

@@ -4,6 +4,7 @@
 # all the other parts of the path that are expected to exist with a basic world.
 
 install:
+  id: 'module-install'
   # Attach values of a specific type to the global context.
   attach-value:
     -

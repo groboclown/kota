@@ -1,8 +1,6 @@
 ---
 
-#
-
 group-value:
-  group: @role
+  group: '@role'
   name: region
 

@@ -5,3 +5,11 @@
 
 # This list can include `manifest.list` and `module.yaml`, but they are
 # always loaded, so they don't need to be here.  They are essentially ignored.
+
+install.yaml
+overrides/common/groups/role.yaml
+overrides/common/l10n/localizations.yaml
+overrides/common/roles/player.yaml
+overrides/common/roles/region.yaml
+overrides/common/roles/world.yaml
+system-text/errors.yaml

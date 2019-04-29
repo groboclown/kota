@@ -3,7 +3,7 @@ import * as cp from '../../lib/core-paths'
 import * as loc from '../../lib/text/localization'
 import * as fmt from '../../lib/text/format'
 import * as itn from '../../model/intern'
-import { HasErrorValue, hasErrorValue } from '../../lib/error'
+import { hasErrorValue } from '../../lib/error'
 
 /** Helper to create a GroupDefinition in-line */
 class GroupDefBuilder {

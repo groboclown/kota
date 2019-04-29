@@ -10,8 +10,8 @@ import {
   ParsedError,
 } from '../../model/module'
 
-const MANIFEST_FILE_NAME = 'manifest.list'
-const MODULE_FILE_NAME = 'module.yaml'
+export const MANIFEST_FILE_NAME = 'manifest.list'
+export const MODULE_FILE_NAME = 'module.yaml'
 
 export interface ManifestResult {
   readonly manifest: Manifest

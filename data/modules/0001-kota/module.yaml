@@ -15,4 +15,5 @@ module:
     - core 0.0
 
   hooks:
-    install: install.yaml
+    install:
+      - source: install.yaml

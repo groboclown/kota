@@ -1,0 +1,52 @@
+---
+
+"$schema": "http://json-schema.org/draft-07/schema#"
+"$id": "https://groboclown.github.io/kota/site/schema/constant.schema.json"
+title: Constant Value
+description: >
+  A constant value inserted into the context tree.
+allOf:
+- type: object
+  properties:
+    name:
+      type: string
+      pattern: "^\S\S+$"
+  required:
+    - name
+- oneOf:
+  - type: object
+    properties:
+      type:
+        type: string
+        enum: [ fuzz ]
+      value:
+        type: number
+        min: 0
+        max: 1
+    required: [ type, value ]
+  - type: object
+    properties:
+      type:
+        type: string
+        enum: [ number, count, range ]
+      value:
+        type: integer
+        min: -1000000000
+        max: 1000000000
+    required: [ type, value ]
+  - type: object
+    description: >
+      Reference to a localized message.
+    properties:
+      type:
+        type: string
+        enum: [ l10n ]
+      domain:
+        type: string
+        minLength: 1
+        maxLength: 200
+      msgid:
+        type: string
+        minLength: 1
+        maxLength: 200
+    required: [ type, domain, msgid ]

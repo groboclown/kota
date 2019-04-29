@@ -35,6 +35,9 @@ export const WORLD_STATE_DIRNAME = 'world'
 /**
  * State data.  This is where the world-state data is put, and can be
  * persisted.  Everything else is pulled from modules, and so is static.
+ * 
+ * Loading a game will only need to refresh this tree if the module list
+ * is the same.
  */
 export const WORLD_STATE_PATH = joinRelativePaths(ROOT_PATH, WORLD_STATE_DIRNAME)
 
@@ -58,8 +61,17 @@ export const APPLICATION_STATE_DIRNAME = 'application'
  * and per-user app-specific preferences (volume level, language).  This data
  * has nothing to do with an individual game, but does matter for certain
  * display options, like vulgarity level.
+ * 
+ * Modules can load this with default values, but the user's settings override them.
  */
 export const APPLICATION_STATE_PATH = joinRelativePaths(ROOT_PATH, APPLICATION_STATE_DIRNAME)
+
+
+export const GUI_DIRNAME = 'gui'
+/**
+ * User interface information.
+ */
+export const GUI_PATH = joinRelativePaths(ROOT_PATH, GUI_DIRNAME)
 
 // ============================================================================
 // Module tree
@@ -110,7 +122,7 @@ export const CURRENT_USER_PREFERENCES_PATH = joinRelativePaths(CURRENT_REFERENCE
 
 export const CURRENT_CONTEXT_PATH = joinRelativePaths(CURRENT_REFERENCES_PATH, 'context')
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 // Template argument tree
 
 export const CURRENT_FUNCTION_ARGUMENTS_PATH = joinRelativePaths(CURRENT_REFERENCES_PATH, 'function', 'arguments')
@@ -120,4 +132,12 @@ export const CURRENT_FUNCTION_ARGUMENT_0_PATH = joinRelativePaths(CURRENT_FUNCTI
 // ============================================================================
 // Common values
 
-export const COMMON_LOCALIZATIONS_PATH = joinRelativePaths(COMMON_STATE_PATH, 'function', 'l10n')
+export const COMMON_LOCALIZATIONS_PATH = joinRelativePaths(COMMON_STATE_PATH, 'l10n')
+
+
+// ============================================================================
+// GUI elements
+
+export const GUI_INIT_GAME_PATH = joinRelativePaths(GUI_PATH, 'init-game')
+export const GUI_START_SCREEN_PATH = joinRelativePaths(GUI_PATH, 'start')
+export const GUI_OPTIONS_PATH = joinRelativePaths(GUI_PATH, 'options')

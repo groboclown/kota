@@ -225,6 +225,7 @@ export function getNumericValueForInternal(v: Internal, ctx: Context): number | 
       return v.value
     }
   }
+  // TODO look at returning "undefined" or something similar if it's a non-numeric type.
   return { error: coreError('non-numeric value type', { value: v.type }) }
 }
 

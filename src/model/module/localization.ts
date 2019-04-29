@@ -16,23 +16,23 @@ export const LocalizationTypeConstraint: ConstraintSet = new ConstraintSet('loca
     .mustHave('positive', 'string', ac => ac.isAString())
     .mustHave('digitsUpper', 'string', ac => ac
       .isAString()
-      .has('string with 16 characters', src => (<any>src).digitsUpper.length === 16))
+      .has('string with 16 characters', src => (<any>src).digitsUpper && (<any>src).digitsUpper.length === 16))
     .mustHave('digitsLower', 'string', ac => ac
       .isAString()
-      .has('string with 16 characters', src => (<any>src).digitsLower.length === 16))
+      .has('string with 16 characters', src => (<any>src).digitsLower && (<any>src).digitsLower.length === 16))
   ))
   .canHave('date-markers', 'LocalizationDateMarkerType[]', ac => ac
     .isAnArrayWith('LocalizationDateMarkerType', csf => csf
       .mustHave('marker', 'string', ac => ac
         .isAString()
-        .has('one character long', v => (<string>v).length === 1))
+        .has('one character long', v => v && (<string>v).length === 1))
       .mustHave('from', 'string', ac => ac
         .isInStringSet(['day', 'month', 'year', 'yr', 'week']))
       .matchesOneOf({
         'map': csf => csf
           .has('one character keys', v => {
             return Object.keys(v).reduce<boolean>((prevValue, key) =>
-              prevValue && key.length === 1,
+              prevValue && !!key && key.length === 1,
               true)
           }),
         'direct-map': csf => csf

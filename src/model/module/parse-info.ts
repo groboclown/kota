@@ -28,7 +28,7 @@ export type ParseSrcKey<T> = (src: any) => ParsedInfo<T>
 
 export function createParsedInfo<T>(src: any, errors: ParsedError[], name: string, parsed?: T | null): ParsedInfo<T> {
   return {
-    srcValue: src,
+    srcValue: errors.length > 0 ? src : null,
     type: name,
     valid: errors.length <= 0,
     parsed: errors.length > 0 ? null : parsed ? parsed : <T>src,
