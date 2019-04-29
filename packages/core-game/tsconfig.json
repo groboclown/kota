@@ -4,10 +4,15 @@
     "module": "commonjs",
     "jsx": "react",
     "sourceMap": true,
+    "outDir": "./dist",
     "noImplicitAny": true,
     "strict": true,
+    "baseUrl": "./src",
     "esModuleInterop": true
   },
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
     "node_modules",
     "__jest__/*"
