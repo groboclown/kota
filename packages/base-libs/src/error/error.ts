@@ -27,7 +27,7 @@ export function hasErrorValue(v: any): v is HasErrorValue {
 }
 
 export function coreError(msgid: string | Error, params?: { [key: string]: string | number }): ErrorValue {
-  let stack: string | undefined = undefined
+  let stack: string | undefined
   if (msgid instanceof Error) {
     stack = msgid.stack
     msgid = msgid.message

@@ -60,28 +60,28 @@ describe('logs', () => {
         inx.setLogLevel('#a.b.c', inx.LOG_DEBUG)
         logger.debug('+000')
         expect(logsWritten).toEqual([
-          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+000' }
+          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+000' },
         ])
       })
       it('parent', () => {
         inx.setLogLevel('#a.b', inx.LOG_DEBUG)
         logger.debug('+001')
         expect(logsWritten).toEqual([
-          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+001' }
+          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+001' },
         ])
       })
       it('grandparent', () => {
         inx.setLogLevel('#a', inx.LOG_DEBUG)
         logger.debug('+002')
         expect(logsWritten).toEqual([
-          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+002' }
+          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+002' },
         ])
       })
       it('root', () => {
         inx.setLogLevel('#', inx.LOG_DEBUG)
         logger.debug('+003')
         expect(logsWritten).toEqual([
-          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+003' }
+          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+003' },
         ])
       })
     })
@@ -105,7 +105,7 @@ describe('logs', () => {
           return '+004'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+004' }
+          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+004' },
         ])
         expect(ran).toBe(true)
       })
@@ -117,7 +117,7 @@ describe('logs', () => {
           return ['+005']
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+005' }
+          { level: inx.LOG_DEBUG, source: 'a.b.c', message: '+005' },
         ])
         expect(ran).toBe(true)
       })
@@ -130,7 +130,7 @@ describe('logs', () => {
       inx.setLogLevel('#c', inx.LOG_UNIT_TEST)
       logger.unitTest('ab')
       expect(logsWritten).toEqual([
-        { level: inx.LOG_UNIT_TEST, source: 'c', message: 'ab' }
+        { level: inx.LOG_UNIT_TEST, source: 'c', message: 'ab' },
       ])
     })
     it('disabled', () => {
@@ -147,7 +147,7 @@ describe('logs', () => {
           return 'ab'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_UNIT_TEST, source: 'c', message: 'ab' }
+          { level: inx.LOG_UNIT_TEST, source: 'c', message: 'ab' },
         ])
         expect(ran).toBe(true)
       })
@@ -159,7 +159,7 @@ describe('logs', () => {
           return ['ab']
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_UNIT_TEST, source: 'c', message: 'ab' }
+          { level: inx.LOG_UNIT_TEST, source: 'c', message: 'ab' },
         ])
         expect(ran).toBe(true)
       })
@@ -182,7 +182,7 @@ describe('logs', () => {
       inx.setLogLevel('#c', inx.LOG_TRACE)
       logger.trace('ab')
       expect(logsWritten).toEqual([
-        { level: inx.LOG_TRACE, source: 'c', message: 'ab' }
+        { level: inx.LOG_TRACE, source: 'c', message: 'ab' },
       ])
     })
     it('disabled', () => {
@@ -199,7 +199,7 @@ describe('logs', () => {
           return 'ab'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_TRACE, source: 'c', message: 'ab' }
+          { level: inx.LOG_TRACE, source: 'c', message: 'ab' },
         ])
         expect(ran).toBe(true)
       })
@@ -211,7 +211,7 @@ describe('logs', () => {
           return [{ x: 'ab' }]
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_TRACE, source: 'c', message: '{"x":"ab"}' }
+          { level: inx.LOG_TRACE, source: 'c', message: '{"x":"ab"}' },
         ])
         expect(ran).toBe(true)
       })
@@ -234,7 +234,7 @@ describe('logs', () => {
       inx.setLogLevel('#c', inx.LOG_VERBOSE)
       logger.verbose({ a: 1 })
       expect(logsWritten).toEqual([
-        { level: inx.LOG_VERBOSE, source: 'c', message: JSON.stringify({ a: 1 }) }
+        { level: inx.LOG_VERBOSE, source: 'c', message: JSON.stringify({ a: 1 }) },
       ])
     })
     it('disabled', () => {
@@ -262,7 +262,7 @@ describe('logs', () => {
           return '+004'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_VERBOSE, source: 'c', message: '+004' }
+          { level: inx.LOG_VERBOSE, source: 'c', message: '+004' },
         ])
         expect(ran).toBe(true)
       })
@@ -274,7 +274,7 @@ describe('logs', () => {
           return ['=004']
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_VERBOSE, source: 'c', message: '=004' }
+          { level: inx.LOG_VERBOSE, source: 'c', message: '=004' },
         ])
         expect(ran).toBe(true)
       })
@@ -287,7 +287,7 @@ describe('logs', () => {
       inx.setLogLevel('#c', inx.LOG_INFO)
       logger.info(true)
       expect(logsWritten).toEqual([
-        { level: inx.LOG_INFO, source: 'c', message: JSON.stringify(true) }
+        { level: inx.LOG_INFO, source: 'c', message: JSON.stringify(true) },
       ])
     })
     it('disabled', () => {
@@ -315,7 +315,7 @@ describe('logs', () => {
           return '+005'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_INFO, source: 'c', message: '+005' }
+          { level: inx.LOG_INFO, source: 'c', message: '+005' },
         ])
         expect(ran).toBe(true)
       })
@@ -327,7 +327,7 @@ describe('logs', () => {
           return ['=005']
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_INFO, source: 'c', message: '=005' }
+          { level: inx.LOG_INFO, source: 'c', message: '=005' },
         ])
         expect(ran).toBe(true)
       })
@@ -340,7 +340,7 @@ describe('logs', () => {
       inx.setLogLevel('#c', inx.LOG_NOTICE)
       logger.notice({ a: 1 })
       expect(logsWritten).toEqual([
-        { level: inx.LOG_NOTICE, source: 'c', message: JSON.stringify({ a: 1 }) }
+        { level: inx.LOG_NOTICE, source: 'c', message: JSON.stringify({ a: 1 }) },
       ])
     })
     it('disabled', () => {
@@ -368,7 +368,7 @@ describe('logs', () => {
           return '+006'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_NOTICE, source: 'c', message: '+006' }
+          { level: inx.LOG_NOTICE, source: 'c', message: '+006' },
         ])
         expect(ran).toBe(true)
       })
@@ -380,7 +380,7 @@ describe('logs', () => {
           return ['=006']
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_NOTICE, source: 'c', message: '=006' }
+          { level: inx.LOG_NOTICE, source: 'c', message: '=006' },
         ])
         expect(ran).toBe(true)
       })
@@ -393,7 +393,7 @@ describe('logs', () => {
       inx.setLogLevel('#c', inx.LOG_WARN)
       logger.warn(2)
       expect(logsWritten).toEqual([
-        { level: inx.LOG_WARN, source: 'c', message: JSON.stringify(2) }
+        { level: inx.LOG_WARN, source: 'c', message: JSON.stringify(2) },
       ])
     })
     it('disabled', () => {
@@ -421,7 +421,7 @@ describe('logs', () => {
           return '+007'
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_WARN, source: 'c', message: '+007' }
+          { level: inx.LOG_WARN, source: 'c', message: '+007' },
         ])
         expect(ran).toBe(true)
       })
@@ -433,7 +433,7 @@ describe('logs', () => {
           return ['=007']
         })
         expect(logsWritten).toEqual([
-          { level: inx.LOG_WARN, source: 'c', message: '=007' }
+          { level: inx.LOG_WARN, source: 'c', message: '=007' },
         ])
         expect(ran).toBe(true)
       })

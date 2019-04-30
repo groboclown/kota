@@ -18,7 +18,7 @@ describe('list-file', () => {
         expect(isListFileData({ error: { domain: '', msgid: '', params: {} } })).toBe(false)
       })
       it('with data of not-strings', () => {
-        expect(isListFileData(<any>{ data: [1] })).toBe(false)
+        expect(isListFileData({ data: [1] } as any)).toBe(false)
       })
     })
   })
@@ -78,20 +78,20 @@ describe('list-file', () => {
     it('Character codes - miss strict 1', () => {
       const res: any = parseListFile('a\\u+\n\nb\\u+1x\n\nc\\u\n\n', true)
       expect(res.data).toBeUndefined()
-      expect(res.error).toEqual(<ErrorValue>{
+      expect(res.error).toEqual({
         domain: CORE_ERROR_DOMAIN,
         msgid: 'list file hex code',
-        params: { value: 'u+' }
-      })
+        params: { value: 'u+' },
+      } as ErrorValue)
     })
     it('Character codes - miss strict 2', () => {
       const res: any = parseListFile('a\n\nb\\u+1x\n\nc\\u\n\n', true)
       expect(res.data).toBeUndefined()
-      expect(res.error).toEqual(<ErrorValue>{
+      expect(res.error).toEqual({
         domain: CORE_ERROR_DOMAIN,
         msgid: 'list file hex code',
-        params: { value: 'u+1' }
-      })
+        params: { value: 'u+1' },
+      } as ErrorValue)
     })
     it('Character codes - miss strict 3', () => {
       const res: any = parseListFile('a\n\nb\n\nc\\u\n\n', true)

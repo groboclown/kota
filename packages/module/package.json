@@ -5,10 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "build:gen:init": "rm -r ./.gen 2>/dev/null ; rm -r ./src/model/schema 2>/dev/null ; mkdir -p ./.gen && mkdir -p ./src/model/schema",
-    "build:json-bad": "node ./bin/yaml-to-json.js -o .gen -i ../../data/file-schema/compiled/*.yaml",
+    "build:json-NOT-NEEDED": "node ./bin/yaml-to-json.js -o .gen -i ../../data/file-schema/compiled/*.yaml",
     "build:schema": "node ./bin/schema-to-ts.js -o ./src/model/schema -i ../../data/file-schema/compiled/*.yaml",
-    "build:schema-quicktime-bad": "node ./node_modules/.bin/quicktype ./.gen --lang flow -o ./src/model/schema/index.ts",
-    "build:gen": "npm run build:gen:init && npm run build:json && npm run build:schema",
+    "build:gen": "npm run build:gen:init && npm run build:schema",
     "build:src": "node_modules/.bin/tsc && npm run lint",
     "build": "npm run build:gen && npm run build:src",
     "test": "jest --coverage",

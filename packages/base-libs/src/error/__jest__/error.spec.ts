@@ -9,7 +9,7 @@ describe('error', () => {
         expect(res.domain).toBe(CORE_ERROR_DOMAIN)
         expect(res.msgid).toBe('x')
         expect(Object.keys(res.params)).toHaveLength(0)
-        expect(res.stack).toBeUndefined
+        expect(res.stack).toBeUndefined()
       })
       it('for an exception', () => {
         const err = new Error('m')

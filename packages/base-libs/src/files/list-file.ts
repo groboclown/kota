@@ -9,9 +9,9 @@ const ESCAPE_SEQUENCES: { [key: string]: string } = {
   'n': '\n',
 }
 const HEX_NUMBER: { [key: string]: number } = {
-  '0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
-  'a': 10, 'A': 10, 'b': 11, 'B': 11, 'c': 12, 'C': 12, 'd': 13, 'D': 13,
-  'e': 14, 'E': 14, 'f': 15, 'F': 15
+  0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9,
+  a: 10, A: 10, b: 11, B: 11, c: 12, C: 12, d: 13, D: 13,
+  e: 14, E: 14, f: 15, F: 15,
 }
 
 export interface ListFileData {
@@ -36,14 +36,13 @@ export function isListFileData(v: ListFileData | HasErrorValue): v is ListFileDa
  * Load a "list" module file.  Should be read in UTF-8 format.
  */
 export function parseListFile(data: string, strict: boolean): ListFileData | HasErrorValue {
-  var buff = ''
-  var esc = 0
-  var escStr = ''
-  var ret: string[] = []
-  var state = 0
-  var lastNonWhitespace = 0
-  for (var i = 0; i < data.length; i++) {
-    const c = data[i]
+  let buff = ''
+  let esc = 0
+  let escStr = ''
+  const ret: string[] = []
+  let state = 0
+  let lastNonWhitespace = 0
+  for (const c of data) {
     switch (state) {
       case 0:
         // start of Line

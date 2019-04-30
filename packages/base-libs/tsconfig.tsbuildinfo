@@ -134,7 +134,7 @@
         "signature": "05ba3976b7754d6f292a738d8a5aa439408e0427114eee9533f9ecce5e2a043b"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/error/error.ts": {
-        "version": "c63fc9fea16e6374c7ea62cd1fc139600b4575ca34635cb162a020d282cd3f68",
+        "version": "c08e69e75e176fb27c5f426210181d597a31b7474ab4112a8e51420f1c318a73",
         "signature": "2521e03d70d964fd45a62cae599faaa990fd3cb084408511657d10d30779ad2c"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/error/index.ts": {
@@ -146,11 +146,11 @@
         "signature": "8636d43b156a6caea6e41bbcaffba7837e0747810fa71b09ffab8ef16756e0b3"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/error/__jest__/error.spec.ts": {
-        "version": "3d2095a391d1ce6f381b7c1583524c848018adc66c96c090a0b0d04188fa33f8",
+        "version": "64e405e7e9b22bb8132284fc59ecad6f959c90321c222f976555409657a7c765",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/files/list-file.ts": {
-        "version": "5d6b7177cb2e63f8cbb2d06de703eebabc9eaaa5e0c8c83fbb2aabeb2339a421",
+        "version": "b9052ca2f4ca1c9b4ef5e30ec8703ce8c1ae7308b798350824378d5b2f1d21b0",
         "signature": "684c0960610e6af899374ccda60136c8283084341386c612821c9689adf7c036"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/files/index.ts": {
@@ -158,7 +158,7 @@
         "signature": "7335ca9d3bc7bfba2007db40e8cccdce709126fe367ac278f08f7069f87b490a"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/files/__jest__/list-file.spec.ts": {
-        "version": "75e3ce9a084528952e347c0083d374c2149efba29393a025f97399c3a76722a8",
+        "version": "dc5b45f5212048551ee389dbb3dd5e938e9f719742232a98f2a4c9287ec8cd27",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/log/log.ts": {
@@ -174,7 +174,7 @@
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/log/__jest__/log.spec.ts": {
-        "version": "69fece833cecc6db1c29c3bffaf2aa7887d6f9bf0327bee8b87bd2cc60f6e053",
+        "version": "7faa2263b5b701f3da01a45c214fbc0b6087f97f4e1c2504530c52f8de591a95",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/conventions.ts": {
@@ -1449,8 +1449,17 @@
       "/mnt/c/dev/kota/kota/packages/base-libs/node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/node_modules/typescript/lib/lib.esnext.bigint.d.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/parse.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/index.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/error/error.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/error/index.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/index.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/error/__jest__/error.spec.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/files/list-file.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/files/index.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/files/__jest__/list-file.spec.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/log/log.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/log/index.ts",
+      "/mnt/c/dev/kota/kota/packages/base-libs/src/log/__jest__/log-module.spec.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/conventions.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/core.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/__jest__/parse.spec.ts",
@@ -1509,15 +1518,6 @@
       "/mnt/c/dev/kota/kota/packages/base-libs/node_modules/@types/sinon/ts3.1/index.d.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/node_modules/@types/stack-utils/index.d.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/node_modules/@types/yargs/index.d.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/tree-path/index.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/error/error.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/error/index.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/index.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/error/__jest__/error.spec.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/files/list-file.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/files/index.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/files/__jest__/list-file.spec.ts",
-      "/mnt/c/dev/kota/kota/packages/base-libs/src/log/__jest__/log-module.spec.ts",
       "/mnt/c/dev/kota/kota/packages/base-libs/src/log/__jest__/log.spec.ts"
     ]
   },
