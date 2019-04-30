@@ -1,4 +1,8 @@
 
+// This file is allowed to have console logging, because that's the point of it.
+/* tslint:disable:no-console */
+
+
 export const LOG_UNIT_TEST = 'unit-test'
 export type LOG_UNIT_TEST = 'unit-test'
 export const LOG_TRACE = 'trace'
@@ -72,7 +76,7 @@ export interface Logger {
 }
 
 const LOG_SETTINGS: { [key: string]: LogLevel } = {
-  '#': LOG_LEVEL_VALUES[DEFAULT_LOG_LEVEL]
+  '#': LOG_LEVEL_VALUES[DEFAULT_LOG_LEVEL],
 }
 
 export function setLogLevel(source: string, level: LOG_LEVELS): void {
@@ -91,7 +95,11 @@ export function setLogLevel(source: string, level: LOG_LEVELS): void {
 
 /** A replaceable logger implementation. */
 export type LogWriter = (level: LOG_LEVELS, source: string, message: string) => void
+
+// The default writer doesn't need coverage.
+/* istanbul ignore next */
 const DEFAULT_LOG_WRITER: LogWriter = (level: LOG_LEVELS, source: string, message: string): void => {
+  /* istanbul ignore next */
   console.log(`[${level}] ${source} :: ${message}`)
 }
 let LOG_WRITER: LogWriter = DEFAULT_LOG_WRITER
@@ -108,8 +116,8 @@ export function unittest_getLogLevels(): { [key: string]: LogLevel } {
 }
 export function unittest_resetLogLevels(settings: { [key: string]: LogLevel }): void {
   const currentKeys = Object.keys(LOG_SETTINGS)
-  currentKeys.forEach(k => delete LOG_SETTINGS[k])
-  Object.keys(settings).forEach(k => { LOG_SETTINGS[k] = settings[k] })
+  currentKeys.forEach((k) => delete LOG_SETTINGS[k])
+  Object.keys(settings).forEach((k) => { LOG_SETTINGS[k] = settings[k] })
 }
 
 /**
@@ -125,7 +133,7 @@ class LoggerImpl implements Logger {
   private readonly source: string
 
   constructor(level: string) {
-    let lv = []
+    const lv = []
     const parts = level.split(/\.|\//)
     this.source = parts.join('.')
     let path = '#' + parts[0]
@@ -135,41 +143,6 @@ class LoggerImpl implements Logger {
       lv.push(path)
     }
     this.levels = lv.reverse()
-  }
-
-  private getSetting(): LogLevel {
-    for (let i = 0; i < this.levels.length; i++) {
-      const x = LOG_SETTINGS[this.levels[i]]
-      if (x) {
-        return x
-      }
-    }
-    return LOG_SETTINGS['#']
-  }
-
-  private format(msg: any[]): string {
-    return msg.reduce((prev, curr) => {
-      if (prev.length > 0 && prev[prev.length - 1] != ' ') {
-        prev += ' '
-      }
-      if (curr === undefined || curr === null) {
-        return prev + '<null>'
-      }
-      if (typeof curr === 'string') {
-        return prev + curr
-      }
-      if (typeof curr === 'number' || typeof curr === 'boolean') {
-        return prev + String(curr)
-      }
-      if (curr instanceof Error) {
-        let r = prev + curr.constructor.name + ': ' + curr.message
-        if (typeof curr.stack === 'string') {
-          r = r + curr.stack
-        }
-        return r
-      }
-      return prev + JSON.stringify(curr)
-    }, '')
   }
 
   unitTest(...msg: any[]): void {
@@ -315,5 +288,40 @@ class LoggerImpl implements Logger {
     } else {
       LOG_WRITER(LOG_FATAL, this.source, this.format(v))
     }
+  }
+
+  private getSetting(): LogLevel {
+    for (const level of this.levels) {
+      const x = LOG_SETTINGS[level]
+      if (x) {
+        return x
+      }
+    }
+    return LOG_SETTINGS['#']
+  }
+
+  private format(msg: any[]): string {
+    return msg.reduce((prev, curr) => {
+      if (prev.length > 0 && prev[prev.length - 1] !== ' ') {
+        prev += ' '
+      }
+      if (curr === undefined || curr === null) {
+        return prev + '<null>'
+      }
+      if (typeof curr === 'string') {
+        return prev + curr
+      }
+      if (typeof curr === 'number' || typeof curr === 'boolean') {
+        return prev + String(curr)
+      }
+      if (curr instanceof Error) {
+        let r = prev + curr.constructor.name + ': ' + curr.message
+        if (typeof curr.stack === 'string') {
+          r = r + '\n' + curr.stack
+        }
+        return r
+      }
+      return prev + JSON.stringify(curr)
+    }, '')
   }
 }

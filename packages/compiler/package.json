@@ -1,7 +1,7 @@
 {
-  "name": "@kota/base-libs",
+  "name": "@kota/compiler",
   "version": "0.1.0",
-  "description": "Base libraries for Knowledge of the Ancients",
+  "description": "Module compiler and high-level data model for Knowledge of the Ancients",
   "main": "src/index.js",
   "scripts": {
     "build": "node_modules/.bin/tsc && npm run lint",
@@ -19,7 +19,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/groboclown/kota.git",
-    "directory": "packages/base-libs"
+    "directory": "packages/compiler"
   },
   "directories": {
     "lib": "lib",
@@ -32,10 +32,16 @@
   "devDependencies": {
     "@types/jest": "^23.3.14",
     "jest": "^24.7.1",
+    "quicktype": "^15.0.184",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.0.2",
     "tslint": "^5.13.1",
-    "typescript": "^3.3.3",
-    "ts-jest": "^24.0.2"
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@kota/base-libs": "*",
+    "@kota/module": "*",
+    "js-yaml": "^3.13.1"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-babel",
@@ -57,19 +63,14 @@
     "testMatch": [
       "**/__jest__/*.+(ts|tsx|js)"
     ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/lib/"
-    ],
     "collectCoverageFrom": [
       "**/*.ts"
     ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/lib/"
-    ],
     "coverageReporters": [
-      "json", "html", "text-summary", "text"
+      "json",
+      "html",
+      "text-summary",
+      "text"
     ]
   }
 }

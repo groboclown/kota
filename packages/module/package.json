@@ -1,10 +1,16 @@
 {
-  "name": "@kota/base-libs",
+  "name": "@kota/module",
   "version": "0.1.0",
-  "description": "Base libraries for Knowledge of the Ancients",
+  "description": "Low-level data model and file loader for Knowledge of the Ancients",
   "main": "src/index.js",
   "scripts": {
-    "build": "node_modules/.bin/tsc && npm run lint",
+    "build:gen:init": "rm -r ./.gen 2>/dev/null ; rm -r ./src/model/schema 2>/dev/null ; mkdir -p ./.gen && mkdir -p ./src/model/schema",
+    "build:json-bad": "node ./bin/yaml-to-json.js -o .gen -i ../../data/file-schema/compiled/*.yaml",
+    "build:schema": "node ./bin/schema-to-ts.js -o ./src/model/schema -i ../../data/file-schema/compiled/*.yaml",
+    "build:schema-quicktime-bad": "node ./node_modules/.bin/quicktype ./.gen --lang flow -o ./src/model/schema/index.ts",
+    "build:gen": "npm run build:gen:init && npm run build:json && npm run build:schema",
+    "build:src": "node_modules/.bin/tsc && npm run lint",
+    "build": "npm run build:gen && npm run build:src",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "lint": "node_modules/.bin/tslint \"./src/**/*.ts\""
@@ -32,10 +38,12 @@
   "devDependencies": {
     "@types/jest": "^23.3.14",
     "jest": "^24.7.1",
+    "js-yaml": "^3.13.1",
+    "json-schema-to-typescript": "^6.1.3",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.0.2",
     "tslint": "^5.13.1",
-    "typescript": "^3.3.3",
-    "ts-jest": "^24.0.2"
+    "typescript": "^3.3.3"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-babel",
@@ -69,7 +77,10 @@
       "/lib/"
     ],
     "coverageReporters": [
-      "json", "html", "text-summary", "text"
+      "json",
+      "html",
+      "text-summary",
+      "text"
     ]
   }
 }

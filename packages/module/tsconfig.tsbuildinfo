@@ -1,0 +1,214 @@
+{
+  "program": {
+    "fileInfos": {
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es6.d.ts": {
+        "version": "c180f01a2aaac7d733001fa1db20f881dc83cf33096b674a1546ca26762e69da",
+        "signature": "c180f01a2aaac7d733001fa1db20f881dc83cf33096b674a1546ca26762e69da"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es5.d.ts": {
+        "version": "c8665e66018917580e71792b91022bcaf53fb946fab4aaf8dfb0738ed564db88",
+        "signature": "c8665e66018917580e71792b91022bcaf53fb946fab4aaf8dfb0738ed564db88"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.d.ts": {
+        "version": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96",
+        "signature": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.dom.d.ts": {
+        "version": "6994c583b66862deca24d7bbf77297d95b9d3da8160dbd9beef6b847cf7c1376",
+        "signature": "6994c583b66862deca24d7bbf77297d95b9d3da8160dbd9beef6b847cf7c1376"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.dom.iterable.d.ts": {
+        "version": "4c892766803cef795d73d69aee436dc7a80157163e0cf35e6d0e86917cbd42f3",
+        "signature": "4c892766803cef795d73d69aee436dc7a80157163e0cf35e6d0e86917cbd42f3"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.webworker.importscripts.d.ts": {
+        "version": "fe4e59403e34c7ff747abe4ff6abbc7718229556d7c1a5b93473fb53156c913b",
+        "signature": "fe4e59403e34c7ff747abe4ff6abbc7718229556d7c1a5b93473fb53156c913b"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.scripthost.d.ts": {
+        "version": "b9faa17292f17d2ad75e34fac77dd63a6403af1dba02d39cd0cbb9ffdf3de8b9",
+        "signature": "b9faa17292f17d2ad75e34fac77dd63a6403af1dba02d39cd0cbb9ffdf3de8b9"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.core.d.ts": {
+        "version": "384f66a3422d80014c51de2682159bb26f1e35854029880ccd5f6d1f00e6a36d",
+        "signature": "384f66a3422d80014c51de2682159bb26f1e35854029880ccd5f6d1f00e6a36d"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.collection.d.ts": {
+        "version": "dd94d8ef48c562389eb58af8df3a3a34d11367f7c818192aa5f16470d469e3f0",
+        "signature": "dd94d8ef48c562389eb58af8df3a3a34d11367f7c818192aa5f16470d469e3f0"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.generator.d.ts": {
+        "version": "828413486bdcaa342558e8e4570b1b287b776cb61b4b70b0214bd10c5d9a94c3",
+        "signature": "828413486bdcaa342558e8e4570b1b287b776cb61b4b70b0214bd10c5d9a94c3"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.iterable.d.ts": {
+        "version": "4d1f39313a169b8599b8817688f504b56ba8204c2ebafd03f66ff77ddb1899a4",
+        "signature": "4d1f39313a169b8599b8817688f504b56ba8204c2ebafd03f66ff77ddb1899a4"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.promise.d.ts": {
+        "version": "7c07d934680d0e33275a44d22fb11a4ff31d46c8c26a8d056828a478753f1efe",
+        "signature": "7c07d934680d0e33275a44d22fb11a4ff31d46c8c26a8d056828a478753f1efe"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.proxy.d.ts": {
+        "version": "5e72f949a89717db444e3bd9433468890068bb21a5638d8ab15a1359e05e54fe",
+        "signature": "5e72f949a89717db444e3bd9433468890068bb21a5638d8ab15a1359e05e54fe"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.reflect.d.ts": {
+        "version": "f5b242136ae9bfb1cc99a5971cccc44e99947ae6b5ef6fd8aa54b5ade553b976",
+        "signature": "f5b242136ae9bfb1cc99a5971cccc44e99947ae6b5ef6fd8aa54b5ade553b976"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.symbol.d.ts": {
+        "version": "9ae2860252d6b5f16e2026d8a2c2069db7b2a3295e98b6031d01337b96437230",
+        "signature": "9ae2860252d6b5f16e2026d8a2c2069db7b2a3295e98b6031d01337b96437230"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": {
+        "version": "3e0a459888f32b42138d5a39f706ff2d55d500ab1031e0988b5568b0f67c2303",
+        "signature": "3e0a459888f32b42138d5a39f706ff2d55d500ab1031e0988b5568b0f67c2303"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/src/model/schema/index.ts": {
+        "version": "c09a2e66eda558d7758b2a38a7eedba4d0ad1015339da97f79031fc391713bd4",
+        "signature": "39a601ed0d454972d3473d86980290675b9ebe283eba3366c7c8f4408229c156"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts": {
+        "version": "9eac0dd4de5669db2b8321dffa400b997f7b21181118efc7a2c1743d93d4be57",
+        "signature": "9eac0dd4de5669db2b8321dffa400b997f7b21181118efc7a2c1743d93d4be57"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__generator/index.d.ts": {
+        "version": "19fb2161edf60fbe73ee3650c1cee889df0525ed852eff2d5fa6e5480c132ae3",
+        "signature": "19fb2161edf60fbe73ee3650c1cee889df0525ed852eff2d5fa6e5480c132ae3"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__traverse/index.d.ts": {
+        "version": "30b805fe6d4272d147fea35fd859bc5f3e13b7c9d762bd35948fe842919452a5",
+        "signature": "30b805fe6d4272d147fea35fd859bc5f3e13b7c9d762bd35948fe842919452a5"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts": {
+        "version": "67fb81fcd13edc5410665fa72892dd0878654b54946e8b0f10af5adc234bfe8f",
+        "signature": "67fb81fcd13edc5410665fa72892dd0878654b54946e8b0f10af5adc234bfe8f"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__template/index.d.ts": {
+        "version": "3e0a34f7207431d967dc32d593d1cda0c23975e9484bc8895b39d96ffca4a0d8",
+        "signature": "3e0a34f7207431d967dc32d593d1cda0c23975e9484bc8895b39d96ffca4a0d8"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__core/index.d.ts": {
+        "version": "80e6d098a9998f0523ef6fc423449017dab64c61610c770563617d59bf2902ed",
+        "signature": "80e6d098a9998f0523ef6fc423449017dab64c61610c770563617d59bf2902ed"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/istanbul-lib-coverage/index.d.ts": {
+        "version": "9e951ec338c4232d611552a1be7b4ecec79a8c2307a893ce39701316fe2374bd",
+        "signature": "9e951ec338c4232d611552a1be7b4ecec79a8c2307a893ce39701316fe2374bd"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/jest/index.d.ts": {
+        "version": "37dbdee3bb13bc254e9d75bbb75569e807369868e5cbd89ce72aa77fb22fcb75",
+        "signature": "37dbdee3bb13bc254e9d75bbb75569e807369868e5cbd89ce72aa77fb22fcb75"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/stack-utils/index.d.ts": {
+        "version": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49",
+        "signature": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49"
+      },
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/yargs/index.d.ts": {
+        "version": "8f3237f03af87871a18d49ff52dec94d71eabecca464d5f2a81e34b55fb60bb5",
+        "signature": "8f3237f03af87871a18d49ff52dec94d71eabecca464d5f2a81e34b55fb60bb5"
+      }
+    },
+    "options": {
+      "target": 2,
+      "module": 1,
+      "jsx": 2,
+      "sourceMap": true,
+      "noImplicitAny": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "outDir": "/mnt/c/dev/kota/kota/packages/module/lib",
+      "rootDir": "/mnt/c/dev/kota/kota/packages/module/src",
+      "baseUrl": "/mnt/c/dev/kota/kota/packages/module/src",
+      "composite": true,
+      "configFilePath": "/mnt/c/dev/kota/kota/packages/module/tsconfig.json"
+    },
+    "referencedMap": {
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__generator/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__traverse/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__template/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__core/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__generator/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__traverse/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__template/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__generator/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__traverse/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__template/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts"
+      ],
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__core/index.d.ts": [
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__generator/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__traverse/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__template/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts",
+        "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es6.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es5.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.dom.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.dom.iterable.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.scripthost.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.core.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.collection.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.generator.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.promise.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.proxy.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.reflect.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.symbol.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/types/lib/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__generator/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__traverse/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@babel/parser/typings/babel-parser.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__template/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/babel__core/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/istanbul-lib-coverage/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/jest/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/stack-utils/index.d.ts",
+      "/mnt/c/dev/kota/kota/packages/module/node_modules/@types/yargs/index.d.ts",
+      [
+        "/mnt/c/dev/kota/kota/packages/module/src/model/schema/index.ts",
+        [
+          {
+            "file": "/mnt/c/dev/kota/kota/packages/module/src/model/schema/index.ts",
+            "start": 8222,
+            "length": 6,
+            "messageText": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.",
+            "category": 1,
+            "code": 2580
+          }
+        ]
+      ]
+    ]
+  },
+  "version": "3.4.5"
+}

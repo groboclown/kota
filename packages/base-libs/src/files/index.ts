@@ -1,6 +1,12 @@
 
 import { HasErrorValue } from '../error'
 
+export {
+  ListFileData,
+  isListFileData,
+  parseListFile,
+} from './list-file'
+
 export interface FileData {
   source: string
   data: string
