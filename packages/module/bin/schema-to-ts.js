@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const { compile } = require('json-schema-to-typescript')
-const yaml = require('yaml')
+const yaml = require('js-yaml')
 const util = require('util')
 
 const config = {
@@ -37,7 +37,6 @@ Promise.all(config.src.map(fn => {
     throw new Error(`Bad input file: ${fn}`)
   }
   coreName = coreName.substring(0, coreName.length - 12)
-  let className = coreName[0].toUpperCase() + coreName.substring(1)
   let outFile = path.join(config.out, coreName + '.ts')
   return new Promise((resolve, reject) => {
     fs.readFile(fn, 'utf8', (err, text) => {
@@ -51,23 +50,32 @@ Promise.all(config.src.map(fn => {
     .then((text) => {
       let raw
       try {
-        raw = yaml.parseAllDocuments(text)
+        raw = yaml.safeLoadAll(text)
       } catch (e) {
-        console.error(`FORMAT ERROR!  ${e.message}: ${fn}`)
+        console.error(`FORMAT ERROR in ${fn}\n  ${e.message}`)
         errorCount[0]++
-        return
+        return null
       }
-      if (util.isArray(raw) && raw.length === 1) {
-        raw = raw[0]
+      if (util.isArray(raw)) {
+        if (raw.length == 1) {
+          raw = raw[0]
+        } else {
+          console.error(`FORMAT ERROR in ${fn}\n  Must contain exactly 1 document; found ${raw.length} documents.`)
+          errorCount[0]++
+          return null
+        }
       }
       if (util.isObject(raw)) {
         // For some weird reason, the schema-to-ts converter does not
         // like the yaml-parsed objects.  So strip all that pretense
         // and turn it into a pure object in probably the least
         // efficient manner possible.
-        const value = JSON.parse(JSON.stringify(raw))
-        return compile(value, className, {
+        const className = raw.title
+        console.log(`Processing ${className} :: ${fn} -> ${outFile}`)
+        return compile(raw, className, {
           bannerComment: '',
+          cwd: path.dirname(fn),
+          enableConstEnums: true,
           style: {
             bracketSpacing: false,
             printWidth: 120,
@@ -75,7 +83,22 @@ Promise.all(config.src.map(fn => {
             singleQuote: true,
             tabWidth: 2,
             trailingComma: 'all',
-            useTabs: false
+            useTabs: false,
+          },
+          '$refOptions': {
+            parser: {
+              json: true,
+              yaml: true,
+              text: false,
+            },
+            resolve: {
+              external: false,
+              file: false,
+              http: false,
+            },
+            dereference: {
+              circular: false,
+            },
           }
         })
           .then(ts => {
@@ -84,7 +107,7 @@ Promise.all(config.src.map(fn => {
               ts
               }\nconst JSON_SCHEMA = ${
               JSON.stringify(raw, null, 2)
-              }\nexport const VALIDATOR = new SchemaVerifier<${
+              }\nexport const ${className.toUpperCase()}_VALIDATOR = new SchemaVerifier<${
               className
               }>("${coreName}", JSON_SCHEMA)\n`
             return new Promise((resolve, reject) => {
@@ -92,7 +115,7 @@ Promise.all(config.src.map(fn => {
                 if (err) {
                   reject(err)
                 } else {
-                  resolve()
+                  resolve(coreName)
                 }
               })
             })
@@ -108,6 +131,26 @@ Promise.all(config.src.map(fn => {
       errorCount[0]++
     })
 }))
+  .then((names) => {
+    let out = '/* AUTO GENERATED FILE.  DO NOT MODIFY. */\n\n'
+    names.forEach((n) => {
+      out = `${out}export * from './${n}'\n`
+    })
+    console.log(`Processing index.ts file`)
+    return new Promise((resolve, reject) => {
+      fs.writeFile(path.join(config.out, 'index.ts'), out, (err) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
+      .catch((e) => {
+        console.error(e)
+        errorCount[0]++
+      })
+  })
   .then(() => {
     if (errorCount[0] > 0) {
       process.exit(1)

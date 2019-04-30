@@ -9,9 +9,9 @@ export class SchemaVerifier<T> {
     this.verifier = AJV.compile(schema)
   }
 
-  validate(srcfile: string, obj: any, errors: lib.ErrorValue[]): obj is T {
+  validate(srcfile: string, obj: any, errors?: lib.ErrorValue[]): obj is T {
     if (!this.verifier(obj)) {
-      if (this.verifier.errors) {
+      if (errors && this.verifier.errors) {
         for (const e of this.verifier.errors) {
           errors.push(lib.coreError('invalid file schema format', {
             path: srcfile,

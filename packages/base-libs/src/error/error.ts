@@ -1,6 +1,6 @@
 
-import { core } from '../tree-path'
-export const CORE_ERROR_DOMAIN = core.CORE_ERROR_DOMAIN
+import * as tp from '../tree-path'
+export const CORE_ERROR_DOMAIN = tp.paths.core.CORE_ERROR_DOMAIN
 
 export interface ErrorValue {
   domain: string

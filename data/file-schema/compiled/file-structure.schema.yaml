@@ -1,0 +1,639 @@
+---
+
+"$schema": "http://json-schema.org/draft-07/schema#"
+"$id": "https://groboclown.github.io/kota/site/schema/compiled/file-structure.schema.json"
+title: FileStructure
+description: >
+  A list of the different items stored in the module.  Every item contains a "source" to link back
+  to its location within the original module (pre-compiled) location.  This helps with runtime
+  reporting of errors back to the module authors.
+
+definitions:
+  # -------------------------------------------------------------------------
+  # Top level types
+  GroupValue:
+    type: object
+    description: >
+      A value to insert into a group-set.  These live outside the trees due to the way
+      group values are inserted.
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      groupPath:
+        type: string
+        minLength: 2
+      name:
+        type: string
+        minLength: 1
+      matches:
+        type: object
+        patternProperties:
+          "^\\w$":
+            type: number
+            min: 0
+            max: 1
+    required: [ source, groupPath, name, matches ]
+    additionalProperties: false
+  
+  OverrideTreeItem:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      path:
+        type: string
+        minLength: 2
+        maxLength: 1024
+      entry:
+        oneOf:
+          - "$ref": "#/definitions/MapAttribute"
+          - "$ref": "#/definitions/FuzzAttribute"
+          - "$ref": "#/definitions/GroupAttribute"
+          - "$ref": "#/definitions/DateAttribute"
+          - "$ref": "#/definitions/DateDeltaAttribute"
+          - "$ref": "#/definitions/NumberAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearTargetAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearLessThanAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearMoreThanAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearRangeAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNumberAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedFuzzAttribute"
+          - "$ref": "#/definitions/ConstantFuzzValue"
+          - "$ref": "#/definitions/ConstantNumberValue"
+          - "$ref": "#/definitions/ConstantL10nReferenceValue"
+    required: [ source, path, entry ]
+    additionalProperties: false
+  
+  ModuleTreeItem:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      relpath:
+        type: string
+        minLength: 1
+        maxLength: 1024
+      entry:
+        oneOf:
+          - "$ref": "#/definitions/MapAttribute"
+          - "$ref": "#/definitions/FuzzAttribute"
+          - "$ref": "#/definitions/GroupAttribute"
+          - "$ref": "#/definitions/DateAttribute"
+          - "$ref": "#/definitions/DateDeltaAttribute"
+          - "$ref": "#/definitions/NumberAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearTargetAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearLessThanAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearMoreThanAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNearRangeAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedNumberAttribute"
+          - "$ref": "#/definitions/FunctionCalculatedFuzzAttribute"
+          - "$ref": "#/definitions/ConstantFuzzValue"
+          - "$ref": "#/definitions/ConstantNumberValue"
+          - "$ref": "#/definitions/ConstantL10nReferenceValue"
+          
+    required: [ source, relpath, entry ]
+    additionalProperties: false
+  
+  InstallHook:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      # TODO MORE
+    required: [ source ]
+    additionalProperties: false
+  
+  UpgradeHook:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      # TODO MORE
+    required: [ source ]
+    additionalProperties: false
+  
+  Localization:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      parent:
+        "$ref": "#/definitions/LocaleName"
+      locale:
+        "$ref": "#/definitions/LocaleName"
+      alternates:
+        type: array
+        items:
+          "$ref": "#/definitions/LocaleName"
+      number:
+        "$ref": "#/definitions/L10nNumberFormat"
+      dateMarkers:
+        type: array
+        items:
+          "$ref": "#/definitions/DateMarker"
+    # parent is not required.  Alternates could be an empty list.
+    required: [ source, locale, alternates, number, dateMarkers ]
+    additionalProperties: false
+  
+  Translation:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      locale:
+        type: string
+        minLength: 2
+        maxLength: 12
+      domain:
+        type: string
+        minLength: 1
+        maxLength: 200
+      file:
+        type: string
+        minLength: 1
+        maxLength: 200
+    required: [ source, locale, domain, file ]
+    additionalProperties: false
+  
+  MediaAudio:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      locale:
+        type: string
+        minLength: 2
+        maxLength: 12
+      file:
+        type: string
+        minLength: 1
+        maxLength: 200
+      codec:
+        type: string
+        minLength: 1
+        maxLength: 60
+      seconds:
+        type: number
+        min: 0
+      subtitles:
+        type: array
+        items:
+          "$ref": "#/definitions/Subtitle"
+    required: [ source, locale, file, codec, seconds, subtitles ]
+    additionalProperties: false
+
+  MediaVideo:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      locale:
+        type: string
+        minLength: 2
+        maxLength: 12
+      file:
+        type: string
+        minLength: 1
+        maxLength: 200
+      codec:
+        type: string
+        minLength: 1
+        maxLength: 60
+      seconds:
+        type: number
+        min: 0
+      size_x:
+        type: integer
+        min: 0
+      size_y:
+        type: integer
+        min: 0
+      subtitles:
+        type: array
+        items:
+          "$ref": "#/definitions/Subtitle"
+    required: [ source, locale, file, codec, seconds, size_x, size_y, subtitles ]
+    additionalProperties: false
+
+  MediaImage:
+    type: object
+    properties:
+      source:
+        "$ref": "#/definitions/Source"
+      locale:
+        type: string
+        minLength: 2
+        maxLength: 12
+      file:
+        type: string
+        minLength: 1
+        maxLength: 200
+      codec:
+        type: string
+        minLength: 1
+        maxLength: 60
+      size_x:
+        type: integer
+        min: 0
+      size_y:
+        type: integer
+        min: 0
+    required: [ source, locale, file, codec, size_x, size_y ]
+    additionalProperties: false
+
+  
+  # -------------------------------------------------------------------------
+  # Values in the tree.
+  MapAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ "attribute-map" ]
+    required: [ type ]
+    additionalProperties: false
+  FuzzAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ "attribute-fuzz" ]
+    required: [ type ]
+    additionalProperties: false
+  GroupAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ "attribute-group" ]
+    required: [ type ]
+    additionalProperties: false
+  DateAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ "attribute-date" ]
+    required: [ type ]
+    additionalProperties: false
+  DateDeltaAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ "attribute-datedelta" ]
+    required: [ type ]
+    additionalProperties: false
+  NumberAttribute:
+    allOf:
+      - type: object
+        properties:
+          type:
+            type: string
+            enum: [ "attribute-number" ]
+        required: [ type ]
+        additionalProperties: false
+      - "$ref": "#/definitions/NumericRange"
+  FunctionCalculatedNearTargetAttribute:
+    allOf:
+      - "$ref": "#/definitions/FunctionCalculatedNearAttribute"
+      - type: object
+        properties:
+          type:
+            type: string
+            enum: [ "attribute-function-near-target" ]
+          target:
+            "$ref": "#/definitions/NumericValue"
+        required: [ type, target ]
+        additionalProperties: false
+  FunctionCalculatedNearLessThanAttribute:
+    allOf:
+      - "$ref": "#/definitions/FunctionCalculatedNearAttribute"
+      - type: object
+        properties:
+          type:
+            type: string
+            enum: [ "attribute-function-near-lessthan" ]
+          lessThan:
+            "$ref": "#/definitions/NumericValue"
+        required: [ type, lessThan ]
+        additionalProperties: false
+  FunctionCalculatedNearMoreThanAttribute:
+    allOf:
+      - "$ref": "#/definitions/FunctionCalculatedNearAttribute"
+      - type: object
+        properties:
+          type:
+            type: string
+            enum: [ "attribute-function-near-morethan" ]
+          moreThan:
+            "$ref": "#/definitions/NumericValue"
+        required: [ type, moreThan ]
+        additionalProperties: false
+  FunctionCalculatedNearRangeAttribute:
+    allOf:
+      - "$ref": "#/definitions/FunctionCalculatedNearAttribute"
+      - type: object
+        properties:
+          type:
+            type: string
+            enum: [ "attribute-function-near-range" ]
+        required: [ type ]
+        additionalProperties: false
+      - "$ref": "#/definitions/NumericRange"
+  FunctionCalculatedNumberAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ attribute-function-number ]
+      expression:
+        description: >
+          computation string expression
+        type: string
+        minLength: 3
+        maxLength: 200
+      requires:
+        description: >
+          map of expression variable names to context attribute name
+        type: object
+        patternProperties:
+          "^[^\\s/]+$":
+            type: string
+            pattern: "^[^\\s/]+$"
+      bound:
+        description: >
+          boundary conditions
+        "$ref": "#/definitions/NumericRange"
+      round:
+        type: string
+        enum: [ floor, ceiling, closest ]
+    required: [ type, expression, requires, bound, round ]
+    additionalProperties: false
+  
+  # TODO will this be supported?
+  FunctionCalculatedFuzzAttribute:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ attribute-function-fuzz ]
+      expression:
+        description: >
+          computation string expression
+        type: string
+        minLength: 3
+        maxLength: 200
+      requires:
+        description: >
+          map of expression variable names to context attribute name
+        type: object
+        patternProperties:
+          "^[^\\s/]+$":
+            type: string
+            pattern: "^[^\\s/]+$"
+    required: [ type, expression, requires ]
+    additionalProperties: false
+
+  ConstantFuzzValue:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ constant-fuzz ]
+      value:
+        "$ref": "#/definitions/FuzzValue"
+    required: [ type, value ]
+    additionalProperties: false
+  
+  ConstantNumberValue:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ constant-number ]
+      value:
+        "$ref": "#/definitions/NumericValue"
+    required: [ type, value ]
+    additionalProperties: false
+    
+  ConstantL10nReferenceValue:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ constant-l10n ]
+      domain:
+        type: string
+        minLength: 1
+        maxLength: 200
+      msgid:
+        type: string
+        minLength: 1
+        maxLength: 200
+    required: [ type, domain, msgid ]
+    additionalProperties: false
+
+  # -------------------------------------------------------------------------
+  # Localization Types
+  L10nNumberFormat:
+    type: object
+    properties:
+      decimal:
+        type: string
+        minLength: 1
+        maxLength: 1
+      grouping:
+        type: string
+        minLength: 1
+        maxLength: 1
+      negative:
+        type: string
+        minLength: 1
+        maxLength: 1
+      positive:
+        type: string
+        minLength: 1
+        maxLength: 1
+      digitsUpper:
+        type: string
+        minLength: 16
+        maxLength: 16
+      digitsLower:
+        type: string
+        minLength: 16
+        maxLength: 16
+    required: [ decimal, grouping, negative, positive, digitsUpper, digitsLower ]
+    additionalProperties: false
+  DateMarkerDirectMapping:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ direct ]
+      from:
+        type: string
+        enum: [ year, yr, day, month, week ]
+    required: [ type, from ]
+    additionalProperties: false
+  DateMarkerValueMapping:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: [ map ]
+      from:
+        type: string
+        enum: [ day, month, week ]
+      mapping:
+        type: object
+        patternProperties:
+          "\\d+":
+            type: string
+            minLength: 1
+            maxLength: 200
+    required: [ type, from, mapping ]
+    additionalProperties: false
+  DateMarker:
+    type: object
+    properties:
+      marker:
+        type: string
+        minLength: 1
+        maxLength: 1
+      map:
+        oneOf:
+        - "$ref": "#/definitions/DateMarkerDirectMapping"
+        - "$ref": "#/definitions/DateMarkerValueMapping"
+    required: [ marker, map ]
+    additionalProperties: false
+
+
+  # -------------------------------------------------------------------------
+  # Partial types
+  NumericValue:
+    type: integer
+    # TODO how to replace with the constants?
+    min: -1000000000
+    max: 1000000000
+  FuzzValue:
+    type: number
+    min: 0
+    max: 1
+  NumericRange:
+    type: object
+    properties:
+      min:
+        "$ref": "#/definitions/NumericValue"
+      max:
+        "$ref": "#/definitions/NumericValue"
+      # Need an extra constrint, forcing min < max.
+    required: [ min, max ]
+    additionalProperties: false
+  FunctionCalculatedNearAttribute:
+    type: object
+    properties:
+      forValue:
+        description: >
+          the attribute in the context that the function uses.
+        type: string
+        pattern: "^[^\\s/]+$"
+      ramp:
+        description: >
+          linear ramp distance from 0 to 1
+        type: number
+        min: 0
+        max: 1
+    required: [ for, ramp ]
+    additionalProperties: false
+  
+  Source:
+    type: string
+    minLength: 1
+    maxLength: 200
+
+  LocaleName:
+    type: string
+    minLength: 2
+    maxLength: 12
+    pattern: "^[a-z][a-z](_[A-Z][A-Z])+"
+  
+  Subtitle:
+    type: object
+    properties:
+      time:
+        type: number
+        min: 0
+      duration:
+        type: number
+        min: 0
+      domain:
+        type: string
+        minLength: 2
+      msgid:
+        type: string
+        minLength: 1
+    required: [ time, duration, domain, msgid ]
+    additionalProperties: false
+
+
+# ---------------------------------------------------------------------------
+type: object
+properties:
+  installHooks:
+    type: array
+    items:
+      "$ref": "#/definitions/InstallHook"
+  upgradeHooks:
+    type: array
+    items:
+      "$ref": "#/definitions/UpgradeHook"
+  groupValues:
+    type: array
+    items:
+      "$ref": "#/definitions/GroupValue"
+  overrideTree:
+    type: array
+    items:
+      "$ref": "#/definitions/OverrideTreeItem"
+  moduleTree:
+    type: array
+    items:
+      "$ref": "#/definitions/ModuleTreeItem"
+  localizations:
+    type: array
+    items:
+      "$ref": "#/definitions/Localization"
+  translations:
+    type: array
+    items:
+      "$ref": "#/definitions/Translation"
+  audio:
+    type: array
+    items:
+      "$ref": "#/definitions/MediaAudio"
+  videos:
+    type: array
+    items:
+      "$ref": "#/definitions/MediaVideo"
+  images:
+    type: array
+    items:
+      "$ref": "#/definitions/MediaImage"
+  
+# To make the read code simpler, we'll require each of these
+# items, but they can have an empty array.  This is minimal
+# space usage vs. the overall size of these files.
+required:
+  - installHooks
+  - upgradeHooks
+  - groupValues
+  - overrideTree
+  - moduleTree
+  - localizations
+  - translations
+  - audio
+  - videos
+  - images
+
+additionalProperties: false

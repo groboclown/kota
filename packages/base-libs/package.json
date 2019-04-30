@@ -2,7 +2,8 @@
   "name": "@kota/base-libs",
   "version": "0.1.0",
   "description": "Base libraries for Knowledge of the Ancients",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "build": "node_modules/.bin/tsc && npm run lint",
     "test": "jest --coverage",

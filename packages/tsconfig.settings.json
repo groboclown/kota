@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "composite": true,
+    "declarationMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noLib": false,
+    "paths": {
+      "@kota/*": ["packages/*/src"]
+    }
+  }
+}

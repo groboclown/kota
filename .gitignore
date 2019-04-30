@@ -4,5 +4,9 @@ dist/
 _site/
 Gemfile.lock
 .vscode/
+.idea/
 .nyc_output/
 coverage/
+lerna-debug.log
+npm-debug.log
+tsconfig.tsbuildinfo

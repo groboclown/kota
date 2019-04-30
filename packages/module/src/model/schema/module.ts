@@ -10,7 +10,7 @@ export interface Module {
   id: string
   name: string
   description: string
-  version: string
+  version: number[]
   authors?: string[]
   /**
    * List of licenses.  If your module requires a special license validation for Piracy Protection, then you will need to include a license validator in the load module call.
@@ -23,7 +23,6 @@ export interface Module {
    *
    */
   requires?: string[]
-  [k: string]: any
 }
 
 const JSON_SCHEMA = {
@@ -49,8 +48,12 @@ const JSON_SCHEMA = {
       "maxLength": 2000
     },
     "version": {
-      "type": "string",
-      "pattern": "^[0-9]+(\\.[0-9]+)*$"
+      "type": "array",
+      "items": {
+        "type": "number",
+        "min": 0
+      },
+      "minLength": 1
     },
     "authors": {
       "type": "array",
@@ -87,7 +90,7 @@ const JSON_SCHEMA = {
       }
     }
   },
-  "additionalPropeties": false,
+  "additionalProperties": false,
   "required": [
     "id",
     "name",
@@ -95,4 +98,4 @@ const JSON_SCHEMA = {
     "version"
   ]
 }
-export const VALIDATOR = new SchemaVerifier<Module>("module", JSON_SCHEMA)
+export const MODULE_VALIDATOR = new SchemaVerifier<Module>("module", JSON_SCHEMA)

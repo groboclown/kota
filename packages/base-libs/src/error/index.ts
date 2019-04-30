@@ -1,2 +1,7 @@
 
-export { ErrorValue, HasErrorValue, hasErrorValue, coreError } from './error'
+export {
+  ErrorValue,
+  HasErrorValue,
+  hasErrorValue,
+  coreError
+} from './error'
