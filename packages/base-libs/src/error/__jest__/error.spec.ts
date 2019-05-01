@@ -1,5 +1,5 @@
 
-import { CORE_ERROR_DOMAIN, hasErrorValue, coreError } from '../error'
+import { CORE_ERROR_DOMAIN, hasErrorValue, hasErrorValueList, coreError } from '../error'
 
 describe('error', () => {
   describe('coreError', () => {
@@ -55,6 +55,43 @@ describe('error', () => {
       })
       it('for object with empty error key', () => {
         expect(hasErrorValue({ error: {} })).toBe(false)
+      })
+    })
+  })
+
+  describe('hasErrorValueList', () => {
+    describe('is valid', () => {
+      it('for object with empty error list', () => {
+        expect(hasErrorValueList({ errors: [] })).toBe(true)
+      })
+      it('for object with one error value', () => {
+        expect(hasErrorValueList({ errors: [coreError('x')] })).toBe(true)
+      })
+    })
+    describe('is not valid', () => {
+      it('for non-object', () => {
+        expect(hasErrorValueList(1)).toBe(false)
+      })
+      it('for null', () => {
+        expect(hasErrorValueList(null)).toBe(false)
+      })
+      it('for undefined', () => {
+        expect(hasErrorValueList(undefined)).toBe(false)
+      })
+      it('for object without error key', () => {
+        expect(hasErrorValueList({ x: 'x' })).toBe(false)
+      })
+      it('for object with non-object error key', () => {
+        expect(hasErrorValueList({ errors: 1 })).toBe(false)
+      })
+      it('for object with null error key', () => {
+        expect(hasErrorValueList({ errors: null })).toBe(false)
+      })
+      it('for object with undefined error key', () => {
+        expect(hasErrorValueList({ errors: undefined })).toBe(false)
+      })
+      it('for object with empty value as first index', () => {
+        expect(hasErrorValueList({ errors: [{}] })).toBe(false)
       })
     })
   })

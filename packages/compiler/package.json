@@ -4,6 +4,7 @@
   "description": "Module compiler and high-level data model for Knowledge of the Ancients",
   "main": "src/index.js",
   "scripts": {
+    "prebuild": "rimraf lib tsconfig.tsbuildinfo",
     "build": "node_modules/.bin/tsc && npm run lint",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
@@ -33,6 +34,7 @@
     "@types/jest": "^23.3.14",
     "jest": "^24.7.1",
     "quicktype": "^15.0.184",
+    "rimraf": "^2.6.3",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.0.2",
     "tslint": "^5.13.1",

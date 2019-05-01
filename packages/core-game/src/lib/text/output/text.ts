@@ -7,11 +7,11 @@ export const BLOCK_STYLE_QUOTE = 'quote'
 export const BLOCK_STYLE_SIGNAURE = 'signature'
 export const BLOCK_STYLE_HEADER = 'header'
 export const BLOCK_STYLE_SUBHEAD = 'subhead'
-export const BLOCK_STYLE_RIGHT = 'right'
-export const BLOCK_STYLE_HLINE = 'hline'
+export const BLOCK_STYLE_END = 'end' // end-of-line aligned
+export const BLOCK_STYLE_HLINE = 'section'  // start a "section", usually indicated by a horizontal line.
 export const BLOCK_STYLES = [
   BLOCK_STYLE_PARA, BLOCK_STYLE_QUOTE, BLOCK_STYLE_SIGNAURE, BLOCK_STYLE_HEADER, BLOCK_STYLE_SUBHEAD,
-  BLOCK_STYLE_RIGHT, BLOCK_STYLE_HLINE
+  BLOCK_STYLE_END //, BLOCK_STYLE_HLINE
 ]
 
 export type FontFamily = string

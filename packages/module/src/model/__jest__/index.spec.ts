@@ -8,14 +8,18 @@ describe('module validator', () => {
   describe('with valid input', () => {
     describe('which is minimal', () => {
       it('has no errors and is valid', () => {
-        const m: schema.Module = {
+        const m: schema.ModuleHeader = {
           id: 'abcd',
           name: 'abcde',
           description: 'what',
           version: [1],
+          authors: [],
+          license: [],
+          source: [],
+          requires: [],
         }
         const errors: ErrorValue[] = []
-        schema.MODULE_VALIDATOR.validate('src file', m, errors)
+        schema.MODULEHEADER_VALIDATOR.validate('src file', m, errors)
         expect(errors).toHaveLength(0)
       })
     })

@@ -97,7 +97,8 @@ Promise.all(config.src.map(fn => {
               http: false,
             },
             dereference: {
-              circular: false,
+              // Allow for recursive data structures.
+              // circular: "ignore",
             },
           }
         })

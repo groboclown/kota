@@ -2,6 +2,11 @@
 export {
   ErrorValue,
   HasErrorValue,
+  HasErrorValueList,
+
+  isErrorValue,
   hasErrorValue,
-  coreError
+  hasErrorValueList,
+
+  coreError,
 } from './error'

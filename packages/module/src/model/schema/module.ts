@@ -6,29 +6,29 @@ import { SchemaVerifier } from '../validator'
  * The module.json file contents must conform to this standard.
  *
  */
-export interface Module {
+export interface ModuleHeader {
   id: string
   name: string
   description: string
   version: number[]
-  authors?: string[]
+  authors: string[]
   /**
    * List of licenses.  If your module requires a special license validation for Piracy Protection, then you will need to include a license validator in the load module call.
    *
    */
-  license?: string[]
-  source?: string[]
+  license: string[]
+  source: string[]
   /**
    * A list of module ID and version number that this module depends upon being loaded first.
    *
    */
-  requires?: string[]
+  requires: string[]
 }
 
 const JSON_SCHEMA = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://groboclown.github.io/kota/site/schema/compiled/module.schema.json",
-  "title": "Module",
+  "title": "ModuleHeader",
   "description": "The module.json file contents must conform to this standard.\n",
   "type": "object",
   "properties": {
@@ -95,7 +95,11 @@ const JSON_SCHEMA = {
     "id",
     "name",
     "description",
-    "version"
+    "version",
+    "authors",
+    "license",
+    "source",
+    "requires"
   ]
 }
-export const MODULE_VALIDATOR = new SchemaVerifier<Module>("module", JSON_SCHEMA)
+export const MODULEHEADER_VALIDATOR = new SchemaVerifier<ModuleHeader>("module", JSON_SCHEMA)

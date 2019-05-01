@@ -2,7 +2,7 @@
 
 "$schema": "http://json-schema.org/draft-07/schema#"
 "$id": "https://groboclown.github.io/kota/site/schema/compiled/module.schema.json"
-title: Module
+title: ModuleHeader
 description: >
   The module.json file contents must conform to this standard.
 type: object
@@ -64,3 +64,8 @@ required:
   - name
   - description
   - version
+  # These items can be empty lists.
+  - authors
+  - license
+  - source
+  - requires

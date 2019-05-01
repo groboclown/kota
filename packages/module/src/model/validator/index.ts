@@ -20,8 +20,8 @@ export class SchemaVerifier<T> {
             dataPath: e.dataPath,
             schemaPath: e.schemaPath,
             params: JSON.stringify(e.params),
-            message: e.message || '(no message)',
-            propertyName: e.propertyName || '(no property)',
+            message: lib.option<string>(e.message, '(no message)'),
+            propertyName: lib.option<string>(e.propertyName, '(no property)'),
           }))
         }
       }

@@ -18,12 +18,15 @@ export interface HasErrorValue {
   error: ErrorValue
 }
 
+export function isErrorValue(v: any): v is ErrorValue {
+  return v !== null && typeof v === 'object' &&
+    typeof (v.domain) === 'string' &&
+    typeof (v.msgid) === 'string' &&
+    typeof (v.params) === 'object'
+}
+
 export function hasErrorValue(v: any): v is HasErrorValue {
-  return v !== null && typeof v === 'object' && v.error !== null &&
-    typeof (v.error) === 'object' &&
-    typeof (v.error.domain) === 'string' &&
-    typeof (v.error.msgid) === 'string' &&
-    typeof (v.error.params) === 'object'
+  return v !== null && typeof v === 'object' && isErrorValue(v.error)
 }
 
 export function coreError(msgid: string | Error, params?: { [key: string]: string | number }): ErrorValue {
@@ -33,4 +36,13 @@ export function coreError(msgid: string | Error, params?: { [key: string]: strin
     msgid = msgid.message
   }
   return { domain: CORE_ERROR_DOMAIN, msgid, stack, params: params || {} }
+}
+
+export interface HasErrorValueList {
+  errors: ErrorValue[]
+}
+
+export function hasErrorValueList(v: any): v is HasErrorValueList {
+  return v !== null && typeof v === 'object' && v.errors !== null &&
+    v.errors instanceof Array && v.errors.every((k: any) => isErrorValue(k))
 }
