@@ -47,8 +47,8 @@ export interface DomainTranslations {
 export function createCatalogs(locale: CombinedLocalization, modules: ModuleContents[]): DomainTranslations {
   // Quick lookup for the ordering of each language.
   const sortOrder: { [locale: string]: number } = {}
-  locale.translationSearchOrder.forEach((locale, index) => {
-    sortOrder[locale] = index
+  locale.translationSearchOrder.forEach((localeName, index) => {
+    sortOrder[localeName] = index
   })
 
   const ret: DomainTranslations = {}
