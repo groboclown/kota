@@ -102,4 +102,4 @@ const JSON_SCHEMA = {
     "requires"
   ]
 }
-export const MODULEHEADER_VALIDATOR = new SchemaVerifier<ModuleHeader>("module", JSON_SCHEMA)
+export const MODULEHEADER_BASIC_VALIDATOR = new SchemaVerifier<ModuleHeader>("module", JSON_SCHEMA)

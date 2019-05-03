@@ -1,9 +1,5 @@
 
 export * from './validator'
 export * from './schema'
-
-import * as schema from './schema'
-export interface ModuleContents {
-  about: schema.ModuleHeader
-  contents: schema.FileStructure
-}
+export * from './types-text'
+export * from './validate-schema'

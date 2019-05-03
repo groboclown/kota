@@ -3,6 +3,22 @@
 import { SchemaVerifier } from '../validator'
 
 export type Source = string
+export type TreeItemEntry =
+  | MapAttribute
+  | FuzzAttribute
+  | GroupAttribute
+  | DateAttribute
+  | DateDeltaAttribute
+  | NumberAttribute
+  | FunctionCalculatedNearTargetAttribute
+  | FunctionCalculatedNearLessThanAttribute
+  | FunctionCalculatedNearMoreThanAttribute
+  | FunctionCalculatedNearRangeAttribute
+  | FunctionCalculatedNumberAttribute
+  | FunctionCalculatedFuzzAttribute
+  | ConstantFuzzValue
+  | ConstantNumberValue
+  | ConstantL10NReferenceValue
 export type NumberAttribute = {
   type: 'attribute-number'
 } & NumericRange
@@ -66,22 +82,7 @@ export interface GroupValue {
 export interface OverrideTreeItem {
   source: Source
   path: string
-  entry:
-    | MapAttribute
-    | FuzzAttribute
-    | GroupAttribute
-    | DateAttribute
-    | DateDeltaAttribute
-    | NumberAttribute
-    | FunctionCalculatedNearTargetAttribute
-    | FunctionCalculatedNearLessThanAttribute
-    | FunctionCalculatedNearMoreThanAttribute
-    | FunctionCalculatedNearRangeAttribute
-    | FunctionCalculatedNumberAttribute
-    | FunctionCalculatedFuzzAttribute
-    | ConstantFuzzValue
-    | ConstantNumberValue
-    | ConstantL10NReferenceValue
+  entry: TreeItemEntry
 }
 export interface MapAttribute {
   type: 'attribute-map'
@@ -107,7 +108,7 @@ export interface FunctionCalculatedNearAttribute {
    * the attribute in the context that the function uses.
    *
    */
-  forValue?: string
+  forValue: string
   /**
    * linear ramp distance from 0 to 1
    *
@@ -177,30 +178,52 @@ export interface ConstantL10NReferenceValue {
 export interface ModuleTreeItem {
   source: Source
   relpath: string
-  entry:
-    | MapAttribute
-    | FuzzAttribute
-    | GroupAttribute
-    | DateAttribute
-    | DateDeltaAttribute
-    | NumberAttribute
-    | FunctionCalculatedNearTargetAttribute
-    | FunctionCalculatedNearLessThanAttribute
-    | FunctionCalculatedNearMoreThanAttribute
-    | FunctionCalculatedNearRangeAttribute
-    | FunctionCalculatedNumberAttribute
-    | FunctionCalculatedFuzzAttribute
-    | ConstantFuzzValue
-    | ConstantNumberValue
-    | ConstantL10NReferenceValue
+  entry: TreeItemEntry
 }
+/**
+ * A method for formatting certain values specific to an end-user locale. It also includes properties that allow for constructing a heirarchy for finding localized values from `localized-text.schema.yaml` files.
+ *
+ */
 export interface Localization {
   source: Source
-  parent?: LocaleName
+  /**
+   * An ordered list of locales that indicate the order to find localized messages if a requested message is not found in this locale's translation files.  The order should be -
+   *   1. This locale's messages.
+   *   2. Each parent's strictly defined ordered message lookup, in the order
+   *      they are listed here.
+   * This means that if the first parent also has parents, then its parents will be looked up before the next item in this list.
+   * Any circular references will be ignored.
+   * This does not support aliasing locales.  If you want to support regions, then each region will need its own fully defined Localalization block, with valid parent hierarchies.
+   * The date markers, though, will be joined together using the same algorithm as the translations.
+   * If multiple localization blocks are found through the modules, they will be merged together into a single entry, with later loaded modules overwriting settings from previous modules.
+   *
+   */
+  parents: LocaleName[]
   locale: LocaleName
-  alternates: LocaleName[]
+  /**
+   * A human readable name of the language.  Should be the language's native name for itself (i.e. "Deutch" instead of "German")
+   *
+   */
+  name: string
+  icon: MediaImage
   number: L10NNumberFormat
+  /**
+   * Markers for how to display various types of date attributes. All dates are based upon Gregorian calendar attributes.
+   *
+   */
   dateMarkers: DateMarker[]
+}
+export interface MediaImage {
+  source: Source
+  locale: string
+  /**
+   * relative path to the media file within the module's file structure.
+   *
+   */
+  file: string
+  codec: string
+  size_x: number
+  size_y: number
 }
 export interface L10NNumberFormat {
   decimal: string
@@ -231,20 +254,36 @@ export interface DateMarkerValueMapping {
 }
 export interface Translation {
   source: Source
+  /**
+   * The name of the locale, as marked by the "localization" block. It's better to be less precise with the locale here, to allow for wider use of a single translation.
+   * A locale's domain and messages are joined together based on the load order, which means that later loaded messages overwrite previous ones.
+   *
+   */
   locale: string
   domain: string
+  /**
+   * relative path to the media file within the module's file structure.
+   *
+   */
   file: string
 }
 export interface MediaAudio {
   source: Source
   locale: string
+  /**
+   * relative path to the media file within the module's file structure.
+   *
+   */
   file: string
   codec: string
   seconds: number
   subtitles: Subtitle[]
 }
+/**
+ * A localized subtitle message.  It can be formatted text with variables. Each subtitle appears immediately after the previous one.  To include no subtitle for a period of time, set the `domain` and `msgid` to empty strings.
+ *
+ */
 export interface Subtitle {
-  time: number
   duration: number
   domain: string
   msgid: string
@@ -252,20 +291,16 @@ export interface Subtitle {
 export interface MediaVideo {
   source: Source
   locale: string
+  /**
+   * relative path to the media file within the module's file structure.
+   *
+   */
   file: string
   codec: string
   seconds: number
   size_x: number
   size_y: number
   subtitles: Subtitle[]
-}
-export interface MediaImage {
-  source: Source
-  locale: string
-  file: string
-  codec: string
-  size_x: number
-  size_y: number
 }
 
 const JSON_SCHEMA = {
@@ -320,53 +355,7 @@ const JSON_SCHEMA = {
           "maxLength": 1024
         },
         "entry": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/MapAttribute"
-            },
-            {
-              "$ref": "#/definitions/FuzzAttribute"
-            },
-            {
-              "$ref": "#/definitions/GroupAttribute"
-            },
-            {
-              "$ref": "#/definitions/DateAttribute"
-            },
-            {
-              "$ref": "#/definitions/DateDeltaAttribute"
-            },
-            {
-              "$ref": "#/definitions/NumberAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearTargetAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearLessThanAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearMoreThanAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearRangeAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNumberAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedFuzzAttribute"
-            },
-            {
-              "$ref": "#/definitions/ConstantFuzzValue"
-            },
-            {
-              "$ref": "#/definitions/ConstantNumberValue"
-            },
-            {
-              "$ref": "#/definitions/ConstantL10nReferenceValue"
-            }
-          ]
+          "$ref": "#/definitions/TreeItemEntry"
         }
       },
       "required": [
@@ -388,53 +377,7 @@ const JSON_SCHEMA = {
           "maxLength": 1024
         },
         "entry": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/MapAttribute"
-            },
-            {
-              "$ref": "#/definitions/FuzzAttribute"
-            },
-            {
-              "$ref": "#/definitions/GroupAttribute"
-            },
-            {
-              "$ref": "#/definitions/DateAttribute"
-            },
-            {
-              "$ref": "#/definitions/DateDeltaAttribute"
-            },
-            {
-              "$ref": "#/definitions/NumberAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearTargetAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearLessThanAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearMoreThanAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNearRangeAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedNumberAttribute"
-            },
-            {
-              "$ref": "#/definitions/FunctionCalculatedFuzzAttribute"
-            },
-            {
-              "$ref": "#/definitions/ConstantFuzzValue"
-            },
-            {
-              "$ref": "#/definitions/ConstantNumberValue"
-            },
-            {
-              "$ref": "#/definitions/ConstantL10nReferenceValue"
-            }
-          ]
+          "$ref": "#/definitions/TreeItemEntry"
         }
       },
       "required": [
@@ -443,6 +386,55 @@ const JSON_SCHEMA = {
         "entry"
       ],
       "additionalProperties": false
+    },
+    "TreeItemEntry": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/MapAttribute"
+        },
+        {
+          "$ref": "#/definitions/FuzzAttribute"
+        },
+        {
+          "$ref": "#/definitions/GroupAttribute"
+        },
+        {
+          "$ref": "#/definitions/DateAttribute"
+        },
+        {
+          "$ref": "#/definitions/DateDeltaAttribute"
+        },
+        {
+          "$ref": "#/definitions/NumberAttribute"
+        },
+        {
+          "$ref": "#/definitions/FunctionCalculatedNearTargetAttribute"
+        },
+        {
+          "$ref": "#/definitions/FunctionCalculatedNearLessThanAttribute"
+        },
+        {
+          "$ref": "#/definitions/FunctionCalculatedNearMoreThanAttribute"
+        },
+        {
+          "$ref": "#/definitions/FunctionCalculatedNearRangeAttribute"
+        },
+        {
+          "$ref": "#/definitions/FunctionCalculatedNumberAttribute"
+        },
+        {
+          "$ref": "#/definitions/FunctionCalculatedFuzzAttribute"
+        },
+        {
+          "$ref": "#/definitions/ConstantFuzzValue"
+        },
+        {
+          "$ref": "#/definitions/ConstantNumberValue"
+        },
+        {
+          "$ref": "#/definitions/ConstantL10nReferenceValue"
+        }
+      ]
     },
     "InstallHook": {
       "type": "object",
@@ -470,26 +462,35 @@ const JSON_SCHEMA = {
     },
     "Localization": {
       "type": "object",
+      "description": "A method for formatting certain values specific to an end-user locale. It also includes properties that allow for constructing a heirarchy for finding localized values from `localized-text.schema.yaml` files.\n",
       "properties": {
         "source": {
           "$ref": "#/definitions/Source"
         },
-        "parent": {
-          "$ref": "#/definitions/LocaleName"
-        },
-        "locale": {
-          "$ref": "#/definitions/LocaleName"
-        },
-        "alternates": {
+        "parents": {
+          "description": "An ordered list of locales that indicate the order to find localized messages if a requested message is not found in this locale's translation files.  The order should be -\n  1. This locale's messages.\n  2. Each parent's strictly defined ordered message lookup, in the order\n     they are listed here.\nThis means that if the first parent also has parents, then its parents will be looked up before the next item in this list.\nAny circular references will be ignored.\nThis does not support aliasing locales.  If you want to support regions, then each region will need its own fully defined Localalization block, with valid parent hierarchies.\nThe date markers, though, will be joined together using the same algorithm as the translations.\nIf multiple localization blocks are found through the modules, they will be merged together into a single entry, with later loaded modules overwriting settings from previous modules.\n",
           "type": "array",
           "items": {
             "$ref": "#/definitions/LocaleName"
           }
         },
+        "locale": {
+          "$ref": "#/definitions/LocaleName"
+        },
+        "name": {
+          "description": "A human readable name of the language.  Should be the language's native name for itself (i.e. \"Deutch\" instead of \"German\")\n",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "icon": {
+          "$ref": "#/definitions/MediaImage"
+        },
         "number": {
           "$ref": "#/definitions/L10nNumberFormat"
         },
         "dateMarkers": {
+          "description": "Markers for how to display various types of date attributes. All dates are based upon Gregorian calendar attributes.\n",
           "type": "array",
           "items": {
             "$ref": "#/definitions/DateMarker"
@@ -498,6 +499,9 @@ const JSON_SCHEMA = {
       },
       "required": [
         "source",
+        "name",
+        "icon",
+        "parents",
         "locale",
         "alternates",
         "number",
@@ -512,6 +516,7 @@ const JSON_SCHEMA = {
           "$ref": "#/definitions/Source"
         },
         "locale": {
+          "description": "The name of the locale, as marked by the \"localization\" block. It's better to be less precise with the locale here, to allow for wider use of a single translation.\nA locale's domain and messages are joined together based on the load order, which means that later loaded messages overwrite previous ones.\n",
           "type": "string",
           "minLength": 2,
           "maxLength": 12
@@ -522,6 +527,7 @@ const JSON_SCHEMA = {
           "maxLength": 200
         },
         "file": {
+          "description": "relative path to the media file within the module's file structure.\n",
           "type": "string",
           "minLength": 1,
           "maxLength": 200
@@ -547,6 +553,7 @@ const JSON_SCHEMA = {
           "maxLength": 12
         },
         "file": {
+          "description": "relative path to the media file within the module's file structure.\n",
           "type": "string",
           "minLength": 1,
           "maxLength": 200
@@ -589,6 +596,7 @@ const JSON_SCHEMA = {
           "maxLength": 12
         },
         "file": {
+          "description": "relative path to the media file within the module's file structure.\n",
           "type": "string",
           "minLength": 1,
           "maxLength": 200
@@ -641,6 +649,7 @@ const JSON_SCHEMA = {
           "maxLength": 12
         },
         "file": {
+          "description": "relative path to the media file within the module's file structure.\n",
           "type": "string",
           "minLength": 1,
           "maxLength": 200
@@ -1186,7 +1195,7 @@ const JSON_SCHEMA = {
         }
       },
       "required": [
-        "for",
+        "forValue",
         "ramp"
       ],
       "additionalProperties": false
@@ -1204,22 +1213,19 @@ const JSON_SCHEMA = {
     },
     "Subtitle": {
       "type": "object",
+      "description": "A localized subtitle message.  It can be formatted text with variables. Each subtitle appears immediately after the previous one.  To include no subtitle for a period of time, set the `domain` and `msgid` to empty strings.\n",
       "properties": {
-        "time": {
-          "type": "number",
-          "min": 0
-        },
         "duration": {
           "type": "number",
           "min": 0
         },
         "domain": {
           "type": "string",
-          "minLength": 2
+          "minLength": 0
         },
         "msgid": {
           "type": "string",
-          "minLength": 1
+          "minLength": 0
         }
       },
       "required": [
@@ -1308,4 +1314,4 @@ const JSON_SCHEMA = {
   ],
   "additionalProperties": false
 }
-export const FILESTRUCTURE_VALIDATOR = new SchemaVerifier<FileStructure>("file-structure", JSON_SCHEMA)
+export const FILESTRUCTURE_BASIC_VALIDATOR = new SchemaVerifier<FileStructure>("file-structure", JSON_SCHEMA)

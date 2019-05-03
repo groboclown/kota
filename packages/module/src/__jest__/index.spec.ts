@@ -5,6 +5,6 @@ import * as idx from '../index'
 
 describe('this needs some kind of test', () => {
   it('but we dont do anything', () => {
-    expect(idx.FILESTRUCTURE_VALIDATOR).not.toBeNull()
+    expect(idx.FILESTRUCTURE_BASIC_VALIDATOR).not.toBeNull()
   })
 })

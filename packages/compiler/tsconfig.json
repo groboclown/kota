@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
@@ -7,7 +7,7 @@
     "composite": true
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*", "../module/src/model/format-marker.ts"
   ],
   "exclude": [
     "node_modules",

@@ -5,7 +5,14 @@ import * as model from '../model'
 export const MODULE_ABOUT_NAME = 'about.json'
 export const MODULE_CONTENTS_NAME = 'contents.json'
 
-export function readModuleAbout(
+/**
+ * Usually called by itself to inspect each module, to present a list
+ * of available modules to the end-user.
+ * 
+ * @param modulePath 
+ * @param loader 
+ */
+export function readModuleHeader(
   modulePath: string, loader: baselibs.FileLoader
 ): Promise<model.ModuleHeader | baselibs.HasErrorValueList> {
   return loader(modulePath, MODULE_ABOUT_NAME)
@@ -47,28 +54,24 @@ export function readModuleContents(
     })
 }
 
-export function readModule(
-  modulePath: string, loader: baselibs.FileLoader
-): Promise<model.ModuleContents | baselibs.HasErrorValueList> {
-  return Promise.all([readModuleAbout(modulePath, loader), readModuleContents(modulePath, loader)])
-    .then((vv) => {
-      let errors: baselibs.ErrorValue[] = []
-      let about: model.ModuleHeader | null = null
-      let contents: model.FileStructure | null = null
-      if (baselibs.hasErrorValueList(vv[0])) {
-        errors = errors.concat(vv[0].errors)
-      } else {
-        about = vv[0]
+export function readModuleLocalizationText(
+  modulePath: string, translation: model.Translation,
+  loader: baselibs.FileLoader
+): Promise<model.LocalizedMessageCatalog | baselibs.HasErrorValueList> {
+  return loader(modulePath, translation.file)
+    .then((text) => {
+      if (baselibs.hasErrorValue(text)) {
+        return { errors: [text.error] }
       }
-      if (baselibs.hasErrorValueList(vv[1])) {
-        errors = errors.concat(vv[1].errors)
-      } else {
-        contents = vv[1]
-      }
-      // The or checking here is redundant, but necessary for typescript type checking.
-      if (errors.length > 0 || !about || !contents) {
+      try {
+        const raw = JSON.parse(text.data)
+        const errors: baselibs.ErrorValue[] = []
+        if (model.LOCALIZEDTEXT_VALIDATOR.validate(text.source, raw, errors)) {
+          return raw
+        }
         return { errors }
+      } catch (e) {
+        return { errors: [baselibs.coreError('bad json format', { path: text.source, msg: e.message })] }
       }
-      return { about, contents }
     })
 }

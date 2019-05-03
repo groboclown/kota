@@ -108,7 +108,7 @@ Promise.all(config.src.map(fn => {
               ts
               }\nconst JSON_SCHEMA = ${
               JSON.stringify(raw, null, 2)
-              }\nexport const ${className.toUpperCase()}_VALIDATOR = new SchemaVerifier<${
+              }\nexport const ${className.toUpperCase()}_BASIC_VALIDATOR = new SchemaVerifier<${
               className
               }>("${coreName}", JSON_SCHEMA)\n`
             return new Promise((resolve, reject) => {

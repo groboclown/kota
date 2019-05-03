@@ -19,7 +19,7 @@ describe('module validator', () => {
           requires: [],
         }
         const errors: ErrorValue[] = []
-        schema.MODULEHEADER_VALIDATOR.validate('src file', m, errors)
+        schema.MODULEHEADER_BASIC_VALIDATOR.validate('src file', m, errors)
         expect(errors).toHaveLength(0)
       })
     })
