@@ -4,6 +4,7 @@ import { SchemaVerifier } from '../validator'
 
 export type LocalizedMessageBlock = {
   blockStyle: BlockStyle
+  [k: string]: any
 } & TextFragmentList
 export type BlockStyle = 'para' | 'quote' | 'signature' | 'header' | 'subhead' | 'right' | 'section'
 export type TextFragment =
@@ -18,6 +19,7 @@ export type TextFragment =
 export type StyledVariable = SpanStyle &
   VariableTextData & {
     type: 'styled-var'
+    [k: string]: any
   }
 /**
  * This interface was referenced by `ArgumentMapping`'s JSON-Schema definition
@@ -27,26 +29,33 @@ export type ArgumentReference = string
 export type StyledContextVariable = SpanStyle &
   ContextVariableTextData & {
     type: 'styled-context'
+    [k: string]: any
   }
 export type StyledMessage = SpanStyle &
   MessageTextData & {
     type: 'styled-text'
+    [k: string]: any
   }
 export type StyledLink = SpanStyle &
   LinkTextData & {
     type: 'styled-link'
+    [k: string]: any
   }
 export type PlainVariable = VariableTextData & {
   type: 'var'
+  [k: string]: any
 }
 export type PlainContextVariable = ContextVariableTextData & {
   type: 'context'
+  [k: string]: any
 }
 export type PlainMessage = MessageTextData & {
   type: 'text'
+  [k: string]: any
 }
 export type PlainLink = LinkTextData & {
   type: 'link'
+  [k: string]: any
 }
 
 /**
@@ -140,7 +149,7 @@ const JSON_SCHEMA = {
             "type",
             "blocks"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         },
         {
           "allOf": [
@@ -157,13 +166,13 @@ const JSON_SCHEMA = {
               "required": [
                 "type",
                 "text"
-              ]
+              ],
+              "noInheritProperties": false
             },
             {
               "$ref": "#/definitions/TextFragmentList"
             }
-          ],
-          "additionalProperties": false
+          ]
         }
       ]
     },
@@ -179,7 +188,7 @@ const JSON_SCHEMA = {
           "required": [
             "blockStyle"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         },
         {
           "$ref": "#/definitions/TextFragmentList"
@@ -199,7 +208,7 @@ const JSON_SCHEMA = {
       "required": [
         "text"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "TextFragment": {
       "oneOf": [
@@ -262,7 +271,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -284,7 +293,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -300,7 +309,7 @@ const JSON_SCHEMA = {
       "required": [
         "text"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "StyledVariable": {
       "allOf": [
@@ -323,7 +332,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -345,7 +354,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -371,7 +380,7 @@ const JSON_SCHEMA = {
         "keyValueNames",
         "template"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "StyledContextVariable": {
       "allOf": [
@@ -394,7 +403,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -416,7 +425,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -443,7 +452,7 @@ const JSON_SCHEMA = {
         "keyValueNames",
         "template"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "StyledLink": {
       "allOf": [
@@ -466,7 +475,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -488,7 +497,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -506,7 +515,7 @@ const JSON_SCHEMA = {
         "text",
         "linkTo"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "ArgumentMapping": {
       "type": "object",
@@ -545,7 +554,7 @@ const JSON_SCHEMA = {
         }
       },
       "required": [],
-      "additionalProperties": false
+      "additionalProperties": true
     }
   }
 }

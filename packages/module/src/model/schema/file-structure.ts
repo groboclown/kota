@@ -21,22 +21,27 @@ export type TreeItemEntry =
   | ConstantL10NReferenceValue
 export type NumberAttribute = {
   type: 'attribute-number'
+  [k: string]: any
 } & NumericRange
 export type NumericValue = number
 export type FunctionCalculatedNearTargetAttribute = FunctionCalculatedNearAttribute & {
   type: 'attribute-function-near-target'
   target: NumericValue
+  [k: string]: any
 }
 export type FunctionCalculatedNearLessThanAttribute = FunctionCalculatedNearAttribute & {
   type: 'attribute-function-near-lessthan'
   lessThan: NumericValue
+  [k: string]: any
 }
 export type FunctionCalculatedNearMoreThanAttribute = FunctionCalculatedNearAttribute & {
   type: 'attribute-function-near-morethan'
   moreThan: NumericValue
+  [k: string]: any
 }
 export type FunctionCalculatedNearRangeAttribute = FunctionCalculatedNearAttribute & {
   type: 'attribute-function-near-range'
+  [k: string]: any
 } & NumericRange
 export type FuzzValue = number
 export type LocaleName = string
@@ -691,7 +696,7 @@ const JSON_SCHEMA = {
       "required": [
         "type"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "FuzzAttribute": {
       "type": "object",
@@ -706,7 +711,7 @@ const JSON_SCHEMA = {
       "required": [
         "type"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "GroupAttribute": {
       "type": "object",
@@ -721,7 +726,7 @@ const JSON_SCHEMA = {
       "required": [
         "type"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "DateAttribute": {
       "type": "object",
@@ -736,7 +741,7 @@ const JSON_SCHEMA = {
       "required": [
         "type"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "DateDeltaAttribute": {
       "type": "object",
@@ -751,7 +756,7 @@ const JSON_SCHEMA = {
       "required": [
         "type"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "NumberAttribute": {
       "allOf": [
@@ -768,7 +773,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         },
         {
           "$ref": "#/definitions/NumericRange"
@@ -797,7 +802,7 @@ const JSON_SCHEMA = {
             "type",
             "target"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -823,7 +828,7 @@ const JSON_SCHEMA = {
             "type",
             "lessThan"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -849,7 +854,7 @@ const JSON_SCHEMA = {
             "type",
             "moreThan"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         }
       ]
     },
@@ -871,7 +876,7 @@ const JSON_SCHEMA = {
           "required": [
             "type"
           ],
-          "additionalProperties": false
+          "noInheritProperties": false
         },
         {
           "$ref": "#/definitions/NumericRange"
@@ -1177,7 +1182,7 @@ const JSON_SCHEMA = {
         "min",
         "max"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "FunctionCalculatedNearAttribute": {
       "type": "object",
@@ -1198,7 +1203,7 @@ const JSON_SCHEMA = {
         "forValue",
         "ramp"
       ],
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "Source": {
       "type": "string",

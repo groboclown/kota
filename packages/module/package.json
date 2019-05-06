@@ -6,7 +6,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "prebuild": "rimraf lib tsconfig.tsbuildinfo",
-    "build:gen:init": "rimraf ./.gen ./src/model/schema && mkdir -p ./.gen && mkdir -p ./src/model/schema",
+    "build:gen:init": "rimraf ./src/model/schema && mkdir -p ./src/model/schema",
     "build:json-NOT-NEEDED": "node ./bin/yaml-to-json.js -o .gen -i ../../data/file-schema/compiled/*.schema.yaml",
     "build:schema": "node ./bin/schema-to-ts.js -o ./src/model/schema -i ../../data/file-schema/compiled/*.schema.yaml",
     "build:gen": "npm run build:gen:init && npm run build:schema",
@@ -68,7 +68,7 @@
       "ts-jest": {}
     },
     "testMatch": [
-      "**/__jest__/*.+(ts|tsx|js)"
+      "**/__jest__/*.spec.+(ts|tsx|js)"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
@@ -79,7 +79,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/lib/"
+      "/lib/",
+      "__jest__"
     ],
     "coverageReporters": [
       "json",

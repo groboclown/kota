@@ -11,6 +11,45 @@ const config = {
   src: []
 }
 
+
+// Handling for lack of "inheritable" for "additionalProperties".
+
+/** Convert the schema from the used model to the compile model */
+function forCompile(schema) {
+  const ret = {}
+  Object.keys(schema).forEach((key) => {
+    const sk = schema[key]
+    if (util.isArray(sk)) {
+      ret[key] = [].concat(sk)
+    } else if (util.isObject(sk)) {
+      ret[key] = forCompile(sk)
+    } else if (key === 'noInheritProperties' && sk === false) {
+      ret['additionalProperties'] = false
+    } else {
+      ret[key] = sk
+    }
+  })
+  return ret
+}
+
+/** Convert the schema from the used model to the schema model */
+function forSchema(schema) {
+  const ret = {}
+  Object.keys(schema).forEach((key) => {
+    const sk = schema[key]
+    if (util.isArray(sk)) {
+      ret[key] = [].concat(sk)
+    } else if (util.isObject(sk)) {
+      ret[key] = forSchema(sk)
+    } else if (key === 'noInheritProperties' && sk === false) {
+      ret['additionalProperties'] = true
+    } else {
+      ret[key] = sk
+    }
+  })
+  return ret
+}
+
 let mode = ['x']
 process.argv.forEach(val => {
   if (val === '-o' || val === '-i') {
@@ -72,7 +111,7 @@ Promise.all(config.src.map(fn => {
         // efficient manner possible.
         const className = raw.title
         console.log(`Processing ${className} :: ${fn} -> ${outFile}`)
-        return compile(raw, className, {
+        return compile(forCompile(raw), className, {
           bannerComment: '',
           cwd: path.dirname(fn),
           enableConstEnums: true,
@@ -107,7 +146,7 @@ Promise.all(config.src.map(fn => {
               `/* AUTO GENERATED FILE.  DO NOT MODIFY. */\n/* tslint:disable */\nimport { SchemaVerifier } from '../validator'\n\n${
               ts
               }\nconst JSON_SCHEMA = ${
-              JSON.stringify(raw, null, 2)
+              JSON.stringify(forSchema(raw), null, 2)
               }\nexport const ${className.toUpperCase()}_BASIC_VALIDATOR = new SchemaVerifier<${
               className
               }>("${coreName}", JSON_SCHEMA)\n`
