@@ -111,7 +111,7 @@ The number section defines how numbers are shown to the user.  Number formatting
 
 Representing dates is very locale specific.  However, the way the date is shown to the user is a combination of the intention of the text ("Jan 29" vs "Monday, January 29, 2019") and the words for the locale.  The [translation](#translation) should contain date formatting as the language dictates, but the transformation of the Gregarian calendar values to that language is handled by the localization date markers.
 
-Only the Gregarian calendar is supported.  The engine uses native date libraries to handle the nitty gritty details.
+Only the Gregorian calendar is supported.  The engine uses native date libraries to handle the nitty gritty details.
 
 A localization can have as many kinds of date markers as desired.  For example, the day of the week can be terse ("M", "Tu"), short ("Mon", "Tue"), or verbose ("Monday", "Tuesday"), and each of these has its own date marker.
 
@@ -132,7 +132,7 @@ The install defines action groups, and the list of those actions to run.
 
 The install hook runs after the module definitions are loaded into the engine.
 
-You may notice an absense of object creation.  This is due to one of the tenants of the engine - explicit object creation is only done by the engine, not by the modules.  This allows modules to have extreme influence over the consructed stories without being declarative.
+You may notice an absence of object creation.  This is due to one of the tenants of the engine - explicit object creation is only done by the engine, not by the modules.  This allows modules to have extreme influence over the constructed stories without being declarative.
 
 
 ### `install.attach-value`
@@ -209,7 +209,7 @@ A constraint defines the role that it creates for, but all the attributes genera
 
 A constraint can use other constraints to define the restrictions.  Attributes defined by the constraint itself override any definitions of what it uses.  Likewise, constraints used override previous constraints.
 
-The standard method for constraints is to create a heirarchy of values.  The first constraint is the most generic, and defines all the attributes for that role.
+The standard method for constraints is to create a hierarchy of values.  The first constraint is the most generic, and defines all the attributes for that role.
 
 * **name**: the name of the constraint.  Does not need to be unique for the role.
 * **includes**: list of other constraints to base this one off of.  Keep in mind the priority for overriding values.
@@ -268,7 +268,7 @@ A story is a long form adventure for a "character" to explore.  It has an end go
 
 The events within the story are constrained within the location.  However, events may take the main character to sub-locations.
 
-In order to allow interesting descisions from the player, the story should have pre-defined [threats](#threat) that can be prepared against.
+In order to allow interesting decisions from the player, the story should have pre-defined [threats](#threat) that can be prepared against.
 
 *TODO DEFINE*
 
@@ -311,7 +311,7 @@ Event chains need to have:
 
 (Nebulous idea.  Still in the works.)
 
-Threats are attached to in-game generated objects, and represent a category of obstacle to the primary character.  Some threats can be on the primary character (e.g. alchoholic).  These should be some of the expected obstacles that the character may need to overcome, and gives the player an opportunity to prepare against it.  Threats are used in event-chain construction.  Threats are things the characters are expected to be able to find out within story.
+Threats are attached to in-game generated objects, and represent a category of obstacle to the primary character.  Some threats can be on the primary character (e.g. alcoholic).  These should be some of the expected obstacles that the character may need to overcome, and gives the player an opportunity to prepare against it.  Threats are used in event-chain construction.  Threats are things the characters are expected to be able to find out within story.
 
 How do we link a threat to a story concept?
 
@@ -319,9 +319,9 @@ Some ideas:
 
 * *Categorical threats*
     * A location can have threats specific to it, that dictate how objects are created.
-        * A location can be renown for how the general population acts.  This would mean that natives to the location tend to side with these categories of threats.  Xenophobic, agressive, shy, etc.  They represent general cultural and societal norms that most people conform to.
+        * A location can be renown for how the general population acts.  This would mean that natives to the location tend to side with these categories of threats.  Xenophobic, aggressive, shy, etc.  They represent general cultural and societal norms that most people conform to.
         * Threats could also be in the form of cultural taboos and other expectations of behavior that an unprepared person could easily break, which could lead to inferred insults or shunning or religious consequences.  Things like entering a house without shoes, eating the wrong way, using a sacred rock as a lunch table.  These would be things that would require a careful traveler to prepare for and/or hire a friendly local to aid them in the cultural navigation.
-        * Locations can also have natural threats - things in the natural world specific to them.  Harsh cold, bears, landslides, poisonous plants, mosquitos, disease, brackish water, black mold.
+        * Locations can also have natural threats - things in the natural world specific to them.  Harsh cold, bears, landslides, poisonous plants, mosquitoes, disease, brackish water, black mold.
     * Organizations can have rules that the members are expected to follow, which can themselves be threats.  In this case, the organization itself is not a threat (it's an organization, which is made up of people), but which makes the people in it follow certain behaviors and thus be inclined to general categories of threats.
     * Categorical threats to not mean "may or may not have threat X", but should mean instead "how much of threats similar to X", because people can have different degrees of association with that idea, and it can manifest behaviors in different ways.
     * Categorical threats should probably be made more abstract.  It's essentially a match on individual threats.

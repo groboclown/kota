@@ -5,7 +5,7 @@
 Download the repository, and run:
 
 ```(bash)
-npm install
+npm run bootstrap
 ```
 
 ## Testing

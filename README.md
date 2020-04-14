@@ -6,6 +6,9 @@ This project contains the source code for the game engine.  The content is distr
 
 The planned gameplay is initially a hunt for hidden knowledge throughout the known world.  As the engine develops, let's see where it takes us.
 
+
 ## Documentation
 
 As this is an engine for others to play with, documentation is all important.  The [homepage](https://groboclown.github.io/kota) is for end-users, while the nitty-gritty notes lie in [the docs folder](docs)
+
+Developers should get started with the [building documentation](docs/building.md).
