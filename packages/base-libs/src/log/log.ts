@@ -291,6 +291,12 @@ class LoggerImpl implements Logger {
   }
 
   private getSetting(): LogLevel {
+    // This allows for dynamic changing of log level.
+    // As an "optimization", this could instead:
+    //   - keep a static cache of each log object.
+    //   - requests for a log object at a level are reused.
+    //   - when log settings change, all the cached log objects
+    //     are updated.
     for (const level of this.levels) {
       const x = LOG_SETTINGS[level]
       if (x) {

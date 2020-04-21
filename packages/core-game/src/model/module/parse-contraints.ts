@@ -1,3 +1,10 @@
+/**
+ * Defines constraints for external data that allows deep inspection of the
+ * data for compliance with the expected typed data.
+ * 
+ * This could also be accomplished with a JSON Schema validator.  The
+ * JSON schema could also be used to generate documentation
+ */
 
 import { ParsedError } from './parse-info'
 import { coreError } from '../../lib/error'
@@ -23,6 +30,7 @@ export function checkCompliance(errors: ParsedError[], src: any, constraints: Co
 }
 
 interface Verifiable {
+  /** Name of the verifiable constraint. */
   readonly name: string
   runVerify(objectValue: any, accumulatedErrors?: ParsedError[] | null): boolean
 }
@@ -347,6 +355,7 @@ class ForEachConstraintSet implements Verifiable {
       foundErrors.forEach(err => {
         err.violation.params.path = `for ${this.matcher.name}: ${index}`
         errors.push(err)
+        hasErrors = true
       })
     })
     return hasErrors

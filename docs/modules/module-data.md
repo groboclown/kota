@@ -7,13 +7,13 @@ Throughout this document notes will be made as to how the engine uses the module
 Each section describes a top-level data type that can be defined in the module.
 
 <!--
-Need to manually maintain this TOC for the moment.
+Need to manually maintain this Table of Contents for the moment.
 -->
 
 * Text Services
   * [translation](#translation)
   * [localization](#localization)
-* Module Lifecycle
+* Module Life-cycle
   * [install](#install)
 * Data Type Definitions
   * [group](#group)
@@ -48,7 +48,7 @@ translation:
 
 Because translations are created just once, they are created with an `id` and inserted into the context tree under `(module path)/(id)`, which creates the domain for the messages.
 
-The messages are stored in files in the same directory as the translation definition `yaml` file, with a name in the format `(file).(locale).json`, where the locale is all lowercase.  In the example above, if the yaml file defining the `name` translation is located in `/modules/23-skidoo/text`, then the domain is `/modules/23-skidoo/text/name`, and the translation files would be like `/modules/23-skidoo/text/name-list.en_uk.json`.
+The messages are stored in files in the same directory as the translation definition `yaml` file, with a name in the format `(file).(locale).json`, where the locale is all lowercase.  In the example above, if the `yaml` file defining the `name` translation is located in `/modules/23-skidoo/text`, then the domain is `/modules/23-skidoo/text/name`, and the translation files would be like `/modules/23-skidoo/text/name-list.en_uk.json`.
 
 The translation json files have a very simple format.  They are a simple JSON object with the message ID as the key, and the translation as the value.  To handle plural formats, such as "coin" versus "coins",
 the message ID is assigned to another object, with each count value
@@ -86,7 +86,7 @@ All localizations should be stored in the `overrides/common/l10n` directory of a
 Localizations define 3 primary values to help the engine decide which localization to apply for a specific locale.  Because of limited resources, we should assume that not all locales are supported, so the engine will make a best initial guess as to the right locale, while allowing the user to choose their preferred one.
 
 * **parent** - if a parent is set, then the localization is a subset of the parent.  All the parent values are inherited where not defined in this locale.
-* **locale** - the formal locale identifier (xx_YY) conforming to standards.  Non-standard locales (such as Klingon) should use the format `x-language` (e.g. `x-klingon`).
+* **locale** - the formal locale identifier (`xx_YY`) conforming to standards.  Non-standard locales (such as Klingon) should use the format `x-language` (e.g. `x-klingon`).
 * **alternatives** - a list, in less-specific order, of alternative user locales that this one can match.
 
 Additionally, the locale must provide a **name** for the end-user to select.
@@ -109,9 +109,9 @@ The number section defines how numbers are shown to the user.  Number formatting
 
 ### `localization.date-markers`
 
-Representing dates is very locale specific.  However, the way the date is shown to the user is a combination of the intention of the text ("Jan 29" vs "Monday, January 29, 2019") and the words for the locale.  The [translation](#translation) should contain date formatting as the language dictates, but the transformation of the Gregarian calendar values to that language is handled by the localization date markers.
+Representing dates is very locale specific.  However, the way the date is shown to the user is a combination of the intention of the text ("Jan 29" vs "Monday, January 29, 2019") and the words for the locale.  The [translation](#translation) should contain date formatting as the language dictates, but the transformation of the Gregorian calendar values to that language is handled by the localization date markers.
 
-Only the Gregorian calendar is supported.  The engine uses native date libraries to handle the nitty gritty details.
+Only the Gregorian calendar is supported.  The engine uses native date libraries to handle the low-level details.
 
 A localization can have as many kinds of date markers as desired.  For example, the day of the week can be terse ("M", "Tu"), short ("Mon", "Tue"), or verbose ("Monday", "Tuesday"), and each of these has its own date marker.
 
@@ -126,7 +126,7 @@ The `date-markers` section defines an array of date markers.  Each one must have
 
 ## `install`
 
-The module can have "hooks" into the lifecycle of the module in the world.  The "install" hook defines how to add the module into a generated world.
+The module can have "hooks" into the life-cycle of the module in the world.  The "install" hook defines how to add the module into a generated world.
 
 The install defines action groups, and the list of those actions to run.
 
@@ -160,7 +160,7 @@ Declares a base-story reference (either absolute or relative path) that the play
 
 A "group" is a generic set of strings with a well defined set of possible values.  This can lead to bad modules that abuse this, because matching is sorely limited.  However, there are really good reasons to have a group of unique values.  One way to help extend this concept so it doesn't lead to brittle values is the group value - it must declare what values it contains.  So when a module references 'boat', that value can mean the 'boat' or 'ship' values.
 
-The group-assigned values can change according to whatever other modules desire.  However, the values are staticly defined by modules, and are not changable through game state changes.
+The group-assigned values can change according to whatever other modules desire.  However, the values are statically defined by modules, and are not changeable through game state changes.
 
 Group definitions only define one attribute.
 
@@ -223,7 +223,7 @@ object-constraints:
         - /common/roles/@person/craftsman
 ```
 
-The standard usage is to create a yaml file named after the generator, then a directory with that generator name containing all the attribute files, located in the same place as the yaml generator file.  For example:
+The standard usage is to create a `yaml` file named after the generator, then a directory with that generator name containing all the attribute files, located in the same place as the `yaml` generator file.  For example:
 
 * `/module/my-module/roles/person/blacksmith/_.yaml` defines the blacksmith generator
 * `/module/my-module/roles/person/blacksmith/attributes.yaml` defines attributes created by the generator.
@@ -237,7 +237,7 @@ Constraints can define a whole archetype, like "person", or they can define one 
 
 An attribute defines the kind of value that is suitable for a position in the context tree.  These are used by [object-generators](#object-generator) to create values within the bounds of the attribute.
 
-(TODO expand on attributes of the attribute)
+*TODO expand on attributes of the attribute*
 
 
 ## `match`
@@ -251,7 +251,7 @@ Matches are defined as nodes in the tree, so that they can be enhanced by multip
 
 ## `narrative`
 
-Thw "narrative" is the narrative glue that ties the various stories together.  For the most part, the narrative flow can't be changed.  Defining this merely allows the definition of the details.
+The "narrative" is the narrative glue that ties the various stories together.  For the most part, the narrative flow can't be changed.  Defining this merely allows the definition of the details.
 
 The narrative can define requirements, which leads to initial world creation.
 
@@ -268,7 +268,7 @@ A story is a long form adventure for a "character" to explore.  It has an end go
 
 The events within the story are constrained within the location.  However, events may take the main character to sub-locations.
 
-In order to allow interesting decisions from the player, the story should have pre-defined [threats](#threat) that can be prepared against.
+In order to allow interesting decisions from the player, the story should have predefined [threats](#threat) that can be prepared against.
 
 *TODO DEFINE*
 

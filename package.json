@@ -4,6 +4,7 @@
   "description": "Knowledge of the Ancients",
   "main": "src/index.js",
   "scripts": {
+    "generate-docs": "./bin/generate-docs.js",
     "build": "./node_modules/.bin/lerna run build",
     "test": "./node_modules/.bin/lerna run test",
     "dev:link": "./node_modules/.bin/lerna link",
@@ -21,6 +22,7 @@
   "author": "Groboclown",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^3.13.4"
+    "@adobe/jsonschema2md": "^4.1.1",
+    "lerna": "^3.20.2"
   }
 }

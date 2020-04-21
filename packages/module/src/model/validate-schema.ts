@@ -60,7 +60,7 @@ function checkRangeError(path: string, entry: TreeItemEntry, errors: ErrorValue[
 function getNumericRange(item: TreeItemEntry): [number, number] | null {
   const a: any = item
   if (a !== null && typeof a === 'object') {
-    if (typeof a.min === 'number' && a.max === 'number') {
+    if (typeof a.min === 'number' && typeof a.max === 'number') {
       return [a.min, a.max]
     }
 

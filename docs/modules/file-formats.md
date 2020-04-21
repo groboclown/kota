@@ -2,9 +2,12 @@
 
 Modules consist of a collection of files written in a very specific format.  We've made an effort to make these easier to use than other file formats, but you still need to be careful about how you write them.
 
+Note that these files will be processed to generate simplified versions of the data for use by the engine.
+
+
 ## General Formats
 
-There are several file formats used by the system.  We've attempted to make them standards-compliant, but here they are just for
+There are several file formats used by the system.  We've attempted to make them standards-compliant.
 
 ### Files whose name end in `.list`
 
@@ -32,7 +35,7 @@ Files are read with UTF-8 encoding, so if you encode your file in UTF-8, you don
 
 See [the official YAML file specification documentation](https://yaml.org/spec/1.2/spec.html) for detailed information on how to format your files.
 
-The game adds an additional constraint on `yaml` files so that they must start with a single line containing only three dashes (`---`) and no additional whitespace.
+The game adds an additional constraint on `yaml` files so that they must start with a single line containing only three dashes (`---`) and no additional white space.
 
 Each file contains highly specific structured information which depends upon what the data represents.
 
@@ -73,7 +76,7 @@ This file contains all the meta-data information that the module adds to the sys
 
 This file is located outside the `module.yaml` file so that it can be easily created by tools.  If you'd rather load the files through the module file you can, but that seems like a lot of extra effort.
 
-Each line in the file denotes the relative path to a yaml file to load into the context tree.  The files must all end with the `.yaml` extension.  This must not include the `module.yaml` file.
+Each line in the file denotes the relative path to a `yaml` file to load into the context tree.  The files must all end with the `.yaml` extension.  This must not include the `module.yaml` file.
 
 
 ### `module.yaml`
@@ -121,6 +124,6 @@ Module supports the following attributes:
 
 For every file in the `manifest.list` file, it is loaded into the game's context under `/modules(module Unique ID)/(relative file directory)/(file contents)`.
 
-Note that the filename is *not* part of the context path, but the directory name is.  However, files named `_.yaml` will be loaded as part of the parent directory's context.  This is to allow for more natural parent/child descriptions.
+Note that the file name is *not* part of the context path, but the directory name is.  However, files named `_.yaml` will be loaded as part of the parent directory's context.  This is to allow for more natural parent/child descriptions.
 
 Files in the `overrides` directory will be mapped to the root of the context.  This is particularly handy for creating new translations as add-on modules, or providing a high-def graphics pack.

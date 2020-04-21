@@ -1,5 +1,0 @@
-# List of all the schema files in this directory.
-attribute.schema.yaml
-constant.schema.yaml
-group-value.schema.yaml
-module.schema.yaml
