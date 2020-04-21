@@ -2,7 +2,8 @@
   "files": [],
   "references": [
     { "path": "./base-libs" },
-    { "path": "./module" },
+    { "path": "./module-compiled" },
+    { "path": "./module-user" },
     { "path": "./compiler" },
     { "path": "./core-game" }
   ]

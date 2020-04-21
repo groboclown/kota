@@ -4,7 +4,7 @@
   "description": "Knowledge of the Ancients",
   "main": "src/index.js",
   "scripts": {
-    "generate-docs": "./bin/generate-docs.js",
+    "generate-docs": "rimraf ./site/schema/docs ./site/schema/json && cd ./data/bin && node ./generate-docs.js",
     "build": "./node_modules/.bin/lerna run build",
     "test": "./node_modules/.bin/lerna run test",
     "dev:link": "./node_modules/.bin/lerna link",
@@ -23,6 +23,8 @@
   "license": "MIT",
   "devDependencies": {
     "@adobe/jsonschema2md": "^4.1.1",
-    "lerna": "^3.20.2"
+    "js-yaml": "^3.13.1",
+    "lerna": "^3.20.2",
+    "rimraf": "^3.0.2"
   }
 }

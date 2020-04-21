@@ -32,6 +32,14 @@ A new data type should be a "timer" that counts up based on the world time (turn
 
 The core game should use as tightly parsed data format as possible.  It can be verbose and difficult to read, but in the effort to make in-game parsing minimal.  These data structures should be as close to the in-memory structures as possible.
 
+* Split the `module` package into `module-user` and `module-compiled`.  The compiler will use both, and the core-game will use just the `module-compiled`.
+
+
+## Format Strings
+
+The format strings are super hard to write and get right.  They make the text obtuse and tricky to read.  This needs to be seriously cleaned up.
+
+For one, more of the format string text can be pushed into the attribute itself.  In general, most attributes have a set way to show the data.  Things like capitalization, grammatical form, and so on would be different categories of attribute text formats.  The categories should optionally include a default category, because some may require a choice.  Some attributes would require a "count" or some other optional attribute.  This may be included in the attribute tree?  This requires additional investigation.
 
 
 ## Design
@@ -45,3 +53,8 @@ These are notes about the current design, and how it needs to change.  Each note
 ## Optimizations
 
 * `base-libs/src/log` - cache log objects for faster log changes.  This prevents the continual lookup overhead.
+
+
+## Documentation
+
+Have a tool to convert the schema to documentation.  The existing tool is bad, seriously bad.

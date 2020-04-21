@@ -1,25 +1,21 @@
-#!/usr/bin/nodejs
+#!/usr/bin/env node
 
 /*
  * Generates documentation based on the schema.
  * The documentation is for the `site` directory, and checked into
  * source control so it can be published on the site.
- * 
- * This can build files for the `docs` directory, but this file is
- * in the `docs` directory to keep the site tree clean.  So, yeah,
- * this file is kind of misplaced, but at least there's a reason for it.
  */
 
 const fs = require('fs')
 const path = require('path')
 const yaml = require('js-yaml')
 const util = require('util')
-const json2md = require('@adobe/jsonschema2md/lib/index')
+const json2md = require('@adobe/jsonschema2md/lib')
 
 const config = {
   base_json_out: path.resolve('./../../site/schema/json'),
-  base_md_out: path.resolve('./../../site/schema/doc'),
-  base_src: path.resolve('./..'),
+  base_md_out: path.resolve('./../../site/schema/docs'),
+  base_src: path.resolve('./../file-schema'),
   basedir_names: ['compiled', 'user'],
   inout_mapping: {},
   errors: [],
@@ -40,17 +36,17 @@ config.basedir_names.forEach(name => {
       if (ent.name.endsWith(".md")) {
         // Just copy the file to the markdown dir
         let outFile = path.resolve(mdTargetDir, ent.name)
-        const data = fs.readFileSync(fn, 'utf8')
+        const data = fs.readFileSync(sourceFile, 'utf8')
         fs.writeFileSync(outFile, data)
         console.log(`INFO Copied ${sourceFile} to ${outFile}`)
       }
       if (ent.name.endsWith(".yaml")) {
         let outFileName = ent.name.substring(0, ent.name.length - 5) + '.json'
         let outFile = path.resolve(jsonTargetDir, outFileName)
-        const data = fs.readFileSync(fn, 'utf8')
+        const data = fs.readFileSync(sourceFile, 'utf8')
         let raw = {}
         try {
-          raw = yaml.parseAllDocuments(data)
+          raw = yaml.safeLoadAll(data)
         } catch (e) {
           console.error(`FORMAT ERROR!  ${e.message}: ${sourceFile}`)
           config.errors.push(e.message)
@@ -70,16 +66,13 @@ config.basedir_names.forEach(name => {
         console.log(`INFO ignoring source file ${sourceFile}`)
       }
     })
-  // Perform json schema -> markdown conversion
+  // Perform json schema -> markdown conversion.
+  // This isn't good.  It also generates an "out" directory
+  // that isn't part of the output directory, and will cause broken
+  // pages.
   json2md([
     '-d', jsonTargetDir,
     '-o', mdTargetDir,
     '-f', 'yaml',
   ])
 })
-
-
-
-console.error('ERROR not implemented yet')
-
-

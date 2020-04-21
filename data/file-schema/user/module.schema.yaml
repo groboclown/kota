@@ -21,7 +21,7 @@ properties:
     maxLength: 2000
   version:
     type: string
-    pattern: "^[0-9]+(\.[0-9]+)*$"
+    pattern: "^[0-9]+(\\.[0-9]+)*$"
   authors:
     type: array
     items:
@@ -51,7 +51,7 @@ properties:
     type: array
     items:
       type: string
-      pattern: "^[a-zA-Z][-a-zA-Z0-9]+\s+[0-9]+(\.[0-9]+)*$"
+      pattern: "^[a-zA-Z][-a-zA-Z0-9]+\\s+[0-9]+(\\.[0-9]+)*$"
   hooks:
     type: object
     properties:
@@ -69,7 +69,7 @@ properties:
           properties:
             fromVersion:
               type: string
-              pattern: "^[0-9]+(\.[0-9]+)*$"
+              pattern: "^[0-9]+(\\.[0-9]+)*$"
             script:
               type: string
           additionalProperties: false

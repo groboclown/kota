@@ -1,0 +1,77 @@
+{
+  "name": "@kota/module-user",
+  "version": "0.1.0",
+  "description": "User-friendly module definition and parser for Knowledge of the Ancients",
+  "main": "src/index.js",
+  "scripts": {
+    "prebuild": "rimraf lib tsconfig.tsbuildinfo",
+    "build": "node_modules/.bin/tsc && npm run lint",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "node_modules/.bin/tslint \"./src/**/*.ts\""
+  },
+  "keywords": [
+    "text",
+    "game",
+    "web"
+  ],
+  "author": "Groboclown",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/groboclown/kota.git",
+    "directory": "packages/module-user"
+  },
+  "directories": {
+    "lib": "lib",
+    "src": "src",
+    "tests": "__jest__"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.14",
+    "jest": "^24.7.1",
+    "quicktype": "^15.0.184",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.13.1",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@kota/base-libs": "*",
+    "js-yaml": "^3.13.1"
+  },
+  "jest": {
+    "preset": "ts-jest/presets/js-with-babel",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {}
+    },
+    "testMatch": [
+      "**/__jest__/*.+(ts|tsx|js)"
+    ],
+    "collectCoverageFrom": [
+      "**/*.ts"
+    ],
+    "coverageReporters": [
+      "json",
+      "html",
+      "text-summary",
+      "text"
+    ]
+  }
+}

@@ -10,7 +10,7 @@ allOf:
     properties:
       name:
         type: string
-        pattern: "^\S\S+$"
+        pattern: "^\\S\\S+$"
     required: 
       - name
   - oneOf:
@@ -100,7 +100,7 @@ allOf:
             description: >
               the attribute in the context that the function uses.
             type: string
-            pattern: "^[^\s/]+$"
+            pattern: "^[^\\s/]+$"
           ramp:
             description: >
               linear ramp distance from 0 to 1
@@ -158,9 +158,9 @@ allOf:
             map of expression variable names to context attribute name
           type: object
           patternProperties:
-          - "^[^\s/]+$":
+          - "^[^\\s/]+$":
             type: string
-            pattern: "^[^\s/]+$"
+            pattern: "^[^\\s/]+$"
         bound:
           description: >
             boundary conditions
@@ -194,9 +194,9 @@ allOf:
             map of expression variable names to context attribute name
           type: object
           patternProperties:
-          - "^[^\s/]+$":
+          - "^[^\\s/]+$":
             type: string
-            pattern: "^[^\s/]+$"
+            pattern: "^[^\\s/]+$"
         bound:
           description: >
             boundary conditions
