@@ -34,6 +34,8 @@ The core game should use as tightly parsed data format as possible.  It can be v
 
 * Split the `module` package into `module-user` and `module-compiled`.  The compiler will use both, and the core-game will use just the `module-compiled`.
 
+Compiled files need to include trace information so that errors can be linked back to the original sources.
+
 
 ## Format Strings
 
