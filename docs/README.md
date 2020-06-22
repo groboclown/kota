@@ -27,6 +27,6 @@ KotA itself then creates chains of verbs that create a story
 There's a lot more to what the engine can handle, but that's mostly details under these basic definitions.
 
 
-## Revelaing That Which is Hidden
+## Revealing That Which is Hidden
 
 * [Design Principles](design-principles)
